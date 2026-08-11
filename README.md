@@ -67,6 +67,20 @@ of the source type, normalized date, and source text enforces idempotency, so im
 rows again inserts zero duplicates. Historical files do not contain source URLs, so their
 `source_url` value remains null rather than being invented.
 
+## Rebuild normalized injuries
+
+After raw transactions have been imported, rebuild the normalized `injuries` table with:
+
+```bash
+python -m app.jobs.rebuild_injuries
+```
+
+The rebuild applies the characterized legacy classification and deduplication rules, replaces the
+normalized table in one transaction, and retains the selected `RawTransaction` ID and source type
+on every resulting injury. Repeating the command produces the same normalized injury content.
+The full historical comparison and its one known tied-row difference are documented in
+[`docs/legacy_regression.md`](docs/legacy_regression.md).
+
 ## Configuration
 
 Copy `.env.example` to `.env` for local development. `DATABASE_URL` uses SQLAlchemy's psycopg 3
