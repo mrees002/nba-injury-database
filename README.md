@@ -1,9 +1,9 @@
 # NBA Injury Database
 
-This repository is being built in staged, testable increments. Prompt 1 establishes the
-Python/PostgreSQL foundation and locks down the behavior of the legacy processing pipeline.
-The legacy code remains the behavioral reference; application models, data import, scraping,
-API, and UI are intentionally deferred to later prompts.
+This repository is being built in staged, testable increments. The Python/PostgreSQL foundation,
+legacy processing characterization tests, SQLAlchemy data model, initial migration, and historical
+CSV importer are implemented. The legacy code remains the behavioral reference; processing from
+PostgreSQL, live scraping, API, and UI are intentionally deferred to later prompts.
 
 ## Prerequisites
 
@@ -27,8 +27,8 @@ docker compose up -d db
 alembic upgrade head
 ```
 
-Alembic is configured in this stage, but the first schema migration is intentionally part of
-Prompt 2 alongside the SQLAlchemy models.
+This creates the `raw_transactions`, `injuries`, and `update_runs` tables and their indexes and
+constraints.
 
 Stop the local database with:
 
@@ -51,9 +51,24 @@ The tests execute `legacy/process_injuries_pipeline.py` directly. They character
 classification, season assignment, exact-duplicate scoring, recovery filtering, and time-window
 deduplication behavior without porting or changing those rules.
 
+## Historical CSV import
+
+Apply the migration first, then import each historical file with its source type stated explicitly:
+
+```bash
+python -m app.jobs.import_csv --source-type il path/to/NBA_IL.csv
+python -m app.jobs.import_csv --source-type missed_game path/to/NBA_Missed_Games.csv
+```
+
+The importer requires the legacy columns `Date`, `Team`, `Acquired`, `Relinquished`, and `Notes`.
+It accepts dates in `YYYY-MM-DD`, `MM/DD/YYYY`, or `MM/DD/YY` form, preserves the four text fields
+exactly as read, and prints `read`, `inserted`, `skipped`, and `invalid` counts. A deterministic hash
+of the source type, normalized date, and source text enforces idempotency, so importing the same
+rows again inserts zero duplicates. Historical files do not contain source URLs, so their
+`source_url` value remains null rather than being invented.
+
 ## Configuration
 
 Copy `.env.example` to `.env` for local development. `DATABASE_URL` uses SQLAlchemy's psycopg 3
 dialect. The checked-in Compose defaults are local-development credentials only; use secrets in
 the deployment environment and never commit them.
-
