@@ -1,0 +1,274 @@
+================================================================================
+COMPLETE REFERENCE - ALL UPLOADED FILES
+================================================================================
+
+🎯 USE THIS TO ORGANIZE YOUR WEB SCRAPER
+
+================================================================================
+BASE DATASETS (Original)
+================================================================================
+
+1. NBA_IL.csv
+   Location: /mnt/user-data/uploads/NBA_IL.csv
+   Records: 27,588
+   Date Range: 2010-10-26 to 2026-02-05
+   Type: Injured List Transactions
+   Purpose: Official NBA IL placements
+   
+2. NBA_Missed_Games.csv
+   Location: /mnt/user-data/uploads/NBA_Missed_Games.csv
+   Records: 15,211
+   Date Range: 2010-10-03 to 2026-02-05
+   Type: Missed Games Due to Injury
+   Purpose: Game-by-game injury reports
+
+
+================================================================================
+INCREMENTAL UPDATES - February 2026
+================================================================================
+
+3. IL_Updated__02-27-26_-_Sheet1.csv
+   Location: /mnt/user-data/uploads/IL_Updated__02-27-26_-_Sheet1.csv
+   Records: 171
+   Date Range: 2026-02-04 to 2026-02-25
+   Type: IL Transactions update
+   
+4. Missed_Games_due_to_Injury_Updated__02-27-26_-_Sheet1.csv
+   Location: /mnt/user-data/uploads/Missed_Games_due_to_Injury_Updated__02-27-26_-_Sheet1.csv
+   Records: 154
+   Date Range: 2026-02-04 to 2026-02-25
+   Type: Missed Games update
+
+
+================================================================================
+INCREMENTAL UPDATES - March 2026
+================================================================================
+
+5. IL_Transactions__02-25-2026__03-19-2026.csv
+   Location: /mnt/user-data/uploads/IL_Transactions__02-25-2026__03-19-2026.csv
+   Records: 281
+   Date Range: 2026-02-25 to 2026-03-18
+   Type: IL Transactions incremental
+   Note: Naming pattern: IL_Transactions__[START]__[END].csv
+   
+6. Missed_Games_Due_to_Injury__02-25-2026__03-19-2026.csv
+   Location: /mnt/user-data/uploads/Missed_Games_Due_to_Injury__02-25-2026__03-19-2026.csv
+   Records: 185
+   Date Range: 2026-02-25 to 2026-03-18
+   Type: Missed Games incremental
+
+
+================================================================================
+INCREMENTAL UPDATES - April 2026
+================================================================================
+
+7. IL_Transactions__03-20-2026__04-14-2026.csv
+   Location: /mnt/user-data/uploads/IL_Transactions__03-20-2026__04-14-2026.csv
+   Records: 325
+   Date Range: 2026-03-20 to 2026-04-12
+   Type: IL Transactions incremental
+   Note: Current data pattern established
+   
+8. Missed_Games_Due_to_Injury__03-20-2026__04-14-2026.csv
+   Location: /mnt/user-data/uploads/Missed_Games_Due_to_Injury__03-20-2026__04-14-2026.csv
+   Records: 265
+   Date Range: 2026-03-20 to 2026-04-12
+   Type: Missed Games incremental
+
+
+================================================================================
+SUMMARY STATISTICS
+================================================================================
+
+Total Records:
+  - IL Transactions: 28,365 records
+  - Missed Games: 15,815 records
+  - Combined: 44,180 raw records
+
+Date Coverage:
+  - Start: October 3, 2010
+  - End: April 12, 2026
+  - Duration: 5,670 days (15.5 years)
+
+Seasons Covered: 16 (2010-11 through 2025-26)
+
+Current Dataset Output:
+  - Processed/Deduplicated: 13,410 injuries
+  - Unique Players: 1,505
+  - 2025-26 Season: 1,181 injuries (ongoing)
+
+
+================================================================================
+FILE NAMING PATTERNS FOR YOUR SCRAPER
+================================================================================
+
+PATTERN 1: Original Base Files
+  Format: {DATASET_NAME}.csv
+  Examples:
+    - NBA_IL.csv
+    - NBA_Missed_Games.csv
+  
+  → Use these once when initializing your app
+  → Combine and save as: NBA_IL_combined.csv, NBA_Missed_Games_combined.csv
+
+
+PATTERN 2: Initial Update Files (Feb 2026)
+  Format: {DATASET_NAME}_Updated__{DATE}_-_Sheet1.csv
+  Examples:
+    - IL_Updated__02-27-26_-_Sheet1.csv
+    - Missed_Games_due_to_Injury_Updated__02-27-26_-_Sheet1.csv
+  
+  → Transition format - only used once
+
+
+PATTERN 3: Standardized Incremental Updates (Mar 2026+)
+  Format: {DATASET_NAME}__[START_DATE]__[END_DATE].csv
+  Examples:
+    - IL_Transactions__02-25-2026__03-19-2026.csv
+    - Missed_Games_Due_to_Injury__02-25-2026__03-19-2026.csv
+  
+  → This is the pattern your scraper should produce
+  → [START_DATE] = day after previous update ends
+  → [END_DATE] = current date
+  → Append to combined files (don't replace)
+
+
+================================================================================
+RECOMMENDED SETUP FOR YOUR WEB SCRAPER
+================================================================================
+
+1. Download the 8 uploaded files above
+
+2. Initialize combined files:
+   ```
+   cat NBA_IL.csv IL_Updated__02-27-26_-_Sheet1.csv IL_Transactions__02-25-2026__03-19-2026.csv IL_Transactions__03-20-2026__04-14-2026.csv > NBA_IL_combined.csv
+   
+   cat NBA_Missed_Games.csv Missed_Games_due_to_Injury_Updated__02-27-26_-_Sheet1.csv Missed_Games_Due_to_Injury__02-25-2026__03-19-2026.csv Missed_Games_Due_to_Injury__03-20-2026__04-14-2026.csv > NBA_Missed_Games_combined.csv
+   ```
+
+3. Create a daily scraper that:
+   - Scrapes new IL + Missed Games data (since last update date)
+   - Names files: IL_Transactions__[LAST]__[TODAY].csv
+   - Appends to combined files
+   - Runs: python process_injuries_pipeline.py
+   - Outputs: nba_injuries_merged.csv
+   - Updates private app database
+
+4. Run process_injuries_pipeline.py:
+   ```bash
+   python process_injuries_pipeline.py \
+       NBA_IL_combined.csv \
+       NBA_Missed_Games_combined.csv \
+       nba_injuries_merged.csv
+   ```
+
+5. Quality checks built into script:
+   - Validates duplicates removed
+   - Ensures all classified
+   - Checks date ranges
+   - Outputs summary statistics
+
+
+================================================================================
+PROCESSING SCRIPT LOCATION
+================================================================================
+
+File: process_injuries_pipeline.py
+Location: /mnt/user-data/outputs/process_injuries_pipeline.py
+
+This is the complete, production-ready script.
+No modifications needed - ready to integrate into your scraper.
+
+Key Functions:
+  - process_injuries(il_file, missed_games_file, output_file)
+  - extract_injury_info(notes_text)
+  - process_dataset(df, source_name)
+  - deduplicate_by_body_part_and_time(df)
+  - get_nba_season(date)
+
+Configuration (customizable):
+  - TIME_WINDOWS: Adjust deduplication windows
+  - DEDUP_SCORES: Change scoring for IL vs Missed Games
+  - BODY_PARTS: 32 body parts classification
+  - INJURY_TYPES: 45 injury type classification
+
+
+================================================================================
+FINAL OUTPUT SPECIFICATION
+================================================================================
+
+File: nba_injuries_merged.csv
+
+Columns (7):
+  1. date (YYYY-MM-DD)
+  2. season (YYYY-YY format, e.g., "2025-26")
+  3. player_name (string, clean names)
+  4. team (string, 3-letter code)
+  5. body_part (32 categories)
+  6. injury_type (45 categories)
+  7. notes (original text from source)
+
+Format: CSV, no index
+Encoding: UTF-8
+Records: ~13,000-13,500 (deduplicated)
+Unique Players: ~1,500
+Quality: Zero duplicates, 100% classified, no nulls (except 2 team values)
+
+
+================================================================================
+LEGAL NOTES FOR YOUR PRIVATE APP
+================================================================================
+
+✓ SAFE TO SCRAPE:
+  - Injury reports (factual information)
+  - Official IL placements (public data)
+  - Player names and teams (public domain)
+  - Dates and body parts (factual)
+
+✗ DON'T SCRAPE:
+  - Game statistics (copyrighted)
+  - Video highlights (copyrighted)
+  - News articles verbatim (copyrighted)
+  - Licensed performance metrics
+
+⚠️ BEST PRACTICES:
+  - Check site's robots.txt and Terms of Service
+  - Rate limit requests (1+ second between requests)
+  - Identify your scraper with User-Agent
+  - Cache aggressively (don't hit servers constantly)
+  - Respect copyright - only factual data
+  - Keep app private (don't distribute publicly)
+
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+For your web scraper development:
+
+1. Review WEB_SCRAPER_MIGRATION_GUIDE.md
+   → Complete architecture guide
+   → Legal considerations
+   → Deployment checklist
+
+2. Study process_injuries_pipeline.py
+   → Understand 7-phase pipeline
+   → Identify integration points
+   → Customize if needed
+
+3. Plan your scraper:
+   → Which data source to scrape?
+   → API available? Or web scraping?
+   → Daily/weekly/monthly updates?
+   → Private web app or mobile app?
+
+4. Build & deploy:
+   → Use files as foundation
+   → Integrate scraper with pipeline
+   → Test with sample data
+   → Monitor for errors
+   → Keep private!
+
+Good luck! 🚀
+
+================================================================================
