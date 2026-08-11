@@ -1,0 +1,18 @@
+.env
+.venv/
+*.egg-info/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.DS_Store
+
+# Local data and generated exports are not the source of truth.
+data/import/
+data/export/
+data/downloads/
+*.db
+*.sqlite
+*.sqlite3
