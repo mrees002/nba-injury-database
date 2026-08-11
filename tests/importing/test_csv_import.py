@@ -86,6 +86,32 @@ def test_equivalent_date_formats_generate_the_same_row_key(tmp_path, engine):
     assert result.invalid == 0
 
 
+def test_overlapping_rows_in_differently_named_files_insert_only_once(tmp_path, engine):
+    first_path = tmp_path / "base_file.csv"
+    overlap_path = tmp_path / "later_overlap_file.csv"
+    overlapping_row = ["2024-01-02", "BOS", "", "Player One", "sore knee"]
+    write_csv(first_path, [overlapping_row])
+    write_csv(
+        overlap_path,
+        [
+            overlapping_row,
+            ["2024-01-03", "LAL", "", "Player Two", "sprained ankle"],
+        ],
+    )
+
+    with Session(engine, expire_on_commit=False) as session:
+        first_result = import_historical_csv(session, "il", first_path)
+        overlap_result = import_historical_csv(session, "il", overlap_path)
+        database_count = session.scalar(select(func.count()).select_from(RawTransaction))
+
+    assert first_result.inserted == 1
+    assert overlap_result.read == 2
+    assert overlap_result.inserted == 1
+    assert overlap_result.skipped == 1
+    assert overlap_result.invalid == 0
+    assert database_count == 2
+
+
 def test_invalid_dates_and_malformed_rows_are_counted_without_insertion(tmp_path, engine):
     csv_path = tmp_path / "invalid.csv"
     write_csv(
