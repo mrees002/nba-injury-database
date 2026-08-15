@@ -1,0 +1,22 @@
+{
+  "pages": [
+    [
+      [285, 550, "Injury Report: 04/12/26 05:00 PM"],
+      [24, 510, "Game Date"], [120, 510, "Game Time"], [200, 510, "Matchup"],
+      [265, 510, "Team"], [426, 510, "Player Name"], [587, 510, "Current Status"],
+      [667, 510, "Reason"],
+      [667, 492, "Injury/Illness - Right Great Toe;"],
+      [24, 485, "04/12/2026"], [120, 485, "06:00 (ET)"], [200, 485, "ATL@MIA"],
+      [265, 485, "Atlanta Hawks"], [426, 485, "Alexander-Walker, Nickeil"], [587, 485, "Out"],
+      [667, 478, "Sprain"],
+      [426, 450, "Dennis, RayJ"], [587, 450, "Available"], [667, 450, "G League - Two-Way"]
+    ],
+    [
+      [285, 550, "Injury Report: 04/12/26 05:00 PM"],
+      [265, 490, "Miami Heat"], [426, 490, "Herro, Tyler"], [587, 490, "Questionable"],
+      [667, 490, "Injury/Illness - Right Foot; Soreness"],
+      [426, 460, "Jovic, Nikola"], [587, 460, "Out"],
+      [667, 465, "Injury/Illness - Left Ankle;"], [667, 455, "Sprain"]
+    ]
+  ]
+}

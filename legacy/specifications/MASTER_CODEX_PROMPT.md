@@ -1,5 +1,12 @@
 # MASTER CODEX PROMPT
 
+> **Source-strategy amendment (2026-08-11):** The production objective is now the relational
+> official-NBA injury-report PDF pipeline documented in
+> `../../docs/nba_official_methodology.md`. ProSportsTransactions data, processing, and scraper code are
+> retained only as a legacy benchmark/audit path. The PST-focused objective and data model below
+> describe the completed legacy baseline; they must not be used to connect or schedule the old
+> Prompt 5. No PST data may be deleted without a later explicit migration approval.
+
 You are working in a new repository for a public NBA injury dataset application.
 
 ## Objective

@@ -13,6 +13,7 @@ htmlcov/
 data/import/
 data/export/
 data/downloads/
+artifacts/validation/
 *.db
 *.sqlite
 *.sqlite3

@@ -3,9 +3,21 @@
 ## Project mission
 Maintain a reproducible, transparent NBA injury dataset pipeline and public download site.
 
+## Active architecture
+The authoritative future source is the official NBA injury-report PDF archive. The intended
+production flow is:
+
+`NBA PDFs -> discovery/download -> raw parsing -> PostgreSQL -> derived classification -> InjuryEpisode methodology -> API -> website -> scheduled incremental updates`
+
+Complete and validate raw NBA ingestion before further classification, episode, deduplication, or
+PST benchmark tuning. ProSportsTransactions (PST) data and code are retained only for historical
+comparison, regression, and methodology validation; PST is not the intended production ingestion
+source. See `docs/nba_official_methodology.md` and `legacy/README.md`.
+
 ## Non-negotiable rules
 1. PostgreSQL is the source of truth. Do not make appended CSV files the primary datastore.
-2. `legacy/process_injuries_pipeline.py` is the behavioral baseline until regression tests prove equivalence.
+2. `legacy/process_injuries_pipeline.py` is the behavioral baseline for the retained PST benchmark,
+   not the official-NBA production methodology.
 3. Never silently modify deduplication or injury classification rules.
 4. Every scraper ingestion path must be idempotent.
 5. Preserve raw source text and source URLs.

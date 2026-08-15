@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Detail - NBA Injury Database</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            color: #1a1a1a;
+            background: #f5f6f8;
+        }
+
+        .page {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            color: #111;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        .table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,.08);
+            background: #fff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background: #f8f9fb;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #475569;
+            padding: 0.75rem 0.75rem;
+            text-align: left;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 0.6rem 0.75rem;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #f1f3f5;
+            color: #334155;
+            white-space: nowrap;
+        }
+
+        tbody tr:nth-child(even) { background: #fafbfc; }
+        tbody tr:hover { background: #eef2ff; }
+
+        .empty-msg {
+            padding: 2rem;
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 640px) {
+            .page { padding: 1rem 0.5rem; }
+            h1 { font-size: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <a class="back-link" href="/">&larr; Back to dashboard</a>
+        <h1 id="player-name">Loading...</h1>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Team</th>
+                        <th>Start Date</th>
+                        <th>Last Observed</th>
+                        <th>End Date</th>
+                        <th>First Available</th>
+                        <th>Body Part</th>
+                        <th>Laterality</th>
+                        <th>Injury Type</th>
+                        <th>Normalized Reason</th>
+                        <th>Latest Status</th>
+                        <th>Methodology Version</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody id="injuries-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const playerId = window.location.pathname.split('/').pop();
+
+        Promise.all([
+            fetch('/api/players/' + playerId).then(r => { if (!r.ok) throw r; return r.json(); }),
+            fetch('/injuries?player_id=' + playerId).then(r => r.json())
+        ]).then(([player, episodes]) => {
+            document.title = player.canonical_name + ' - NBA Injury Database';
+            document.getElementById('player-name').textContent = player.canonical_name;
+
+            const tbody = document.getElementById('injuries-body');
+            if (episodes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="13" class="empty-msg">No injury episodes found.</td></tr>';
+                return;
+            }
+            episodes.forEach(ep => {
+                const tr = document.createElement('tr');
+                [
+                    ep.id, ep.team_name, ep.start_date,
+                    ep.last_observed_date, ep.end_date, ep.first_available_date,
+                    ep.body_part, ep.laterality, ep.injury_type,
+                    ep.normalized_reason, ep.latest_status,
+                    ep.methodology_version, ep.created_at
+                ].forEach(val => {
+                    const td = document.createElement('td');
+                    td.textContent = val ?? '';
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+        }).catch(err => {
+            document.getElementById('player-name').textContent = 'Player not found';
+        });
+    </script>
+</body>
+</html>

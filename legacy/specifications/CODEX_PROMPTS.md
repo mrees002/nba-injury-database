@@ -1,5 +1,11 @@
 # STAGED CODEX PROMPTS
 
+> **2026-08-11 amendment:** Prompts 1-4 below document the completed legacy/PST baseline. The
+> existing Prompt 5 is retired and must not be executed. Official-NBA PDF acquisition, relational
+> observations, classification, and episode methodology supersede it; see
+> `../../docs/nba_official_methodology.md`. A replacement incremental-update prompt is intentionally
+> deferred until the NBA methodology receives a GO decision.
+
 Use these in order. Let Codex finish and test each stage before moving to the next.
 
 ## Prompt 1: Repository foundation and characterization tests

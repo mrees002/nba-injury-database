@@ -1,0 +1,656 @@
+2026-08-14 23:03:52,680 INFO Direct NBA day 1/365: 2025-07-01, 0 discovered -> 0 selected
+2026-08-14 23:04:18,488 INFO Direct NBA day 2/365: 2025-07-02, 0 discovered -> 0 selected
+2026-08-14 23:04:44,339 INFO Direct NBA day 3/365: 2025-07-03, 0 discovered -> 0 selected
+2026-08-14 23:05:39,053 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_01AM.pdf
+2026-08-14 23:05:39,063 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_01PM.pdf
+2026-08-14 23:05:39,071 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_02AM.pdf
+2026-08-14 23:05:39,079 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_02PM.pdf
+2026-08-14 23:05:39,087 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_03AM.pdf
+2026-08-14 23:05:39,093 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_03PM.pdf
+2026-08-14 23:05:39,100 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_04AM.pdf
+2026-08-14 23:05:39,109 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_04PM.pdf
+2026-08-14 23:05:39,115 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_05AM.pdf
+2026-08-14 23:05:39,140 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_05PM.pdf
+2026-08-14 23:05:39,146 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_06AM.pdf
+2026-08-14 23:05:39,153 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_06PM.pdf
+2026-08-14 23:05:39,159 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_07AM.pdf
+2026-08-14 23:05:39,165 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_07PM.pdf
+2026-08-14 23:05:39,172 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_08AM.pdf
+2026-08-14 23:05:39,178 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_08PM.pdf
+2026-08-14 23:05:39,185 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_09AM.pdf
+2026-08-14 23:05:39,193 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_09PM.pdf
+2026-08-14 23:05:39,199 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_10AM.pdf
+2026-08-14 23:05:39,206 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_10PM.pdf
+2026-08-14 23:05:39,212 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_11AM.pdf
+2026-08-14 23:05:39,218 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_11PM.pdf
+2026-08-14 23:05:39,225 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_12AM.pdf
+2026-08-14 23:05:39,231 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-04T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-04_12PM.pdf
+2026-08-14 23:05:39,231 INFO Direct NBA day 4/365: 2025-07-04, 24 discovered -> 0 selected
+2026-08-14 23:06:32,851 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_01AM.pdf
+2026-08-14 23:06:32,861 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_01PM.pdf
+2026-08-14 23:06:32,870 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_02AM.pdf
+2026-08-14 23:06:32,877 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_02PM.pdf
+2026-08-14 23:06:32,886 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_03AM.pdf
+2026-08-14 23:06:32,892 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_03PM.pdf
+2026-08-14 23:06:32,899 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_04AM.pdf
+2026-08-14 23:06:32,905 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_04PM.pdf
+2026-08-14 23:06:32,912 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_05AM.pdf
+2026-08-14 23:06:32,918 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_05PM.pdf
+2026-08-14 23:06:32,925 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_06AM.pdf
+2026-08-14 23:06:32,931 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_06PM.pdf
+2026-08-14 23:06:32,937 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_07AM.pdf
+2026-08-14 23:06:32,944 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_07PM.pdf
+2026-08-14 23:06:32,950 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_08AM.pdf
+2026-08-14 23:06:32,956 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_08PM.pdf
+2026-08-14 23:06:32,963 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_09AM.pdf
+2026-08-14 23:06:32,969 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_09PM.pdf
+2026-08-14 23:06:32,978 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_10AM.pdf
+2026-08-14 23:06:32,984 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_10PM.pdf
+2026-08-14 23:06:32,990 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_11AM.pdf
+2026-08-14 23:06:32,997 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_11PM.pdf
+2026-08-14 23:06:33,003 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_12AM.pdf
+2026-08-14 23:06:33,009 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-05T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-05_12PM.pdf
+2026-08-14 23:06:33,009 INFO Direct NBA day 5/365: 2025-07-05, 24 discovered -> 0 selected
+2026-08-14 23:07:26,278 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_01AM.pdf
+2026-08-14 23:07:26,289 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_01PM.pdf
+2026-08-14 23:07:26,298 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_02AM.pdf
+2026-08-14 23:07:26,304 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_02PM.pdf
+2026-08-14 23:07:26,311 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_03AM.pdf
+2026-08-14 23:07:26,318 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_03PM.pdf
+2026-08-14 23:07:26,327 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_04AM.pdf
+2026-08-14 23:07:26,333 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_04PM.pdf
+2026-08-14 23:07:26,340 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_05AM.pdf
+2026-08-14 23:07:26,347 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_05PM.pdf
+2026-08-14 23:07:26,353 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_06AM.pdf
+2026-08-14 23:07:26,360 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_06PM.pdf
+2026-08-14 23:07:26,367 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_07AM.pdf
+2026-08-14 23:07:26,373 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_07PM.pdf
+2026-08-14 23:07:26,380 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_08AM.pdf
+2026-08-14 23:07:26,387 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_08PM.pdf
+2026-08-14 23:07:26,394 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_09AM.pdf
+2026-08-14 23:07:26,400 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_09PM.pdf
+2026-08-14 23:07:26,409 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_10AM.pdf
+2026-08-14 23:07:26,416 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_10PM.pdf
+2026-08-14 23:07:26,422 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_11AM.pdf
+2026-08-14 23:07:26,429 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_11PM.pdf
+2026-08-14 23:07:26,436 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_12AM.pdf
+2026-08-14 23:07:26,443 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-06T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-06_12PM.pdf
+2026-08-14 23:07:26,443 INFO Direct NBA day 6/365: 2025-07-06, 24 discovered -> 0 selected
+2026-08-14 23:08:19,740 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_01AM.pdf
+2026-08-14 23:08:19,752 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_01PM.pdf
+2026-08-14 23:08:19,762 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_02AM.pdf
+2026-08-14 23:08:19,772 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_02PM.pdf
+2026-08-14 23:08:19,782 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_03AM.pdf
+2026-08-14 23:08:19,794 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_03PM.pdf
+2026-08-14 23:08:19,803 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_04AM.pdf
+2026-08-14 23:08:19,813 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_04PM.pdf
+2026-08-14 23:08:19,823 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_05AM.pdf
+2026-08-14 23:08:19,832 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_05PM.pdf
+2026-08-14 23:08:19,842 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_06AM.pdf
+2026-08-14 23:08:19,852 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_06PM.pdf
+2026-08-14 23:08:19,864 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_07AM.pdf
+2026-08-14 23:08:19,874 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_07PM.pdf
+2026-08-14 23:08:19,883 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_08AM.pdf
+2026-08-14 23:08:19,893 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_08PM.pdf
+2026-08-14 23:08:19,902 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_09AM.pdf
+2026-08-14 23:08:19,912 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_09PM.pdf
+2026-08-14 23:08:19,921 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_10AM.pdf
+2026-08-14 23:08:19,933 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_10PM.pdf
+2026-08-14 23:08:19,943 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_11AM.pdf
+2026-08-14 23:08:19,953 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_11PM.pdf
+2026-08-14 23:08:19,962 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_12AM.pdf
+2026-08-14 23:08:19,972 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-07T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-07_12PM.pdf
+2026-08-14 23:08:19,972 INFO Direct NBA day 7/365: 2025-07-07, 24 discovered -> 0 selected
+2026-08-14 23:09:13,699 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_01AM.pdf
+2026-08-14 23:09:13,710 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_01PM.pdf
+2026-08-14 23:09:13,718 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_02AM.pdf
+2026-08-14 23:09:13,725 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_02PM.pdf
+2026-08-14 23:09:13,733 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_03AM.pdf
+2026-08-14 23:09:13,739 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_03PM.pdf
+2026-08-14 23:09:13,746 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_04AM.pdf
+2026-08-14 23:09:13,753 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_04PM.pdf
+2026-08-14 23:09:13,760 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_05AM.pdf
+2026-08-14 23:09:13,767 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_05PM.pdf
+2026-08-14 23:09:13,774 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_06AM.pdf
+2026-08-14 23:09:13,782 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_06PM.pdf
+2026-08-14 23:09:13,788 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_07AM.pdf
+2026-08-14 23:09:13,795 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_07PM.pdf
+2026-08-14 23:09:13,801 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_08AM.pdf
+2026-08-14 23:09:13,808 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_08PM.pdf
+2026-08-14 23:09:13,814 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_09AM.pdf
+2026-08-14 23:09:13,820 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_09PM.pdf
+2026-08-14 23:09:13,827 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_10AM.pdf
+2026-08-14 23:09:13,833 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_10PM.pdf
+2026-08-14 23:09:13,839 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_11AM.pdf
+2026-08-14 23:09:13,846 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_11PM.pdf
+2026-08-14 23:09:13,852 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_12AM.pdf
+2026-08-14 23:09:13,858 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-08T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-08_12PM.pdf
+2026-08-14 23:09:13,859 INFO Direct NBA day 8/365: 2025-07-08, 24 discovered -> 0 selected
+2026-08-14 23:10:09,040 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_01AM.pdf
+2026-08-14 23:10:09,057 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_01PM.pdf
+2026-08-14 23:10:09,072 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_02AM.pdf
+2026-08-14 23:10:09,086 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_02PM.pdf
+2026-08-14 23:10:09,100 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_03AM.pdf
+2026-08-14 23:10:09,116 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_03PM.pdf
+2026-08-14 23:10:09,130 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_04AM.pdf
+2026-08-14 23:10:09,144 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_04PM.pdf
+2026-08-14 23:10:09,157 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_05AM.pdf
+2026-08-14 23:10:09,173 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_05PM.pdf
+2026-08-14 23:10:09,187 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_06AM.pdf
+2026-08-14 23:10:09,201 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_06PM.pdf
+2026-08-14 23:10:09,215 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_07AM.pdf
+2026-08-14 23:10:09,229 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_07PM.pdf
+2026-08-14 23:10:09,245 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_08AM.pdf
+2026-08-14 23:10:09,259 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_08PM.pdf
+2026-08-14 23:10:09,273 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_09AM.pdf
+2026-08-14 23:10:09,287 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_09PM.pdf
+2026-08-14 23:10:09,303 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_10AM.pdf
+2026-08-14 23:10:09,344 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_10PM.pdf
+2026-08-14 23:10:09,358 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_11AM.pdf
+2026-08-14 23:10:09,372 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_11PM.pdf
+2026-08-14 23:10:09,387 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_12AM.pdf
+2026-08-14 23:10:09,401 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-09T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-09_12PM.pdf
+2026-08-14 23:10:09,401 INFO Direct NBA day 9/365: 2025-07-09, 24 discovered -> 0 selected
+2026-08-14 23:11:02,765 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_01AM.pdf
+2026-08-14 23:11:02,794 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_01PM.pdf
+2026-08-14 23:11:02,821 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_02AM.pdf
+2026-08-14 23:11:02,851 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_02PM.pdf
+2026-08-14 23:11:02,878 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_03AM.pdf
+2026-08-14 23:11:02,906 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_03PM.pdf
+2026-08-14 23:11:02,936 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_04AM.pdf
+2026-08-14 23:11:02,964 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_04PM.pdf
+2026-08-14 23:11:02,993 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_05AM.pdf
+2026-08-14 23:11:03,021 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_05PM.pdf
+2026-08-14 23:11:03,050 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_06AM.pdf
+2026-08-14 23:11:03,078 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_06PM.pdf
+2026-08-14 23:11:03,107 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_07AM.pdf
+2026-08-14 23:11:03,135 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_07PM.pdf
+2026-08-14 23:11:03,163 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_08AM.pdf
+2026-08-14 23:11:03,189 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_08PM.pdf
+2026-08-14 23:11:03,217 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_09AM.pdf
+2026-08-14 23:11:03,245 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_09PM.pdf
+2026-08-14 23:11:03,271 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_10AM.pdf
+2026-08-14 23:11:03,333 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_10PM.pdf
+2026-08-14 23:11:03,361 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_11AM.pdf
+2026-08-14 23:11:03,390 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_11PM.pdf
+2026-08-14 23:11:03,419 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_12AM.pdf
+2026-08-14 23:11:03,448 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-10T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-10_12PM.pdf
+2026-08-14 23:11:03,448 INFO Direct NBA day 10/365: 2025-07-10, 24 discovered -> 0 selected
+2026-08-14 23:11:59,181 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_01AM.pdf
+2026-08-14 23:11:59,210 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_01PM.pdf
+2026-08-14 23:11:59,240 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_02AM.pdf
+2026-08-14 23:11:59,268 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_02PM.pdf
+2026-08-14 23:11:59,298 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_03AM.pdf
+2026-08-14 23:11:59,326 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_03PM.pdf
+2026-08-14 23:11:59,356 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_04AM.pdf
+2026-08-14 23:11:59,384 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_04PM.pdf
+2026-08-14 23:11:59,413 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_05AM.pdf
+2026-08-14 23:11:59,441 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_05PM.pdf
+2026-08-14 23:11:59,471 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_06AM.pdf
+2026-08-14 23:11:59,499 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_06PM.pdf
+2026-08-14 23:11:59,529 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_07AM.pdf
+2026-08-14 23:11:59,557 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_07PM.pdf
+2026-08-14 23:11:59,586 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_08AM.pdf
+2026-08-14 23:11:59,651 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_08PM.pdf
+2026-08-14 23:11:59,680 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_09AM.pdf
+2026-08-14 23:11:59,708 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_09PM.pdf
+2026-08-14 23:11:59,737 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_10AM.pdf
+2026-08-14 23:11:59,767 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_10PM.pdf
+2026-08-14 23:11:59,798 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_11AM.pdf
+2026-08-14 23:11:59,827 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_11PM.pdf
+2026-08-14 23:11:59,858 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_12AM.pdf
+2026-08-14 23:11:59,888 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-11T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-11_12PM.pdf
+2026-08-14 23:11:59,888 INFO Direct NBA day 11/365: 2025-07-11, 24 discovered -> 0 selected
+2026-08-14 23:12:53,352 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_01AM.pdf
+2026-08-14 23:12:53,381 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_01PM.pdf
+2026-08-14 23:12:53,411 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_02AM.pdf
+2026-08-14 23:12:53,439 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_02PM.pdf
+2026-08-14 23:12:53,468 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_03AM.pdf
+2026-08-14 23:12:53,496 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_03PM.pdf
+2026-08-14 23:12:53,526 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_04AM.pdf
+2026-08-14 23:12:53,554 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_04PM.pdf
+2026-08-14 23:12:53,619 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_05AM.pdf
+2026-08-14 23:12:53,647 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_05PM.pdf
+2026-08-14 23:12:53,676 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_06AM.pdf
+2026-08-14 23:12:53,704 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_06PM.pdf
+2026-08-14 23:12:53,734 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_07AM.pdf
+2026-08-14 23:12:53,762 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_07PM.pdf
+2026-08-14 23:12:53,791 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_08AM.pdf
+2026-08-14 23:12:53,820 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_08PM.pdf
+2026-08-14 23:12:53,849 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_09AM.pdf
+2026-08-14 23:12:53,877 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_09PM.pdf
+2026-08-14 23:12:53,907 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_10AM.pdf
+2026-08-14 23:12:53,935 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_10PM.pdf
+2026-08-14 23:12:53,964 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_11AM.pdf
+2026-08-14 23:12:53,993 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_11PM.pdf
+2026-08-14 23:12:54,022 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_12AM.pdf
+2026-08-14 23:12:54,050 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-12T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-12_12PM.pdf
+2026-08-14 23:12:54,050 INFO Direct NBA day 12/365: 2025-07-12, 24 discovered -> 0 selected
+2026-08-14 23:13:47,949 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_01AM.pdf
+2026-08-14 23:13:47,978 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_01PM.pdf
+2026-08-14 23:13:48,006 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_02AM.pdf
+2026-08-14 23:13:48,032 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_02PM.pdf
+2026-08-14 23:13:48,060 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_03AM.pdf
+2026-08-14 23:13:48,086 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_03PM.pdf
+2026-08-14 23:13:48,114 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_04AM.pdf
+2026-08-14 23:13:48,176 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_04PM.pdf
+2026-08-14 23:13:48,204 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_05AM.pdf
+2026-08-14 23:13:48,232 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_05PM.pdf
+2026-08-14 23:13:48,261 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_06AM.pdf
+2026-08-14 23:13:48,288 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_06PM.pdf
+2026-08-14 23:13:48,317 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_07AM.pdf
+2026-08-14 23:13:48,345 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_07PM.pdf
+2026-08-14 23:13:48,372 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_08AM.pdf
+2026-08-14 23:13:48,402 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_08PM.pdf
+2026-08-14 23:13:48,429 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_09AM.pdf
+2026-08-14 23:13:48,458 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_09PM.pdf
+2026-08-14 23:13:48,486 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_10AM.pdf
+2026-08-14 23:13:48,515 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_10PM.pdf
+2026-08-14 23:13:48,542 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_11AM.pdf
+2026-08-14 23:13:48,570 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_11PM.pdf
+2026-08-14 23:13:48,599 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_12AM.pdf
+2026-08-14 23:13:48,627 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-13T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-13_12PM.pdf
+2026-08-14 23:13:48,627 INFO Direct NBA day 13/365: 2025-07-13, 24 discovered -> 0 selected
+2026-08-14 23:14:43,653 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_01AM.pdf
+2026-08-14 23:14:43,680 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_01PM.pdf
+2026-08-14 23:14:43,705 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_02AM.pdf
+2026-08-14 23:14:43,730 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_02PM.pdf
+2026-08-14 23:14:43,757 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_03AM.pdf
+2026-08-14 23:14:43,782 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_03PM.pdf
+2026-08-14 23:14:43,842 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_04AM.pdf
+2026-08-14 23:14:43,868 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_04PM.pdf
+2026-08-14 23:14:43,894 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_05AM.pdf
+2026-08-14 23:14:43,919 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_05PM.pdf
+2026-08-14 23:14:43,945 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_06AM.pdf
+2026-08-14 23:14:43,972 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_06PM.pdf
+2026-08-14 23:14:43,997 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_07AM.pdf
+2026-08-14 23:14:44,024 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_07PM.pdf
+2026-08-14 23:14:44,049 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_08AM.pdf
+2026-08-14 23:14:44,076 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_08PM.pdf
+2026-08-14 23:14:44,101 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_09AM.pdf
+2026-08-14 23:14:44,127 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_09PM.pdf
+2026-08-14 23:14:44,155 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_10AM.pdf
+2026-08-14 23:14:44,181 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_10PM.pdf
+2026-08-14 23:14:44,209 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_11AM.pdf
+2026-08-14 23:14:44,235 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_11PM.pdf
+2026-08-14 23:14:44,263 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_12AM.pdf
+2026-08-14 23:14:44,290 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-14T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-14_12PM.pdf
+2026-08-14 23:14:44,290 INFO Direct NBA day 14/365: 2025-07-14, 24 discovered -> 0 selected
+2026-08-14 23:15:38,162 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_01AM.pdf
+2026-08-14 23:15:38,189 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_01PM.pdf
+2026-08-14 23:15:38,216 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_02AM.pdf
+2026-08-14 23:15:38,243 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_02PM.pdf
+2026-08-14 23:15:38,269 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_03AM.pdf
+2026-08-14 23:15:38,298 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_03PM.pdf
+2026-08-14 23:15:38,324 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_04AM.pdf
+2026-08-14 23:15:38,386 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_04PM.pdf
+2026-08-14 23:15:38,413 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_05AM.pdf
+2026-08-14 23:15:38,441 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_05PM.pdf
+2026-08-14 23:15:38,467 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_06AM.pdf
+2026-08-14 23:15:38,495 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_06PM.pdf
+2026-08-14 23:15:38,522 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_07AM.pdf
+2026-08-14 23:15:38,549 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_07PM.pdf
+2026-08-14 23:15:38,578 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_08AM.pdf
+2026-08-14 23:15:38,604 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_08PM.pdf
+2026-08-14 23:15:38,632 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_09AM.pdf
+2026-08-14 23:15:38,659 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_09PM.pdf
+2026-08-14 23:15:38,687 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_10AM.pdf
+2026-08-14 23:15:38,714 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_10PM.pdf
+2026-08-14 23:15:38,741 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_11AM.pdf
+2026-08-14 23:15:38,770 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_11PM.pdf
+2026-08-14 23:15:38,796 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_12AM.pdf
+2026-08-14 23:15:38,825 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-15T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-15_12PM.pdf
+2026-08-14 23:15:38,825 INFO Direct NBA day 15/365: 2025-07-15, 24 discovered -> 0 selected
+2026-08-14 23:16:32,614 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_01AM.pdf
+2026-08-14 23:16:32,644 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_01PM.pdf
+2026-08-14 23:16:32,671 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_02AM.pdf
+2026-08-14 23:16:32,699 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_02PM.pdf
+2026-08-14 23:16:32,725 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_03AM.pdf
+2026-08-14 23:16:32,753 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_03PM.pdf
+2026-08-14 23:16:32,816 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_04AM.pdf
+2026-08-14 23:16:32,843 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_04PM.pdf
+2026-08-14 23:16:32,871 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_05AM.pdf
+2026-08-14 23:16:32,898 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_05PM.pdf
+2026-08-14 23:16:32,926 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_06AM.pdf
+2026-08-14 23:16:32,953 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_06PM.pdf
+2026-08-14 23:16:32,981 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_07AM.pdf
+2026-08-14 23:16:33,008 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_07PM.pdf
+2026-08-14 23:16:33,036 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_08AM.pdf
+2026-08-14 23:16:33,063 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_08PM.pdf
+2026-08-14 23:16:33,092 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_09AM.pdf
+2026-08-14 23:16:33,119 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_09PM.pdf
+2026-08-14 23:16:33,145 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_10AM.pdf
+2026-08-14 23:16:33,174 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_10PM.pdf
+2026-08-14 23:16:33,201 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_11AM.pdf
+2026-08-14 23:16:33,229 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_11PM.pdf
+2026-08-14 23:16:33,256 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_12AM.pdf
+2026-08-14 23:16:33,285 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-16T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-16_12PM.pdf
+2026-08-14 23:16:33,285 INFO Direct NBA day 16/365: 2025-07-16, 24 discovered -> 0 selected
+2026-08-14 23:17:27,569 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_01AM.pdf
+2026-08-14 23:17:27,597 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_01PM.pdf
+2026-08-14 23:17:27,622 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_02AM.pdf
+2026-08-14 23:17:27,647 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_02PM.pdf
+2026-08-14 23:17:27,675 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_03AM.pdf
+2026-08-14 23:17:27,700 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_03PM.pdf
+2026-08-14 23:17:27,761 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_04AM.pdf
+2026-08-14 23:17:27,787 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_04PM.pdf
+2026-08-14 23:17:27,814 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_05AM.pdf
+2026-08-14 23:17:27,840 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_05PM.pdf
+2026-08-14 23:17:27,866 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_06AM.pdf
+2026-08-14 23:17:27,894 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_06PM.pdf
+2026-08-14 23:17:27,920 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_07AM.pdf
+2026-08-14 23:17:27,948 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_07PM.pdf
+2026-08-14 23:17:27,974 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_08AM.pdf
+2026-08-14 23:17:28,001 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_08PM.pdf
+2026-08-14 23:17:28,027 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_09AM.pdf
+2026-08-14 23:17:28,053 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_09PM.pdf
+2026-08-14 23:17:28,081 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_10AM.pdf
+2026-08-14 23:17:28,107 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_10PM.pdf
+2026-08-14 23:17:28,135 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_11AM.pdf
+2026-08-14 23:17:28,161 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_11PM.pdf
+2026-08-14 23:17:28,189 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_12AM.pdf
+2026-08-14 23:17:28,215 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-17T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-17_12PM.pdf
+2026-08-14 23:17:28,215 INFO Direct NBA day 17/365: 2025-07-17, 24 discovered -> 0 selected
+2026-08-14 23:18:22,022 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_01AM.pdf
+2026-08-14 23:18:22,047 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_01PM.pdf
+2026-08-14 23:18:22,071 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_02AM.pdf
+2026-08-14 23:18:22,097 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_02PM.pdf
+2026-08-14 23:18:22,121 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_03AM.pdf
+2026-08-14 23:18:22,146 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_03PM.pdf
+2026-08-14 23:18:22,170 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_04AM.pdf
+2026-08-14 23:18:22,194 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_04PM.pdf
+2026-08-14 23:18:22,220 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_05AM.pdf
+2026-08-14 23:18:22,244 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_05PM.pdf
+2026-08-14 23:18:22,269 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_06AM.pdf
+2026-08-14 23:18:22,328 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_06PM.pdf
+2026-08-14 23:18:22,352 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_07AM.pdf
+2026-08-14 23:18:22,376 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_07PM.pdf
+2026-08-14 23:18:22,401 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_08AM.pdf
+2026-08-14 23:18:22,424 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_08PM.pdf
+2026-08-14 23:18:22,448 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_09AM.pdf
+2026-08-14 23:18:22,474 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_09PM.pdf
+2026-08-14 23:18:22,499 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_10AM.pdf
+2026-08-14 23:18:22,525 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_10PM.pdf
+2026-08-14 23:18:22,549 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_11AM.pdf
+2026-08-14 23:18:22,574 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_11PM.pdf
+2026-08-14 23:18:22,589 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_12AM.pdf
+2026-08-14 23:18:22,614 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-18T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-18_12PM.pdf
+2026-08-14 23:18:22,614 INFO Direct NBA day 18/365: 2025-07-18, 24 discovered -> 0 selected
+2026-08-14 23:19:17,000 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_01AM.pdf
+2026-08-14 23:19:17,022 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_01PM.pdf
+2026-08-14 23:19:17,041 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_02AM.pdf
+2026-08-14 23:19:17,059 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_02PM.pdf
+2026-08-14 23:19:17,078 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_03AM.pdf
+2026-08-14 23:19:17,099 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_03PM.pdf
+2026-08-14 23:19:17,117 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_04AM.pdf
+2026-08-14 23:19:17,135 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_04PM.pdf
+2026-08-14 23:19:17,155 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_05AM.pdf
+2026-08-14 23:19:17,173 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_05PM.pdf
+2026-08-14 23:19:17,191 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_06AM.pdf
+2026-08-14 23:19:17,209 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_06PM.pdf
+2026-08-14 23:19:17,230 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_07AM.pdf
+2026-08-14 23:19:17,248 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_07PM.pdf
+2026-08-14 23:19:17,266 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_08AM.pdf
+2026-08-14 23:19:17,286 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_08PM.pdf
+2026-08-14 23:19:17,304 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_09AM.pdf
+2026-08-14 23:19:17,324 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_09PM.pdf
+2026-08-14 23:19:17,343 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_10AM.pdf
+2026-08-14 23:19:17,363 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_10PM.pdf
+2026-08-14 23:19:17,382 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_11AM.pdf
+2026-08-14 23:19:17,404 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_11PM.pdf
+2026-08-14 23:19:17,422 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_12AM.pdf
+2026-08-14 23:19:17,441 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-19T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-19_12PM.pdf
+2026-08-14 23:19:17,441 INFO Direct NBA day 19/365: 2025-07-19, 24 discovered -> 0 selected
+2026-08-14 23:20:11,116 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_01AM.pdf
+2026-08-14 23:20:11,128 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_01PM.pdf
+2026-08-14 23:20:11,137 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_02AM.pdf
+2026-08-14 23:20:11,147 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_02PM.pdf
+2026-08-14 23:20:11,155 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_03AM.pdf
+2026-08-14 23:20:11,163 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T15:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_03PM.pdf
+2026-08-14 23:20:11,171 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_04AM.pdf
+2026-08-14 23:20:11,179 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T16:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_04PM.pdf
+2026-08-14 23:20:11,187 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_05AM.pdf
+2026-08-14 23:20:11,195 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T17:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_05PM.pdf
+2026-08-14 23:20:11,203 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_06AM.pdf
+2026-08-14 23:20:11,210 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T18:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_06PM.pdf
+2026-08-14 23:20:11,220 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_07AM.pdf
+2026-08-14 23:20:11,228 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T19:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_07PM.pdf
+2026-08-14 23:20:11,236 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_08AM.pdf
+2026-08-14 23:20:11,244 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T20:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_08PM.pdf
+2026-08-14 23:20:11,252 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_09AM.pdf
+2026-08-14 23:20:11,260 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T21:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_09PM.pdf
+2026-08-14 23:20:11,267 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_10AM.pdf
+2026-08-14 23:20:11,275 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T22:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_10PM.pdf
+2026-08-14 23:20:11,283 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_11AM.pdf
+2026-08-14 23:20:11,291 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T23:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_11PM.pdf
+2026-08-14 23:20:11,301 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_12AM.pdf
+2026-08-14 23:20:11,309 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-07-20T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-07-20_12PM.pdf
+2026-08-14 23:20:11,309 INFO Direct NBA day 20/365: 2025-07-20, 24 discovered -> 0 selected
+2026-08-14 23:20:37,329 INFO Direct NBA day 21/365: 2025-07-21, 0 discovered -> 0 selected
+2026-08-14 23:21:03,147 INFO Direct NBA day 22/365: 2025-07-22, 0 discovered -> 0 selected
+2026-08-14 23:21:29,216 INFO Direct NBA day 23/365: 2025-07-23, 0 discovered -> 0 selected
+2026-08-14 23:21:55,133 INFO Direct NBA day 24/365: 2025-07-24, 0 discovered -> 0 selected
+2026-08-14 23:22:20,763 INFO Direct NBA day 25/365: 2025-07-25, 0 discovered -> 0 selected
+2026-08-14 23:22:46,870 INFO Direct NBA day 26/365: 2025-07-26, 0 discovered -> 0 selected
+2026-08-14 23:23:12,633 INFO Direct NBA day 27/365: 2025-07-27, 0 discovered -> 0 selected
+2026-08-14 23:23:38,456 INFO Direct NBA day 28/365: 2025-07-28, 0 discovered -> 0 selected
+2026-08-14 23:24:04,500 INFO Direct NBA day 29/365: 2025-07-29, 0 discovered -> 0 selected
+2026-08-14 23:24:30,397 INFO Direct NBA day 30/365: 2025-07-30, 0 discovered -> 0 selected
+2026-08-14 23:24:56,329 INFO Direct NBA day 31/365: 2025-07-31, 0 discovered -> 0 selected
+2026-08-14 23:25:22,431 INFO Direct NBA day 32/365: 2025-08-01, 0 discovered -> 0 selected
+2026-08-14 23:25:48,883 INFO Direct NBA day 33/365: 2025-08-02, 0 discovered -> 0 selected
+2026-08-14 23:26:15,017 INFO Direct NBA day 34/365: 2025-08-03, 0 discovered -> 0 selected
+2026-08-14 23:26:41,006 INFO Direct NBA day 35/365: 2025-08-04, 0 discovered -> 0 selected
+2026-08-14 23:27:07,213 INFO Direct NBA day 36/365: 2025-08-05, 0 discovered -> 0 selected
+2026-08-14 23:27:32,874 INFO Direct NBA day 37/365: 2025-08-06, 0 discovered -> 0 selected
+2026-08-14 23:27:59,291 INFO Direct NBA day 38/365: 2025-08-07, 0 discovered -> 0 selected
+2026-08-14 23:28:25,410 INFO Direct NBA day 39/365: 2025-08-08, 0 discovered -> 0 selected
+2026-08-14 23:28:51,366 INFO Direct NBA day 40/365: 2025-08-09, 0 discovered -> 0 selected
+2026-08-14 23:29:16,924 INFO Direct NBA day 41/365: 2025-08-10, 0 discovered -> 0 selected
+2026-08-14 23:29:43,095 INFO Direct NBA day 42/365: 2025-08-11, 0 discovered -> 0 selected
+2026-08-14 23:30:09,057 INFO Direct NBA day 43/365: 2025-08-12, 0 discovered -> 0 selected
+2026-08-14 23:30:34,766 INFO Direct NBA day 44/365: 2025-08-13, 0 discovered -> 0 selected
+2026-08-14 23:31:00,363 INFO Direct NBA day 45/365: 2025-08-14, 0 discovered -> 0 selected
+2026-08-14 23:31:26,733 INFO Direct NBA day 46/365: 2025-08-15, 0 discovered -> 0 selected
+2026-08-14 23:31:53,111 INFO Direct NBA day 47/365: 2025-08-16, 0 discovered -> 0 selected
+2026-08-14 23:32:19,557 INFO Direct NBA day 48/365: 2025-08-17, 0 discovered -> 0 selected
+2026-08-14 23:32:45,697 INFO Direct NBA day 49/365: 2025-08-18, 0 discovered -> 0 selected
+2026-08-14 23:33:11,369 INFO Direct NBA day 50/365: 2025-08-19, 0 discovered -> 0 selected
+2026-08-14 23:33:37,626 INFO Direct NBA day 51/365: 2025-08-20, 0 discovered -> 0 selected
+2026-08-14 23:34:03,704 INFO Direct NBA day 52/365: 2025-08-21, 0 discovered -> 0 selected
+2026-08-14 23:34:30,010 INFO Direct NBA day 53/365: 2025-08-22, 0 discovered -> 0 selected
+2026-08-14 23:34:56,342 INFO Direct NBA day 54/365: 2025-08-23, 0 discovered -> 0 selected
+2026-08-14 23:35:22,538 INFO Direct NBA day 55/365: 2025-08-24, 0 discovered -> 0 selected
+2026-08-14 23:35:48,394 INFO Direct NBA day 56/365: 2025-08-25, 0 discovered -> 0 selected
+2026-08-14 23:36:14,727 INFO Direct NBA day 57/365: 2025-08-26, 0 discovered -> 0 selected
+2026-08-14 23:36:40,745 INFO Direct NBA day 58/365: 2025-08-27, 0 discovered -> 0 selected
+2026-08-14 23:37:08,820 INFO Direct NBA day 59/365: 2025-08-28, 0 discovered -> 0 selected
+2026-08-14 23:37:35,817 INFO Direct NBA day 60/365: 2025-08-29, 0 discovered -> 0 selected
+2026-08-14 23:38:02,366 INFO Direct NBA day 61/365: 2025-08-30, 0 discovered -> 0 selected
+2026-08-14 23:38:29,235 INFO Direct NBA day 62/365: 2025-08-31, 0 discovered -> 0 selected
+2026-08-14 23:38:55,931 INFO Direct NBA day 63/365: 2025-09-01, 0 discovered -> 0 selected
+2026-08-14 23:39:22,313 INFO Direct NBA day 64/365: 2025-09-02, 0 discovered -> 0 selected
+2026-08-14 23:39:48,513 INFO Direct NBA day 65/365: 2025-09-03, 0 discovered -> 0 selected
+2026-08-14 23:40:14,888 INFO Direct NBA day 66/365: 2025-09-04, 0 discovered -> 0 selected
+2026-08-14 23:40:41,096 INFO Direct NBA day 67/365: 2025-09-05, 0 discovered -> 0 selected
+2026-08-14 23:41:07,096 INFO Direct NBA day 68/365: 2025-09-06, 0 discovered -> 0 selected
+2026-08-14 23:41:33,554 INFO Direct NBA day 69/365: 2025-09-07, 0 discovered -> 0 selected
+2026-08-14 23:41:59,771 INFO Direct NBA day 70/365: 2025-09-08, 0 discovered -> 0 selected
+2026-08-14 23:42:25,968 INFO Direct NBA day 71/365: 2025-09-09, 0 discovered -> 0 selected
+2026-08-14 23:42:51,802 INFO Direct NBA day 72/365: 2025-09-10, 0 discovered -> 0 selected
+2026-08-14 23:43:17,962 INFO Direct NBA day 73/365: 2025-09-11, 0 discovered -> 0 selected
+2026-08-14 23:43:44,638 INFO Direct NBA day 74/365: 2025-09-12, 0 discovered -> 0 selected
+2026-08-14 23:44:10,767 INFO Direct NBA day 75/365: 2025-09-13, 0 discovered -> 0 selected
+2026-08-14 23:44:37,213 INFO Direct NBA day 76/365: 2025-09-14, 0 discovered -> 0 selected
+2026-08-14 23:45:03,188 INFO Direct NBA day 77/365: 2025-09-15, 0 discovered -> 0 selected
+2026-08-14 23:45:29,553 INFO Direct NBA day 78/365: 2025-09-16, 0 discovered -> 0 selected
+2026-08-14 23:45:55,862 INFO Direct NBA day 79/365: 2025-09-17, 0 discovered -> 0 selected
+2026-08-14 23:46:22,492 INFO Direct NBA day 80/365: 2025-09-18, 0 discovered -> 0 selected
+2026-08-14 23:46:48,195 INFO Direct NBA day 81/365: 2025-09-19, 0 discovered -> 0 selected
+2026-08-14 23:47:14,424 INFO Direct NBA day 82/365: 2025-09-20, 0 discovered -> 0 selected
+2026-08-14 23:47:40,458 INFO Direct NBA day 83/365: 2025-09-21, 0 discovered -> 0 selected
+2026-08-14 23:48:06,938 INFO Direct NBA day 84/365: 2025-09-22, 0 discovered -> 0 selected
+2026-08-14 23:48:32,848 INFO Direct NBA day 85/365: 2025-09-23, 0 discovered -> 0 selected
+2026-08-14 23:48:59,420 INFO Direct NBA day 86/365: 2025-09-24, 0 discovered -> 0 selected
+2026-08-14 23:49:25,891 INFO Direct NBA day 87/365: 2025-09-25, 0 discovered -> 0 selected
+2026-08-14 23:49:51,745 INFO Direct NBA day 88/365: 2025-09-26, 0 discovered -> 0 selected
+2026-08-14 23:50:18,399 INFO Direct NBA day 89/365: 2025-09-27, 0 discovered -> 0 selected
+2026-08-14 23:50:44,707 INFO Direct NBA day 90/365: 2025-09-28, 0 discovered -> 0 selected
+2026-08-14 23:51:10,720 INFO Direct NBA day 91/365: 2025-09-29, 0 discovered -> 0 selected
+2026-08-14 23:51:37,133 INFO Direct NBA day 92/365: 2025-09-30, 0 discovered -> 0 selected
+2026-08-14 23:52:03,045 INFO Direct NBA day 93/365: 2025-10-01, 0 discovered -> 0 selected
+2026-08-14 23:52:28,945 INFO Direct NBA day 94/365: 2025-10-02, 0 discovered -> 0 selected
+2026-08-14 23:52:55,065 INFO Direct NBA day 95/365: 2025-10-03, 0 discovered -> 0 selected
+2026-08-14 23:53:20,857 INFO Direct NBA day 96/365: 2025-10-04, 0 discovered -> 0 selected
+2026-08-14 23:53:46,713 INFO Direct NBA day 97/365: 2025-10-05, 0 discovered -> 0 selected
+2026-08-14 23:54:12,542 INFO Direct NBA day 98/365: 2025-10-06, 0 discovered -> 0 selected
+2026-08-14 23:54:38,763 INFO Direct NBA day 99/365: 2025-10-07, 0 discovered -> 0 selected
+2026-08-14 23:55:04,597 INFO Direct NBA day 100/365: 2025-10-08, 0 discovered -> 0 selected
+2026-08-14 23:55:30,243 INFO Direct NBA day 101/365: 2025-10-09, 0 discovered -> 0 selected
+2026-08-14 23:55:56,089 INFO Direct NBA day 102/365: 2025-10-10, 0 discovered -> 0 selected
+2026-08-14 23:56:21,698 INFO Direct NBA day 103/365: 2025-10-11, 0 discovered -> 0 selected
+2026-08-14 23:56:47,351 INFO Direct NBA day 104/365: 2025-10-12, 0 discovered -> 0 selected
+2026-08-14 23:57:13,511 INFO Direct NBA day 105/365: 2025-10-13, 0 discovered -> 0 selected
+2026-08-14 23:57:39,227 INFO Direct NBA day 106/365: 2025-10-14, 0 discovered -> 0 selected
+2026-08-14 23:58:05,701 INFO Direct NBA day 107/365: 2025-10-15, 0 discovered -> 0 selected
+2026-08-14 23:58:32,162 INFO Direct NBA day 108/365: 2025-10-16, 0 discovered -> 0 selected
+2026-08-14 23:58:57,824 INFO Direct NBA day 109/365: 2025-10-17, 0 discovered -> 0 selected
+2026-08-14 23:59:23,732 INFO Direct NBA day 110/365: 2025-10-18, 0 discovered -> 0 selected
+2026-08-14 23:59:49,437 INFO Direct NBA day 111/365: 2025-10-19, 0 discovered -> 0 selected
+2026-08-15 00:00:43,741 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_01AM.pdf
+2026-08-15 00:00:43,752 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_01PM.pdf
+2026-08-15 00:00:43,761 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_02AM.pdf
+2026-08-15 00:00:43,769 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T14:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_02PM.pdf
+2026-08-15 00:00:43,777 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_03AM.pdf
+2026-08-15 00:00:43,795 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_04AM.pdf
+2026-08-15 00:00:43,812 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_05AM.pdf
+2026-08-15 00:00:43,830 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_06AM.pdf
+2026-08-15 00:00:43,854 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_07AM.pdf
+2026-08-15 00:00:43,878 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_08AM.pdf
+2026-08-15 00:00:43,906 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_09AM.pdf
+2026-08-15 00:00:43,932 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_10AM.pdf
+2026-08-15 00:00:43,984 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_11AM.pdf
+2026-08-15 00:00:44,010 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_12AM.pdf
+2026-08-15 00:00:44,016 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2025-10-20T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2025-10-20_12PM.pdf
+2026-08-15 00:00:44,017 INFO Direct NBA day 112/365: 2025-10-20, 24 discovered -> 1 selected
+2026-08-15 00:00:44,880 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+Traceback (most recent call last):
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/engine/default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/psycopg/cursor.py", line 117, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.ForeignKeyViolation: update or delete on table "nba_injury_conditions" violates foreign key constraint "fk_nba_episode_conditions_condition" on table "nba_injury_episode_conditions"
+DETAIL:  Key (id)=(1940418) is still referenced from table "nba_injury_episode_conditions".
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/michael/Developer/nba_injury_database/app/jobs/backfill_nba_reports.py", line 370, in <module>
+    main()
+    ~~~~^^
+  File "/Users/michael/Developer/nba_injury_database/app/jobs/backfill_nba_reports.py", line 315, in main
+    suppressed = _suppress_superseded_game_entries(session, selected_pairs)
+  File "/Users/michael/Developer/nba_injury_database/app/jobs/backfill_nba_reports.py", line 99, in _suppress_superseded_game_entries
+    session.execute(
+    ~~~~~~~~~~~~~~~^
+        delete(NBAInjuryCondition).where(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            NBAInjuryCondition.report_entry_id.in_(entry_ids)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        )
+        ^
+    )
+    ^
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2373, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/orm/session.py", line 2271, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/orm/bulk_persistence.py", line 2049, in orm_execute_statement
+    return super().orm_execute_statement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        session, statement, params, execution_options, bind_arguments, conn
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/orm/context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1421, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/sql/elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 2365, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/sqlalchemy/engine/default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/michael/Developer/nba_injury_database/.venv/lib/python3.14/site-packages/psycopg/cursor.py", line 117, in execute
+    raise ex.with_traceback(None)
+sqlalchemy.exc.IntegrityError: (psycopg.errors.ForeignKeyViolation) update or delete on table "nba_injury_conditions" violates foreign key constraint "fk_nba_episode_conditions_condition" on table "nba_injury_episode_conditions"
+DETAIL:  Key (id)=(1940418) is still referenced from table "nba_injury_episode_conditions".
+[SQL: DELETE FROM nba_injury_conditions WHERE nba_injury_conditions.report_entry_id IN (%(report_entry_id_1_1)s::BIGINT, %(report_entry_id_1_2)s::BIGINT, %(report_entry_id_1_3)s::BIGINT, %(report_entry_id_1_4)s::BIGINT, %(report_entry_id_1_5)s::BIGINT, %(report_entry_id_1_6)s::BIGINT, %(report_entry_id_1_7)s::BIGINT, %(report_entry_id_1_8)s::BIGINT, %(report_entry_id_1_9)s::BIGINT)]
+[parameters: {'report_entry_id_1_1': 2161818, 'report_entry_id_1_2': 2161819, 'report_entry_id_1_3': 2161820, 'report_entry_id_1_4': 2161821, 'report_entry_id_1_5': 2161822, 'report_entry_id_1_6': 2161823, 'report_entry_id_1_7': 2161824, 'report_entry_id_1_8': 2161825, 'report_entry_id_1_9': 2161826}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)

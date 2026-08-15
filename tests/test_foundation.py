@@ -21,4 +21,4 @@ def test_sqlalchemy_foundation_builds_engine_and_session_factory():
 
     assert engine.dialect.name == "postgresql"
     assert session_factory.kw["bind"] is engine
-    assert set(Base.metadata.tables) == {"raw_transactions", "injuries", "update_runs"}
+    assert {"raw_transactions", "injuries", "update_runs"}.issubset(Base.metadata.tables)

@@ -10,7 +10,10 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.13,<2",
+    "beautifulsoup4>=4.12,<5",
+    "httpx>=0.27,<1",
     "pandas>=2.2,<4",
+    "pdfplumber>=0.11,<1",
     "psycopg[binary]>=3.1,<4",
     "pydantic-settings>=2.2,<3",
     "sqlalchemy>=2.0,<3",
@@ -18,6 +21,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "h2>=4,<5",
     "pytest>=8.0,<10",
     "ruff>=0.9,<1",
 ]

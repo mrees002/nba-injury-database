@@ -1,0 +1,29 @@
+{
+  "source_examples": [
+    "NBA report 4, 2018-12-23 13:30: wrapped Minnesota Timberwolves team cell",
+    "NBA report 3, 2018-12-22 17:30: adjacent NOT YET SUBMITTED and ALL PLAYERS AVAILABLE rows"
+  ],
+  "pages": [
+    [
+      [260, 550, "Injury Report: 12/23/18 01:30 PM"],
+      [20, 510, "Game Date"], [73, 510, "Game Time"], [126, 510, "Matchup"],
+      [179, 510, "Team"], [269, 510, "Player Name"], [382, 510, "Category"],
+      [495, 510, "Reason"], [607, 510, "Current Status"], [720, 510, "Previous Status"],
+      [20, 490, "12/23/2018"], [73, 490, "07:00 (ET)"], [126, 490, "SAS@PHX"],
+      [179, 490, "San Antonio Spurs"], [269, 490, "Aldridge, LaMarcus"],
+      [382, 490, "Injury/Illness"], [495, 490, "Sore Right Knee"],
+      [607, 490, "Questionable"], [720, 490, "-"],
+      [179, 472, "Phoenix Suns"], [382, 472, "ALL PLAYERS AVAILABLE"],
+      [73, 450, "08:00 (ET)"], [126, 450, "MIN@OKC"],
+      [179, 450, "Minnesota"], [269, 450, "Rose, Derrick"],
+      [382, 450, "Injury/Illness"], [495, 450, "Sore Left Ankle"],
+      [607, 450, "Questionable"], [720, 450, "-"],
+      [179, 442, "Timberwolves"],
+      [269, 430, "Teague, Jeff"], [382, 430, "Injury/Illness"],
+      [495, 430, "Left Ankle Inflammation"], [607, 430, "Out"], [720, 430, "-"],
+      [73, 400, "09:00 (ET)"], [126, 400, "DAL@POR"], [179, 400, "Dallas Mavericks"],
+      [382, 400, "NOT YET SUBMITTED"],
+      [179, 382, "Portland Trail Blazers"], [382, 382, "ALL PLAYERS AVAILABLE"]
+    ]
+  ]
+}

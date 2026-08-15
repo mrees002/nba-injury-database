@@ -36,4 +36,3 @@ intentional processing-rule change requiring review.
 
 Every SQL-backed injury produced in this regression run has a non-null foreign key to the selected
 `RawTransaction`.
-

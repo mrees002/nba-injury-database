@@ -1,0 +1,17 @@
+{
+  "pages": [
+    [
+      [270, 550, "Injury Report: 04/18/21 08:30 PM"],
+      [20, 510, "Game Date"], [94, 510, "Game Time"], [169, 510, "Matchup"],
+      [243, 510, "Team"], [370, 510, "Player Name"], [498, 510, "Current Status"],
+      [604, 510, "Reason"],
+      [20, 490, "04/18/2021"], [94, 490, "01:00 (ET)"], [169, 490, "IND@ATL"],
+      [243, 490, "Atlanta Hawks"], [370, 490, "Collins, John"], [498, 490, "Available"],
+      [604, 490, "Injury/Illness - Left Ankle; Sprain"],
+      [370, 465, "Hunter, De'Andre"], [498, 465, "Out"],
+      [604, 470, "Injury/Illness - Right Knee;"], [604, 460, "Soreness"],
+      [243, 430, "Indiana Pacers"], [370, 430, "Turner, Myles"], [498, 430, "Questionable"],
+      [604, 430, "Injury/Illness - Left Ankle; Sprain"]
+    ]
+  ]
+}

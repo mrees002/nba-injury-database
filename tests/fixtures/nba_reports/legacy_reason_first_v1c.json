@@ -1,0 +1,16 @@
+{
+  "pages": [
+    [
+      [260, 550, "Injury Report: 11/15/19 01:30 PM"],
+      [20, 510, "Game Date"], [82, 510, "Game Time"], [143, 510, "Matchup"],
+      [204, 510, "Team"], [309, 510, "Player Name"], [440, 510, "Reason"],
+      [571, 510, "Current Status"], [702, 510, "Previous Status"],
+      [20, 490, "11/15/2019"], [82, 490, "07:00 (ET)"], [143, 490, "DET@CHA"],
+      [204, 490, "Charlotte Hornets"], [309, 490, "Bacon, Dwayne"],
+      [440, 490, "Injury/Illness - Right Knee Soreness"], [571, 490, "Probable"],
+      [702, 490, "-"],
+      [440, 472, "Injury/Illness - Fractured Third"], [309, 468, "Batum, Nicolas"],
+      [571, 468, "Out"], [702, 468, "-"], [440, 464, "Finger, Left Hand"]
+    ]
+  ]
+}

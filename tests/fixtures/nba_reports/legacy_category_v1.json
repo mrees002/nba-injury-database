@@ -1,0 +1,26 @@
+{
+  "pages": [
+    [
+      [260, 550, "Injury Report: 10/28/19 01:30 PM"],
+      [20, 510, "Game Date"], [73, 510, "Game Time"], [126, 510, "Matchup"],
+      [179, 510, "Team"], [269, 510, "Player Name"], [382, 510, "Category"],
+      [495, 510, "Reason"], [607, 510, "Current Status"], [720, 510, "Previous Status"],
+      [20, 490, "10/28/2019"], [73, 490, "07:00 (ET)"], [126, 490, "CHI@NYK"],
+      [179, 490, "Chicago Bulls"], [269, 490, "Carter Jr., Wendell"],
+      [382, 490, "Injury/Illness"], [495, 490, "Left thumb sprain"],
+      [607, 490, "Available"], [720, 490, "Probable"],
+      [269, 470, "Hutchison, Chandler"], [382, 470, "Injury/Illness"],
+      [495, 470, "Left hamstring strain"], [607, 470, "Out"], [720, 470, "-"]
+    ],
+    [
+      [260, 550, "Injury Report: 10/28/19 01:30 PM"],
+      [20, 510, "Game Date"], [73, 510, "Game Time"], [126, 510, "Matchup"],
+      [179, 510, "Team"], [269, 510, "Player Name"], [382, 510, "Category"],
+      [495, 510, "Reason"], [607, 510, "Current Status"], [720, 510, "Previous Status"],
+      [269, 490, "Porter Jr., Otto"], [382, 490, "Injury/Illness"],
+      [495, 490, "Facial sutures"], [607, 490, "Available"], [720, 490, "Probable"],
+      [73, 460, "08:00 (ET)"], [126, 460, "ORL@TOR"], [179, 460, "Toronto Raptors"],
+      [382, 460, "NOT YET SUBMITTED"]
+    ]
+  ]
+}

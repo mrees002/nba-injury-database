@@ -1,4 +1,4 @@
--- Proposed logical schema.
+-- Historical proposed logical schema retained for the PST benchmark.
 -- Codex should implement this through SQLAlchemy models + Alembic migrations.
 
 CREATE TABLE raw_transactions (

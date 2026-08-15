@@ -1,0 +1,17 @@
+{
+  "pages": [
+    [
+      [260, 550, "Injury Report: 12/17/19 01:30 PM"],
+      [20, 510, "Game Date"], [73, 510, "Game Time"], [126, 510, "Matchup"],
+      [179, 510, "Team"], [269, 510, "Player Name"], [359, 510, "Current Status"],
+      [434, 510, "Reason"], [596, 510, "Previous Status"], [671, 510, "Previous Reason"],
+      [20, 490, "12/17/2019"], [73, 490, "07:30 (ET)"], [126, 490, "ATL@NYK"],
+      [179, 490, "Atlanta Hawks"], [269, 490, "Huerter, Kevin"], [359, 490, "Probable"],
+      [434, 490, "Injury/Illness - Left Shoulder; Contusion"], [596, 490, "Questionable"],
+      [671, 490, "Injury/Illness - Left Shoulder; Contusion"],
+      [269, 470, "Parker, Jabari"], [359, 470, "Available"],
+      [434, 470, "Injury/Illness - Right Ankle; Sprain"], [596, 470, "Probable"],
+      [671, 470, "Injury/Illness - Right Ankle; Sprain"]
+    ]
+  ]
+}

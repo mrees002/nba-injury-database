@@ -1,11 +1,19 @@
 from sqlalchemy import CheckConstraint, UniqueConstraint
 
 from app.db.base import Base
-from app.models import Injury, RawTransaction, UpdateRun
+from app.models import (
+    Injury,
+    NBAInjuryCondition,
+    NBAInjuryEpisode,
+    NBAReport,
+    NBAReportEntry,
+    RawTransaction,
+    UpdateRun,
+)
 
 
 def test_required_tables_and_columns_are_registered():
-    assert set(Base.metadata.tables) == {"raw_transactions", "injuries", "update_runs"}
+    assert {"raw_transactions", "injuries", "update_runs"}.issubset(Base.metadata.tables)
     assert set(RawTransaction.__table__.columns.keys()) == {
         "id",
         "source_type",
@@ -83,3 +91,32 @@ def test_injury_preserves_raw_transaction_lineage():
 
     assert len(foreign_keys) == 1
     assert next(iter(foreign_keys)).target_fullname == "raw_transactions.id"
+
+
+def test_official_nba_schema_preserves_document_and_episode_lineage():
+    assert {
+        "nba_players",
+        "nba_teams",
+        "nba_games",
+        "nba_report_candidates",
+        "nba_reports",
+        "nba_report_entries",
+        "nba_injury_conditions",
+        "nba_injury_episodes",
+        "nba_injury_episode_conditions",
+    }.issubset(Base.metadata.tables)
+    assert next(iter(NBAReportEntry.__table__.c.report_id.foreign_keys)).target_fullname == (
+        "nba_reports.id"
+    )
+    assert (
+        next(iter(NBAInjuryCondition.__table__.c.report_entry_id.foreign_keys)).target_fullname
+        == "nba_report_entries.id"
+    )
+    assert NBAReport.__table__.c.content_hash.unique
+    assert {
+        "body_part",
+        "laterality",
+        "injury_type",
+        "normalized_reason",
+        "methodology_version",
+    }.issubset(NBAInjuryEpisode.__table__.columns.keys())

@@ -1,16 +1,22 @@
 # NBA Injury Dataset: Codex Starter Kit
 
+> **Current repository note (2026-08-11):** This starter workflow is historical. Prompts 1-4 were
+> completed, PST acquisition was blocked without bypassing Cloudflare, and the project moved to
+> official NBA injury-report PDFs. Do not execute the old Prompt 5. Start with `README.md` and
+> `../../README.md` and `../../docs/nba_official_methodology.md` for the current architecture and
+> migration status. This file is retained only as historical starter-kit context.
+
 This folder is designed to be copied into a new Git repository and used as the starting context for Codex.
 
 ## Files
 
 - `MASTER_CODEX_PROMPT.md`: overall product and engineering specification
 - `CODEX_PROMPTS.md`: staged prompts to run one at a time
-- `AGENTS.md`: persistent repository instructions for Codex
+- `../../AGENTS.md`: current persistent repository instructions for Codex
 - `proposed_schema.sql`: database design reference
-- `legacy/process_injuries_pipeline.py`: existing processing logic
-- `legacy/WEB_SCRAPER_MIGRATION_GUIDE.md`: prior architecture notes
-- `legacy/UPLOADED_FILES_REFERENCE.txt`: inventory of the historical files from the prior workflow
+- `../process_injuries_pipeline.py`: existing processing logic
+- `../WEB_SCRAPER_MIGRATION_GUIDE.md`: prior architecture notes
+- `../UPLOADED_FILES_REFERENCE.txt`: inventory of the historical files from the prior workflow
 
 ## Recommended workflow
 

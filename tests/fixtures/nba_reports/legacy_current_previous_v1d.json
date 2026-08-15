@@ -1,0 +1,15 @@
+{
+  "pages": [
+    [
+      [260, 550, "Injury Report: 11/21/19 05:30 PM"],
+      [20, 510, "Game Date"], [82, 510, "Game Time"], [143, 510, "Matchup"],
+      [204, 510, "Team"], [309, 510, "Player Name"], [440, 510, "Current Status"],
+      [571, 510, "Reason"], [702, 510, "Previous Status"],
+      [20, 490, "11/21/2019"], [82, 490, "08:00 (ET)"], [143, 490, "POR@MIL"],
+      [204, 490, "Milwaukee Bucks"], [309, 490, "Mason, Frank"], [440, 490, "Out"],
+      [571, 490, "G League - Two-Way"], [702, 490, "-"],
+      [309, 470, "Middleton, Khris"], [440, 470, "Out"],
+      [571, 470, "Injury/Illness - Left Thigh; Contusion"], [702, 470, "-"]
+    ]
+  ]
+}
