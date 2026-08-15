@@ -312,3 +312,12 @@
 2026-08-15 10:42:45,135 INFO Direct NBA day 78/178: 2026-01-05, 96 discovered -> 1 selected
 2026-08-15 10:42:45,694 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
 2026-08-15 10:45:00,294 INFO Suppressed 6426 entries from older reports for games superseded by newer snapshots on 2026-01-05
+2026-08-15 10:48:54,340 INFO Direct NBA day 79/178: 2026-01-06, 96 discovered -> 1 selected
+2026-08-15 10:48:54,874 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-15 10:50:11,785 INFO Suppressed 3752 entries from older reports for games superseded by newer snapshots on 2026-01-06
+2026-08-15 10:54:12,984 INFO Direct NBA day 80/178: 2026-01-07, 96 discovered -> 1 selected
+2026-08-15 10:54:13,468 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-15 10:56:44,197 INFO Suppressed 7378 entries from older reports for games superseded by newer snapshots on 2026-01-07
+2026-08-15 11:00:43,635 INFO Direct NBA day 81/178: 2026-01-08, 96 discovered -> 1 selected
+2026-08-15 11:00:44,164 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-15 11:01:45,105 INFO Suppressed 2843 entries from older reports for games superseded by newer snapshots on 2026-01-08

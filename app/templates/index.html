@@ -82,11 +82,24 @@
         }
         button[type="submit"]:hover { background: #1d4ed8; }
 
-        #download-csv {
+        #download-csv,
+        #clear-filters {
             background: #e5e7eb;
             color: #374151;
         }
-        #download-csv:hover { background: #d1d5db; }
+        #download-csv:hover,
+        #clear-filters:hover { background: #d1d5db; }
+
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem 1rem;
+            color: #64748b;
+            font-size: 0.95rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,.08);
+            margin-top: 0.5rem;
+        }
 
         /* ---- Table ---- */
         .table-wrap {
@@ -128,12 +141,6 @@
 
         tbody tr:nth-child(even) { background: #fafbfc; }
         tbody tr:hover { background: #eef2ff; }
-
-        tbody td a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-        tbody td a:hover { text-decoration: underline; }
 
         /* ---- Status multiselect ---- */
         .multiselect-label { flex-direction: column; }
@@ -259,26 +266,26 @@
             <label>End Date: <input type="text" name="end_date" placeholder="YYYY-MM-DD"></label>
             <label class="multiselect-label">Status:
                 <div class="multiselect" id="status-multiselect">
-                    <button type="button" class="multiselect-trigger" id="status-trigger" aria-haspopup="listbox" aria-expanded="false">4 statuses selected</button>
+                    <button type="button" class="multiselect-trigger" id="status-trigger" aria-haspopup="listbox" aria-expanded="false">All statuses</button>
                     <div class="multiselect-panel" id="status-panel" role="listbox" aria-label="Status filter">
                         <label class="multiselect-option"><input type="checkbox" name="status" value="Out" checked> Out</label>
                         <label class="multiselect-option"><input type="checkbox" name="status" value="Doubtful" checked> Doubtful</label>
                         <label class="multiselect-option"><input type="checkbox" name="status" value="Questionable" checked> Questionable</label>
                         <label class="multiselect-option"><input type="checkbox" name="status" value="Probable" checked> Probable</label>
-                        <label class="multiselect-option"><input type="checkbox" name="status" value="Available"> Available</label>
+                        <label class="multiselect-option"><input type="checkbox" name="status" value="Available" checked> Available</label>
                     </div>
                 </div>
             </label>
             <label>Injury Type: <input type="text" name="injury_type"></label>
             <label>Reason Search: <input type="text" name="reason_search"></label>
             <button type="submit">Filter</button>
-            <button type="button" id="download-csv">Download CSV</button>
+            <button type="button" id="clear-filters">Clear Filters</button>
+            <button type="button" id="download-csv">Download filtered CSV</button>
         </form>
         <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Player</th>
                         <th>Team</th>
                         <th>Game Date</th>
@@ -320,7 +327,7 @@
         Promise.all([
             loadDropdown('player-select', '/players', 'id', 'canonical_name'),
             loadDropdown('team-select', '/teams', 'id', 'canonical_name')
-        ]).then(() => loadInjuries());
+        ]).then(() => loadInjuries('status=Out&status=Doubtful&status=Questionable&status=Probable&status=Available'));
 
         function loadInjuries(filterQs) {
             const qs = filterQs ? filterQs + '&' : '';
@@ -330,23 +337,31 @@
                 .then(data => {
                     const tbody = document.getElementById('injuries-body');
                     tbody.innerHTML = '';
+                    const tableWrap = document.querySelector('.table-wrap');
+                    let emptyState = document.querySelector('.empty-state');
+                    if (data.length === 0) {
+                        tableWrap.style.display = 'none';
+                        if (!emptyState) {
+                            emptyState = document.createElement('div');
+                            emptyState.className = 'empty-state';
+                            emptyState.textContent = 'No matching injury records';
+                            tableWrap.parentNode.insertBefore(emptyState, tableWrap.nextSibling);
+                        }
+                        emptyState.style.display = '';
+                    } else {
+                        if (emptyState) emptyState.style.display = 'none';
+                        tableWrap.style.display = '';
+                    }
                     data.forEach(entry => {
                         const tr = document.createElement('tr');
                         const values = [
-                            entry.id, entry.player_name, entry.team_name, entry.game_date,
+                            entry.player_name, entry.team_name, entry.game_date,
                             entry.matchup, entry.status, entry.raw_reason,
                             entry.reason_category, entry.body_part, entry.injury_type
                         ];
                         values.forEach((val, i) => {
                             const td = document.createElement('td');
-                            if (i === 1 && entry.player_name && entry.player_id) {
-                                const a = document.createElement('a');
-                                a.href = '/players/' + entry.player_id;
-                                a.textContent = entry.player_name;
-                                td.appendChild(a);
-                            } else {
-                                td.textContent = val ?? '';
-                            }
+                            td.textContent = val ?? '';
                             tr.appendChild(td);
                         });
                         tbody.appendChild(tr);
@@ -397,6 +412,27 @@
         document.getElementById('download-csv').addEventListener('click', function() {
             const qs = getFilterParams();
             window.location.href = '/injuries.csv' + (qs ? '?' + qs : '');
+        });
+
+        document.getElementById('clear-filters').addEventListener('click', function() {
+            document.getElementById('player-select').value = '';
+            document.getElementById('team-select').value = '';
+            document.querySelector('#filter-form input[name="body_part"]').value = '';
+            document.querySelector('#filter-form select[name="season"]').value = '';
+            document.querySelector('#filter-form input[name="start_date"]').value = '';
+            document.querySelector('#filter-form input[name="end_date"]').value = '';
+            document.querySelector('#filter-form input[name="injury_type"]').value = '';
+            document.querySelector('#filter-form input[name="reason_search"]').value = '';
+            const defaults = ['Out', 'Doubtful', 'Questionable', 'Probable', 'Available'];
+            document.querySelectorAll('#status-panel input[type="checkbox"]').forEach(function(cb) {
+                cb.checked = defaults.includes(cb.value);
+            });
+            const trigger = document.getElementById('status-trigger');
+            const total = document.querySelectorAll('#status-panel input[type="checkbox"]').length;
+            const checked = document.querySelectorAll('#status-panel input[type="checkbox"]:checked').length;
+            trigger.textContent = checked === total ? 'All statuses' : checked + ' statuses selected';
+            currentPage = 1;
+            loadInjuries('');
         });
 
         // ---- Status multiselect ----
