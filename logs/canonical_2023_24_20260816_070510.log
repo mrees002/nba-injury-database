@@ -1,0 +1,130 @@
+2026-08-16 07:05:44,735 INFO Direct NBA day 1/364: 2023-10-24, 7 discovered -> 1 selected
+2026-08-16 07:05:45,453 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:05:48,708 INFO Suppressed 126 entries from older reports for games superseded by newer snapshots on 2023-10-24
+2026-08-16 07:06:43,009 INFO Direct NBA day 2/364: 2023-10-25, 24 discovered -> 1 selected
+2026-08-16 07:06:43,226 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:06:57,144 INFO Suppressed 843 entries from older reports for games superseded by newer snapshots on 2023-10-25
+2026-08-16 07:07:50,382 INFO Direct NBA day 3/364: 2023-10-26, 24 discovered -> 1 selected
+2026-08-16 07:07:50,595 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:07:55,365 INFO Suppressed 229 entries from older reports for games superseded by newer snapshots on 2023-10-26
+2026-08-16 07:08:50,316 INFO Direct NBA day 4/364: 2023-10-27, 24 discovered -> 1 selected
+2026-08-16 07:08:50,543 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:08:55,082 INFO Suppressed 224 entries from older reports for games superseded by newer snapshots on 2023-10-27
+2026-08-16 07:09:49,069 INFO Direct NBA day 5/364: 2023-10-28, 24 discovered -> 1 selected
+2026-08-16 07:09:49,317 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:09:56,922 INFO Suppressed 486 entries from older reports for games superseded by newer snapshots on 2023-10-28
+2026-08-16 07:10:51,834 INFO Direct NBA day 6/364: 2023-10-29, 24 discovered -> 1 selected
+2026-08-16 07:10:52,173 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:10:56,975 INFO Suppressed 222 entries from older reports for games superseded by newer snapshots on 2023-10-29
+2026-08-16 07:11:51,659 INFO Direct NBA day 7/364: 2023-10-30, 24 discovered -> 1 selected
+2026-08-16 07:11:51,924 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:12:00,957 INFO Suppressed 587 entries from older reports for games superseded by newer snapshots on 2023-10-30
+2026-08-16 07:12:54,697 INFO Direct NBA day 8/364: 2023-10-31, 24 discovered -> 1 selected
+2026-08-16 07:13:07,823 INFO Suppressed 808 entries from older reports for games superseded by newer snapshots on 2023-10-31
+2026-08-16 07:14:03,175 INFO Direct NBA day 9/364: 2023-11-01, 24 discovered -> 1 selected
+2026-08-16 07:14:03,532 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:14:21,166 INFO Suppressed 1196 entries from older reports for games superseded by newer snapshots on 2023-11-01
+2026-08-16 07:15:14,865 INFO Direct NBA day 10/364: 2023-11-02, 24 discovered -> 1 selected
+2026-08-16 07:15:15,141 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:15:24,897 INFO Suppressed 615 entries from older reports for games superseded by newer snapshots on 2023-11-02
+2026-08-16 07:16:19,560 INFO Direct NBA day 11/364: 2023-11-03, 24 discovered -> 1 selected
+2026-08-16 07:16:19,872 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:16:36,859 INFO Suppressed 1125 entries from older reports for games superseded by newer snapshots on 2023-11-03
+2026-08-16 07:17:31,155 INFO Direct NBA day 12/364: 2023-11-04, 24 discovered -> 1 selected
+2026-08-16 07:17:31,424 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:17:44,056 INFO Suppressed 894 entries from older reports for games superseded by newer snapshots on 2023-11-04
+2026-08-16 07:18:39,582 INFO Direct NBA day 13/364: 2023-11-05, 24 discovered -> 1 selected
+2026-08-16 07:18:47,121 INFO Suppressed 467 entries from older reports for games superseded by newer snapshots on 2023-11-05
+2026-08-16 07:19:42,839 INFO Direct NBA day 14/364: 2023-11-06, 24 discovered -> 1 selected
+2026-08-16 07:19:43,156 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:19:53,695 INFO Suppressed 673 entries from older reports for games superseded by newer snapshots on 2023-11-06
+2026-08-16 07:20:48,064 INFO Direct NBA day 15/364: 2023-11-07, 24 discovered -> 1 selected
+2026-08-16 07:20:48,390 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:20:51,633 INFO Suppressed 156 entries from older reports for games superseded by newer snapshots on 2023-11-07
+2026-08-16 07:21:47,720 INFO Direct NBA day 16/364: 2023-11-08, 24 discovered -> 1 selected
+2026-08-16 07:21:48,038 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:22:07,098 INFO Suppressed 1511 entries from older reports for games superseded by newer snapshots on 2023-11-08
+2026-08-16 07:23:01,557 INFO Direct NBA day 17/364: 2023-11-09, 24 discovered -> 1 selected
+2026-08-16 07:23:01,825 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:23:04,830 INFO Suppressed 120 entries from older reports for games superseded by newer snapshots on 2023-11-09
+2026-08-16 07:24:00,553 INFO Direct NBA day 18/364: 2023-11-10, 24 discovered -> 1 selected
+2026-08-16 07:24:11,130 INFO Suppressed 690 entries from older reports for games superseded by newer snapshots on 2023-11-10
+2026-08-16 07:25:06,028 INFO Direct NBA day 19/364: 2023-11-11, 24 discovered -> 1 selected
+2026-08-16 07:25:06,362 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:25:12,048 INFO Suppressed 323 entries from older reports for games superseded by newer snapshots on 2023-11-11
+2026-08-16 07:26:08,276 INFO Direct NBA day 20/364: 2023-11-12, 24 discovered -> 1 selected
+2026-08-16 07:26:08,575 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:26:18,882 INFO Suppressed 687 entries from older reports for games superseded by newer snapshots on 2023-11-12
+2026-08-16 07:27:13,308 INFO Direct NBA day 21/364: 2023-11-13, 24 discovered -> 1 selected
+2026-08-16 07:27:13,670 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:27:22,068 INFO Suppressed 571 entries from older reports for games superseded by newer snapshots on 2023-11-13
+2026-08-16 07:28:19,996 INFO Direct NBA day 22/364: 2023-11-14, 24 discovered -> 1 selected
+2026-08-16 07:28:20,337 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:28:34,944 INFO Suppressed 1006 entries from older reports for games superseded by newer snapshots on 2023-11-14
+2026-08-16 07:29:29,223 INFO Direct NBA day 23/364: 2023-11-15, 24 discovered -> 1 selected
+2026-08-16 07:29:29,482 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:29:36,928 INFO Suppressed 519 entries from older reports for games superseded by newer snapshots on 2023-11-15
+2026-08-16 07:30:31,875 INFO Direct NBA day 24/364: 2023-11-16, 24 discovered -> 1 selected
+2026-08-16 07:30:32,169 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:30:37,035 INFO Suppressed 282 entries from older reports for games superseded by newer snapshots on 2023-11-16
+2026-08-16 07:31:33,458 INFO Direct NBA day 25/364: 2023-11-17, 24 discovered -> 1 selected
+2026-08-16 07:31:33,828 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:31:45,412 INFO Suppressed 881 entries from older reports for games superseded by newer snapshots on 2023-11-17
+2026-08-16 07:32:40,589 INFO Direct NBA day 26/364: 2023-11-18, 24 discovered -> 1 selected
+2026-08-16 07:32:40,913 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:32:48,279 INFO Suppressed 436 entries from older reports for games superseded by newer snapshots on 2023-11-18
+2026-08-16 07:33:43,458 INFO Direct NBA day 27/364: 2023-11-19, 24 discovered -> 1 selected
+2026-08-16 07:33:43,787 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:33:58,200 INFO Suppressed 909 entries from older reports for games superseded by newer snapshots on 2023-11-19
+2026-08-16 07:34:53,422 INFO Direct NBA day 28/364: 2023-11-20, 24 discovered -> 1 selected
+2026-08-16 07:34:53,772 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:35:06,972 INFO Suppressed 888 entries from older reports for games superseded by newer snapshots on 2023-11-20
+2026-08-16 07:36:01,550 INFO Direct NBA day 29/364: 2023-11-21, 24 discovered -> 1 selected
+2026-08-16 07:36:01,876 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:36:22,853 INFO Suppressed 1420 entries from older reports for games superseded by newer snapshots on 2023-11-21
+2026-08-16 07:37:18,867 INFO Direct NBA day 30/364: 2023-11-22, 24 discovered -> 1 selected
+2026-08-16 07:37:19,176 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:37:34,426 INFO Suppressed 1188 entries from older reports for games superseded by newer snapshots on 2023-11-22
+2026-08-16 07:38:28,414 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T01:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_01AM.pdf
+2026-08-16 07:38:28,436 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T13:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_01PM.pdf
+2026-08-16 07:38:28,457 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T02:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_02AM.pdf
+2026-08-16 07:38:28,622 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T03:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_03AM.pdf
+2026-08-16 07:38:28,676 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T04:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_04AM.pdf
+2026-08-16 07:38:28,746 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T05:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_05AM.pdf
+2026-08-16 07:38:28,826 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T06:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_06AM.pdf
+2026-08-16 07:38:28,929 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T07:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_07AM.pdf
+2026-08-16 07:38:29,040 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T08:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_08AM.pdf
+2026-08-16 07:38:29,151 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T09:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_09AM.pdf
+2026-08-16 07:38:29,319 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T10:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_10AM.pdf
+2026-08-16 07:38:29,432 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T11:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_11AM.pdf
+2026-08-16 07:38:29,545 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T00:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_12AM.pdf
+2026-08-16 07:38:29,564 INFO Skipped non-substantive snapshot (no date/matchup pairs): timestamp=2023-11-23T12:30:00 source_url=https://ak-static.cms.nba.com/referee/injury/Injury-Report_2023-11-23_12PM.pdf
+2026-08-16 07:38:29,565 INFO Direct NBA day 31/364: 2023-11-23, 24 discovered -> 1 selected
+2026-08-16 07:38:29,821 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:38:35,436 INFO Suppressed 287 entries from older reports for games superseded by newer snapshots on 2023-11-23
+2026-08-16 07:39:30,578 INFO Direct NBA day 32/364: 2023-11-24, 24 discovered -> 1 selected
+2026-08-16 07:39:30,895 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:39:48,484 INFO Suppressed 1247 entries from older reports for games superseded by newer snapshots on 2023-11-24
+2026-08-16 07:40:43,983 INFO Direct NBA day 33/364: 2023-11-25, 24 discovered -> 1 selected
+2026-08-16 07:40:44,282 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:40:52,296 INFO Suppressed 503 entries from older reports for games superseded by newer snapshots on 2023-11-25
+2026-08-16 07:41:48,775 INFO Direct NBA day 34/364: 2023-11-26, 24 discovered -> 1 selected
+2026-08-16 07:41:49,055 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:41:56,030 INFO Suppressed 486 entries from older reports for games superseded by newer snapshots on 2023-11-26
+2026-08-16 07:42:50,429 INFO Direct NBA day 35/364: 2023-11-27, 24 discovered -> 1 selected
+2026-08-16 07:42:50,735 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:43:02,319 INFO Suppressed 721 entries from older reports for games superseded by newer snapshots on 2023-11-27
+2026-08-16 07:43:55,253 INFO Direct NBA day 36/364: 2023-11-28, 24 discovered -> 1 selected
+2026-08-16 07:43:55,549 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:44:25,438 INFO Suppressed 2092 entries from older reports for games superseded by newer snapshots on 2023-11-28
+2026-08-16 07:45:21,139 INFO Direct NBA day 37/364: 2023-11-29, 24 discovered -> 1 selected
+2026-08-16 07:45:21,461 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:45:38,222 INFO Suppressed 1166 entries from older reports for games superseded by newer snapshots on 2023-11-29
+2026-08-16 07:46:33,967 INFO Direct NBA day 38/364: 2023-11-30, 24 discovered -> 1 selected
+2026-08-16 07:46:34,296 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:46:53,966 INFO Suppressed 1404 entries from older reports for games superseded by newer snapshots on 2023-11-30
+2026-08-16 07:47:49,020 INFO Direct NBA day 39/364: 2023-12-01, 24 discovered -> 1 selected
+2026-08-16 07:48:05,598 INFO Suppressed 1122 entries from older reports for games superseded by newer snapshots on 2023-12-01
+2026-08-16 07:49:01,211 INFO Direct NBA day 40/364: 2023-12-02, 24 discovered -> 1 selected
+2026-08-16 07:49:01,527 INFO NBA backfill checkpoint processed=1/1 parsed=1 missing=0 http_failed=0 invalid_pdf=0 parse_failed=0
+2026-08-16 07:49:19,985 INFO Suppressed 1214 entries from older reports for games superseded by newer snapshots on 2023-12-02

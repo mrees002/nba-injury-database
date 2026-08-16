@@ -161,6 +161,12 @@ def _build_entry_query(
         )
     if reason_search is not None:
         q = q.filter(NBAReportEntry.raw_reason.ilike(f"%{reason_search}%"))
+    q = q.order_by(
+        NBAReportEntry.game_date,
+        NBAReportEntry.matchup,
+        NBATeam.canonical_name,
+        NBAPlayer.canonical_name,
+    )
     return q
 
 

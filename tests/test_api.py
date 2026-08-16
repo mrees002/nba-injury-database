@@ -975,3 +975,178 @@ def test_status_csv_multiple_values_parity(client, db):
     j = client.get("/injuries?status=Out&status=Questionable").json()
     c = _csv_ids(client, "/injuries.csv?status=Out&status=Questionable")
     assert [r["id"] for r in j] == c
+
+
+# ── Default ordering ──────────────────────────────────────────────────────────
+
+
+def _seed_ordering(session: Session):
+    """Seed entries to verify deterministic default ordering.
+
+    Layout (game_date, matchup, team, player):
+      2025-01-10, LAL @ BOS, Boston Celtics,   "Bravo, Alpha"
+      2025-01-10, LAL @ BOS, Los Angeles Lakers, "Charlie"
+      2025-01-10, MIL @ GSW, Golden State Warriors, "Delta"
+      2025-01-10, MIL @ GSW, Milwaukee Bucks,      "Echo"
+      2025-01-15, LAL @ BOS, Boston Celtics,      "Foxtrot"
+      2025-01-20, LAL @ BOS, Boston Celtics,      "Golf"
+    """
+    players = [
+        NBAPlayer(id=101, canonical_name="Alpha", name_key="alpha"),
+        NBAPlayer(id=102, canonical_name="Bravo", name_key="bravo"),
+        NBAPlayer(id=103, canonical_name="Charlie", name_key="charlie"),
+        NBAPlayer(id=104, canonical_name="Delta", name_key="delta"),
+        NBAPlayer(id=105, canonical_name="Echo", name_key="echo"),
+        NBAPlayer(id=106, canonical_name="Foxtrot", name_key="foxtrot"),
+        NBAPlayer(id=107, canonical_name="Golf", name_key="golf"),
+    ]
+    teams = [
+        NBATeam(id=201, canonical_name="Boston Celtics", abbreviation="BOS"),
+        NBATeam(id=202, canonical_name="Los Angeles Lakers", abbreviation="LAL"),
+        NBATeam(id=203, canonical_name="Golden State Warriors", abbreviation="GSW"),
+        NBATeam(id=204, canonical_name="Milwaukee Bucks", abbreviation="MIL"),
+    ]
+    candidate = NBAReportCandidate(
+        id=300,
+        source_url="https://example.com/ordering.pdf",
+        report_date=date(2025, 1, 20),
+        status="parsed",
+    )
+    report = NBAReport(
+        id=400,
+        candidate_id=300,
+        report_date=date(2025, 1, 20),
+        report_time=time(17, 0),
+        source_url="https://example.com/ordering.pdf",
+        content_hash="order123",
+        content=b"dummy",
+        content_type="application/pdf",
+        byte_length=5,
+        parse_status="parsed",
+    )
+    session.add_all(players + teams + [candidate, report])
+    session.flush()
+
+    # (id, game_date, matchup, team_id, player_id)
+    specs = [
+        (501, date(2025, 1, 10), "LAL @ BOS", 201, 102),  # BOS, Bravo
+        (502, date(2025, 1, 10), "LAL @ BOS", 202, 103),  # LAL, Charlie
+        (503, date(2025, 1, 10), "MIL @ GSW", 203, 104),  # GSW, Delta
+        (504, date(2025, 1, 10), "MIL @ GSW", 204, 105),  # MIL, Echo
+        (505, date(2025, 1, 10), "LAL @ BOS", 201, 101),  # BOS, Alpha (second player)
+        (506, date(2025, 1, 15), "LAL @ BOS", 201, 106),  # BOS, Foxtrot
+        (507, date(2025, 1, 20), "LAL @ BOS", 201, 107),  # BOS, Golf
+    ]
+    for eid, gd, matchup, tid, pid in specs:
+        entry = NBAReportEntry(
+            id=eid,
+            report_id=400,
+            page_number=1,
+            row_number=eid - 500,
+            team_id=tid,
+            player_id=pid,
+            entry_type="player",
+            game_date=gd,
+            game_time=time(19, 30),
+            matchup=matchup,
+            team_name_raw=teams[tid - 201].abbreviation,
+            player_name_raw=players[pid - 101].canonical_name,
+            status="Out",
+            reason_category="Injury",
+            raw_reason="general soreness",
+            raw_row_text="raw",
+        )
+        session.add(entry)
+        session.flush()
+        cond = NBAInjuryCondition(
+            report_entry_id=eid,
+            condition_index=1,
+            body_part="Knee",
+            injury_type="Soreness",
+            normalized_reason="sore knee",
+            classification_version="v1",
+            is_injury=True,
+        )
+        session.add(cond)
+    session.commit()
+
+
+def _ordering_ids(client, url="/injuries") -> list[int]:
+    return [r["id"] for r in client.get(url).json()]
+
+
+def test_ordering_different_game_dates(client, db):
+    _seed_ordering(db)
+    ids = _ordering_ids(client)
+    dates = [r["game_date"] for r in client.get("/injuries").json()]
+    assert dates == sorted(dates), "rows must be ordered by game_date ascending"
+
+
+def test_ordering_same_date_multiple_matchups(client, db):
+    _seed_ordering(db)
+    data = client.get("/injuries").json()
+    # All 2025-01-10 rows: LAL @ BOS comes before MIL @ GSW lexicographically
+    jan10 = [r for r in data if r["game_date"] == "2025-01-10"]
+    matchups = [r["matchup"] for r in jan10]
+    assert matchups == sorted(matchups), "rows on the same date must be ordered by matchup"
+
+
+def test_ordering_both_teams_in_one_matchup(client, db):
+    _seed_ordering(db)
+    data = client.get("/injuries").json()
+    # Within LAL @ BOS on 2025-01-10: Boston Celtics (B) before Los Angeles Lakers (L)
+    jan10_bos = [
+        r for r in data
+        if r["game_date"] == "2025-01-10" and r["matchup"] == "LAL @ BOS"
+    ]
+    team_names = [r["team_name"] for r in jan10_bos]
+    assert team_names == sorted(team_names), "rows in the same matchup must be ordered by team name"
+
+
+def test_ordering_multiple_players_on_one_team(client, db):
+    _seed_ordering(db)
+    data = client.get("/injuries").json()
+    # Boston Celtics on 2025-01-10 should have Alpha before Bravo
+    bos_jan10 = [
+        r for r in data
+        if r["game_date"] == "2025-01-10"
+        and r["matchup"] == "LAL @ BOS"
+        and r["team_name"] == "Boston Celtics"
+    ]
+    player_names = [r["player_name"] for r in bos_jan10]
+    assert player_names == ["Alpha", "Bravo"], (
+        "players on the same team must be ordered by canonical name"
+    )
+
+
+def test_ordering_full_sequence(client, db):
+    _seed_ordering(db)
+    ids = _ordering_ids(client)
+    # Expected order by (game_date, matchup, team, player):
+    # 2025-01-10 LAL@BOS BOS Alpha=101, BOS Bravo=102, LAL Charlie=103
+    # 2025-01-10 MIL@GSW GSW Delta=104, MIL Echo=105
+    # 2025-01-15 LAL@BOS BOS Foxtrot=106
+    # 2025-01-20 LAL@BOS BOS Golf=107
+    assert ids == [505, 501, 502, 503, 504, 506, 507]
+
+
+def test_ordering_persists_across_pages(client, db):
+    _seed_ordering(db)
+    page1 = _ordering_ids(client, "/injuries?page=1&page_size=3")
+    page2 = _ordering_ids(client, "/injuries?page=2&page_size=3")
+    page3 = _ordering_ids(client, "/injuries?page=3&page_size=3")
+    full = page1 + page2 + page3
+    assert full == [505, 501, 502, 503, 504, 506, 507]
+
+
+def test_csv_ordering_matches_json(client, db):
+    _seed_ordering(db)
+    j = _ordering_ids(client, "/injuries")
+    c = _csv_ids(client, "/injuries.csv")
+    assert j == c, "CSV and JSON must return rows in the same order"
+
+
+def test_csv_ordering_full_sequence(client, db):
+    _seed_ordering(db)
+    c = _csv_ids(client, "/injuries.csv")
+    assert c == [505, 501, 502, 503, 504, 506, 507]
