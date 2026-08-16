@@ -147,6 +147,7 @@ def test_json_returns_entry_fields(client, db):
         "injury_type",
         "previous_status",
         "previous_reason",
+        "source_url",
     }
     assert row["player_name"] == "Test Player"
     assert row["team_name"] == "Test Team"
@@ -188,6 +189,7 @@ def test_csv_returns_correct_columns_and_data(client, db):
         "injury_type",
         "previous_status",
         "previous_reason",
+        "source_url",
     ]
     rows = list(reader)
     assert len(rows) == 1
@@ -1150,3 +1152,62 @@ def test_csv_ordering_full_sequence(client, db):
     _seed_ordering(db)
     c = _csv_ids(client, "/injuries.csv")
     assert c == [505, 501, 502, 503, 504, 506, 507]
+
+
+# ── source_url ────────────────────────────────────────────────────────────────
+
+def test_json_returns_source_url(client, db):
+    _seed(db)
+    resp = client.get("/injuries")
+    data = resp.json()
+    assert len(data) == 1
+    assert data[0]["source_url"] == "https://example.com/report.pdf"
+
+
+def test_csv_returns_source_url(client, db):
+    _seed(db)
+    resp = client.get("/injuries.csv")
+    reader = csv.reader(io.StringIO(resp.text))
+    header = next(reader)
+    src_idx = header.index("source_url")
+    rows = list(reader)
+    assert len(rows) == 1
+    assert rows[0][src_idx] == "https://example.com/report.pdf"
+
+
+def test_source_url_none_when_no_report(client, db):
+    """source_url should be None if the linked report is missing."""
+    player = NBAPlayer(id=100, canonical_name="Test Player", name_key="test player")
+    team = NBATeam(id=200, canonical_name="Test Team", abbreviation="TST")
+    candidate = NBAReportCandidate(
+        id=300,
+        source_url="https://example.com/report.pdf",
+        report_date=date(2025, 1, 15),
+        status="discovered",
+    )
+    session = db
+    session.add_all([player, team, candidate])
+    session.flush()
+    entry = NBAReportEntry(
+        id=501,
+        report_id=0,
+        page_number=1,
+        row_number=1,
+        team_id=200,
+        player_id=100,
+        entry_type="player",
+        game_date=date(2025, 1, 15),
+        game_time=time(19, 30),
+        matchup="TST @ OPP",
+        team_name_raw="TST",
+        player_name_raw="Test Player",
+        status="Out",
+        raw_reason="sore knee",
+        raw_row_text="raw",
+    )
+    session.add(entry)
+    session.commit()
+    resp = client.get("/injuries")
+    data = resp.json()
+    assert len(data) == 1
+    assert data[0]["source_url"] is None

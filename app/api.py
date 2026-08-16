@@ -13,7 +13,7 @@ from sqlalchemy import exists, select
 from sqlalchemy.orm import Session
 
 from app.db.session import build_engine, build_session_factory
-from app.models.nba import NBAInjuryCondition, NBAPlayer, NBAReportEntry, NBATeam
+from app.models.nba import NBAInjuryCondition, NBAPlayer, NBAReport, NBAReportEntry, NBATeam
 
 # Explicit season mapping: label -> (inclusive start_date, inclusive end_date).
 # Avoids generic July-1 rules; each boundary is set to actual NBA game dates.
@@ -69,6 +69,7 @@ class EntryOut(BaseModel):
     injury_type: str | None
     previous_status: str | None
     previous_reason: str | None
+    source_url: str | None
 
     model_config = {"from_attributes": True}
 
@@ -90,6 +91,7 @@ _CSV_COLUMNS = [
     "injury_type",
     "previous_status",
     "previous_reason",
+    "source_url",
 ]
 
 _CONDITION_SQ = (
@@ -122,9 +124,11 @@ def _build_entry_query(
             NBATeam.canonical_name,
             _CONDITION_SQ.c.body_part,
             _CONDITION_SQ.c.injury_type,
+            NBAReport.source_url,
         )
         .join(NBAPlayer, NBAReportEntry.player_id == NBAPlayer.id)
         .outerjoin(NBATeam, NBAReportEntry.team_id == NBATeam.id)
+        .outerjoin(NBAReport, NBAReportEntry.report_id == NBAReport.id)
         .outerjoin(_CONDITION_SQ, _CONDITION_SQ.c.report_entry_id == NBAReportEntry.id)
     )
     if player_id is not None:
@@ -220,8 +224,9 @@ def list_injuries(
             injury_type=it,
             previous_status=entry.previous_status,
             previous_reason=entry.previous_reason,
+            source_url=src_url,
         )
-        for entry, p_name, t_name, bp, it in rows
+        for entry, p_name, t_name, bp, it, src_url in rows
     ]
 
 
@@ -253,7 +258,7 @@ def list_injuries_csv(
     buf = io.StringIO()
     writer = csv.writer(buf)
     writer.writerow(_CSV_COLUMNS)
-    for entry, p_name, t_name, bp, it in rows:
+    for entry, p_name, t_name, bp, it, src_url in rows:
         writer.writerow(
             [
                 entry.id,
@@ -272,6 +277,7 @@ def list_injuries_csv(
                 it,
                 entry.previous_status,
                 entry.previous_reason,
+                src_url,
             ]
         )
     buf.seek(0)

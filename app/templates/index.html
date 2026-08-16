@@ -29,15 +29,18 @@
 
         /* ---- Form ---- */
         #filter-form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            align-items: flex-end;
             margin-bottom: 1.5rem;
             background: #fff;
             padding: 1rem 1.25rem;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,.08);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 0.75rem;
+            align-items: end;
         }
 
         #filter-form label {
@@ -51,11 +54,12 @@
 
         #filter-form select,
         #filter-form input[type="text"] {
-            padding: 0.45rem 0.6rem;
+            height: 2rem;
+            padding: 0 0.6rem;
             border: 1px solid #ccc;
             border-radius: 6px;
             font-size: 0.875rem;
-            min-width: 160px;
+            width: 100%;
             background: #fff;
         }
 
@@ -66,14 +70,26 @@
             box-shadow: 0 0 0 2px rgba(59,130,246,.25);
         }
 
+        .filter-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #f1f3f5;
+        }
+
         #filter-form button {
-            padding: 0.5rem 1.1rem;
+            height: 2rem;
+            padding: 0 1.1rem;
             border: none;
             border-radius: 6px;
             font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
             transition: background .15s;
+            white-space: nowrap;
         }
 
         button[type="submit"] {
@@ -154,8 +170,8 @@
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            min-width: 160px;
-            padding: 0.45rem 0.6rem;
+            height: 2rem;
+            padding: 0 0.6rem;
             border: 1px solid #ccc;
             border-radius: 6px;
             font-size: 0.875rem;
@@ -215,12 +231,53 @@
             accent-color: #2563eb;
         }
 
+        /* ---- Player autocomplete ---- */
+        .autocomplete {
+            position: relative;
+        }
+
+        .autocomplete-results {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 2px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,.12);
+            z-index: 100;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .autocomplete-results.open {
+            display: block;
+        }
+
+        .autocomplete-results:empty {
+            display: none;
+        }
+
+        .autocomplete-result {
+            padding: 0.4rem 0.6rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .autocomplete-result:hover,
+        .autocomplete-result.active {
+            background: #f0f4ff;
+        }
+
         @media (max-width: 640px) {
             .page { padding: 1rem 0.5rem; }
             h1 { font-size: 1.25rem; }
-            #filter-form { flex-direction: column; }
-            #filter-form select,
-            #filter-form input[type="text"] { min-width: 100%; }
+            .filter-grid { grid-template-columns: 1fr; }
+            .filter-actions { justify-content: flex-start; }
         }
 
         .pagination {
@@ -248,39 +305,49 @@
     <div class="page">
         <h1>NBA Injury Database</h1>
         <form id="filter-form">
-            <label>Player: <select id="player-select" name="player_id"><option value="">All</option></select></label>
-            <label>Team: <select id="team-select" name="team_id"><option value="">All</option></select></label>
-            <label>Body Part: <input type="text" name="body_part"></label>
-            <label>Season: <select name="season">
-                <option value="">All Seasons</option>
-                <option value="2018-19">2018-19</option>
-                <option value="2019-20">2019-20</option>
-                <option value="2020-21">2020-21</option>
-                <option value="2021-22">2021-22</option>
-                <option value="2022-23">2022-23</option>
-                <option value="2023-24">2023-24</option>
-                <option value="2024-25">2024-25</option>
-                <option value="2025-26">2025-26</option>
-            </select></label>
-            <label>Start Date: <input type="text" name="start_date" placeholder="YYYY-MM-DD"></label>
-            <label>End Date: <input type="text" name="end_date" placeholder="YYYY-MM-DD"></label>
-            <label class="multiselect-label">Status:
-                <div class="multiselect" id="status-multiselect">
-                    <button type="button" class="multiselect-trigger" id="status-trigger" aria-haspopup="listbox" aria-expanded="false">All statuses</button>
-                    <div class="multiselect-panel" id="status-panel" role="listbox" aria-label="Status filter">
-                        <label class="multiselect-option"><input type="checkbox" name="status" value="Out" checked> Out</label>
-                        <label class="multiselect-option"><input type="checkbox" name="status" value="Doubtful" checked> Doubtful</label>
-                        <label class="multiselect-option"><input type="checkbox" name="status" value="Questionable" checked> Questionable</label>
-                        <label class="multiselect-option"><input type="checkbox" name="status" value="Probable" checked> Probable</label>
-                        <label class="multiselect-option"><input type="checkbox" name="status" value="Available" checked> Available</label>
+            <div class="filter-grid">
+                <label>Player:
+                    <div class="autocomplete" id="player-autocomplete">
+                        <input type="text" id="player-input" placeholder="Search players..." autocomplete="off">
+                        <input type="hidden" id="player_id" name="player_id" value="">
+                        <div class="autocomplete-results" id="player-results"></div>
                     </div>
-                </div>
-            </label>
-            <label>Injury Type: <input type="text" name="injury_type"></label>
-            <label>Reason Search: <input type="text" name="reason_search"></label>
-            <button type="submit">Filter</button>
-            <button type="button" id="clear-filters">Clear Filters</button>
-            <button type="button" id="download-csv">Download filtered CSV</button>
+                </label>
+                <label>Team: <select id="team-select" name="team_id"><option value="">All</option></select></label>
+                <label>Body Part: <input type="text" name="body_part"></label>
+                <label>Season: <select name="season">
+                    <option value="">All Seasons</option>
+                    <option value="2018-19">2018-19</option>
+                    <option value="2019-20">2019-20</option>
+                    <option value="2020-21">2020-21</option>
+                    <option value="2021-22">2021-22</option>
+                    <option value="2022-23">2022-23</option>
+                    <option value="2023-24">2023-24</option>
+                    <option value="2024-25">2024-25</option>
+                    <option value="2025-26">2025-26</option>
+                </select></label>
+                <label>Start Date: <input type="text" name="start_date" placeholder="YYYY-MM-DD"></label>
+                <label>End Date: <input type="text" name="end_date" placeholder="YYYY-MM-DD"></label>
+                <label class="multiselect-label">Status:
+                    <div class="multiselect" id="status-multiselect">
+                        <button type="button" class="multiselect-trigger" id="status-trigger" aria-haspopup="listbox" aria-expanded="false">All statuses</button>
+                        <div class="multiselect-panel" id="status-panel" role="listbox" aria-label="Status filter">
+                            <label class="multiselect-option"><input type="checkbox" name="status" value="Out" checked> Out</label>
+                            <label class="multiselect-option"><input type="checkbox" name="status" value="Doubtful" checked> Doubtful</label>
+                            <label class="multiselect-option"><input type="checkbox" name="status" value="Questionable" checked> Questionable</label>
+                            <label class="multiselect-option"><input type="checkbox" name="status" value="Probable" checked> Probable</label>
+                            <label class="multiselect-option"><input type="checkbox" name="status" value="Available" checked> Available</label>
+                        </div>
+                    </div>
+                </label>
+                <label>Injury Type: <input type="text" name="injury_type"></label>
+                <label>Reason Search: <input type="text" name="reason_search"></label>
+            </div>
+            <div class="filter-actions">
+                <button type="submit">Filter</button>
+                <button type="button" id="clear-filters">Clear Filters</button>
+                <button type="button" id="download-csv">Download filtered CSV</button>
+            </div>
         </form>
         <div class="table-wrap">
             <table>
@@ -295,6 +362,7 @@
                         <th>Reason Category</th>
                         <th>Body Part</th>
                         <th>Injury Type</th>
+                        <th>Source</th>
                     </tr>
                 </thead>
                 <tbody id="injuries-body"></tbody>
@@ -309,6 +377,9 @@
 
     <script>
         let currentPage = 1;
+        let allPlayers = [];
+        let selectedPlayerId = '';
+        let activeResultIndex = -1;
 
         function loadDropdown(selectId, url, valueKey, labelKey) {
             return fetch(url)
@@ -324,8 +395,16 @@
                 });
         }
 
+        function loadPlayers() {
+            return fetch('/players')
+                .then(res => res.json())
+                .then(players => {
+                    allPlayers = players;
+                });
+        }
+
         Promise.all([
-            loadDropdown('player-select', '/players', 'id', 'canonical_name'),
+            loadPlayers(),
             loadDropdown('team-select', '/teams', 'id', 'canonical_name')
         ]).then(() => loadInjuries('status=Out&status=Doubtful&status=Questionable&status=Probable&status=Available'));
 
@@ -359,11 +438,21 @@
                             entry.matchup, entry.status, entry.raw_reason,
                             entry.reason_category, entry.body_part, entry.injury_type
                         ];
-                        values.forEach((val, i) => {
+                        values.forEach((val) => {
                             const td = document.createElement('td');
                             td.textContent = val ?? '';
                             tr.appendChild(td);
                         });
+                        const srcTd = document.createElement('td');
+                        if (entry.source_url) {
+                            const a = document.createElement('a');
+                            a.href = entry.source_url;
+                            a.textContent = 'PDF';
+                            a.target = '_blank';
+                            a.rel = 'noopener noreferrer';
+                            srcTd.appendChild(a);
+                        }
+                        tr.appendChild(srcTd);
                         tbody.appendChild(tr);
                     });
                     updatePagination(data.length);
@@ -415,7 +504,11 @@
         });
 
         document.getElementById('clear-filters').addEventListener('click', function() {
-            document.getElementById('player-select').value = '';
+            document.getElementById('player-input').value = '';
+            document.getElementById('player_id').value = '';
+            selectedPlayerId = '';
+            document.getElementById('player-results').classList.remove('open');
+            document.getElementById('player-results').innerHTML = '';
             document.getElementById('team-select').value = '';
             document.querySelector('#filter-form input[name="body_part"]').value = '';
             document.querySelector('#filter-form select[name="season"]').value = '';
@@ -500,6 +593,115 @@
             });
 
             updateSummary();
+        })();
+
+        // ---- Player autocomplete ----
+        (function() {
+            const input = document.getElementById('player-input');
+            const hidden = document.getElementById('player_id');
+            const resultsContainer = document.getElementById('player-results');
+            let activeIndex = -1;
+
+            function closeResults() {
+                resultsContainer.classList.remove('open');
+                resultsContainer.innerHTML = '';
+                activeIndex = -1;
+            }
+
+            function renderResults(query) {
+                const q = query.trim().toLowerCase();
+                if (!q) {
+                    closeResults();
+                    return;
+                }
+                const matches = allPlayers.filter(p =>
+                    (p.canonical_name || '').toLowerCase().includes(q)
+                ).slice(0, 8);
+
+                if (matches.length === 0) {
+                    closeResults();
+                    return;
+                }
+
+                activeIndex = -1;
+                resultsContainer.innerHTML = '';
+                matches.forEach((player, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'autocomplete-result';
+                    div.textContent = player.canonical_name;
+                    div.dataset.playerId = player.id;
+                    div.addEventListener('mousedown', function(e) {
+                        e.preventDefault();
+                        selectPlayer(player);
+                    });
+                    resultsContainer.appendChild(div);
+                });
+                resultsContainer.classList.add('open');
+            }
+
+            function selectPlayer(player) {
+                input.value = player.canonical_name;
+                hidden.value = player.id;
+                selectedPlayerId = player.id;
+                closeResults();
+            }
+
+            function navigateResults(direction) {
+                const items = resultsContainer.querySelectorAll('.autocomplete-result');
+                if (items.length === 0) return;
+                items.forEach(el => el.classList.remove('active'));
+                activeIndex += direction;
+                if (activeIndex < 0) activeIndex = items.length - 1;
+                if (activeIndex >= items.length) activeIndex = 0;
+                items[activeIndex].classList.add('active');
+                items[activeIndex].scrollIntoView({ block: 'nearest' });
+            }
+
+            function selectActiveResult() {
+                const items = resultsContainer.querySelectorAll('.autocomplete-result');
+                if (activeIndex >= 0 && activeIndex < items.length) {
+                    const playerId = items[activeIndex].dataset.playerId;
+                    const player = allPlayers.find(p => String(p.id) === String(playerId));
+                    if (player) selectPlayer(player);
+                }
+            }
+
+            input.addEventListener('input', function() {
+                hidden.value = '';
+                selectedPlayerId = '';
+                renderResults(input.value);
+            });
+
+            input.addEventListener('keydown', function(e) {
+                if (!resultsContainer.classList.contains('open')) {
+                    if (e.key === 'ArrowDown' && input.value.trim()) {
+                        renderResults(input.value);
+                    }
+                    return;
+                }
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    navigateResults(1);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    navigateResults(-1);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    selectActiveResult();
+                } else if (e.key === 'Escape') {
+                    closeResults();
+                }
+            });
+
+            input.addEventListener('blur', function() {
+                setTimeout(closeResults, 150);
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!document.getElementById('player-autocomplete').contains(e.target)) {
+                    closeResults();
+                }
+            });
         })();
     </script>
 </body>
