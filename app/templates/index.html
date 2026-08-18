@@ -356,17 +356,32 @@
                 </label>
                 <label>Team: <select id="team-select" name="team_id"><option value="">All</option></select></label>
                 <label>Body Part: <input type="text" name="body_part"></label>
-                <label>Season: <select name="season">
-                    <option value="">All Seasons</option>
-                    <option value="2018-19">2018-19</option>
-                    <option value="2019-20">2019-20</option>
-                    <option value="2020-21">2020-21</option>
-                    <option value="2021-22">2021-22</option>
-                    <option value="2022-23">2022-23</option>
-                    <option value="2023-24">2023-24</option>
-                    <option value="2024-25">2024-25</option>
-                    <option value="2025-26">2025-26</option>
-                </select></label>
+                <label class="multiselect-label">Season:
+                    <div class="multiselect" id="season-multiselect">
+                        <button type="button" class="multiselect-trigger" id="season-trigger" aria-haspopup="listbox" aria-expanded="false">7 seasons</button>
+                        <div class="multiselect-panel" id="season-panel" role="listbox" aria-label="Season filter">
+                            <label class="multiselect-option"><input type="checkbox" name="season" value="2018-19"> 2018-19</label>
+                            <label class="multiselect-option"><input type="checkbox" name="season" value="2019-20" checked> 2019-20</label>
+                            <label class="multiselect-option"><input type="checkbox" name="season" value="2020-21" checked> 2020-21</label>
+                            <label class="multiselect-option"><input type="checkbox" name="season" value="2021-22" checked> 2021-22</label>
+                            <label class="multiselect-option"><input type="checkbox" name="season" value="2022-23" checked> 2022-23</label>
+                            <label class="multiselect-option"><input type="checkbox" name="season" value="2023-24" checked> 2023-24</label>
+                            <label class="multiselect-option"><input type="checkbox" name="season" value="2024-25" checked> 2024-25</label>
+                            <label class="multiselect-option"><input type="checkbox" name="season" value="2025-26" checked> 2025-26</label>
+                        </div>
+                    </div>
+                </label>
+                <label class="multiselect-label">Season Type:
+                    <div class="multiselect" id="season-type-multiselect">
+                        <button type="button" class="multiselect-trigger" id="season-type-trigger" aria-haspopup="listbox" aria-expanded="false">Regular + Play-In + Playoffs</button>
+                        <div class="multiselect-panel" id="season-type-panel" role="listbox" aria-label="Season Type filter">
+                            <label class="multiselect-option"><input type="checkbox" name="season_type" value="Preseason"> Preseason</label>
+                            <label class="multiselect-option"><input type="checkbox" name="season_type" value="Regular Season" checked> Regular Season</label>
+                            <label class="multiselect-option"><input type="checkbox" name="season_type" value="Play-In" checked> Play-In</label>
+                            <label class="multiselect-option"><input type="checkbox" name="season_type" value="Playoffs" checked> Playoffs</label>
+                        </div>
+                    </div>
+                </label>
                 <label>Start Date: <input type="text" name="start_date" placeholder="YYYY-MM-DD"></label>
                 <label>End Date: <input type="text" name="end_date" placeholder="YYYY-MM-DD"></label>
                 <label class="multiselect-label">Status:
@@ -447,7 +462,7 @@
         Promise.all([
             loadPlayers(),
             loadDropdown('team-select', '/teams', 'id', 'canonical_name')
-        ]).then(() => loadInjuries('status=Out&status=Doubtful&status=Questionable&status=Probable&status=Available'));
+        ]).then(() => loadInjuries(getFilterParams()));
 
         function loadInjuries(filterQs) {
             const qs = filterQs ? filterQs + '&' : '';
@@ -521,11 +536,10 @@
         function getFilterParams() {
             const fd = new FormData(document.getElementById('filter-form'));
             const params = [];
-            const seen = {};
             for (const [k, v] of fd.entries()) {
                 if (!v) continue;
-                if (k === 'status') {
-                    params.push('status=' + encodeURIComponent(v));
+                if (k === 'status' || k === 'season' || k === 'season_type') {
+                    params.push(k + '=' + encodeURIComponent(v));
                 } else {
                     params.push(k + '=' + encodeURIComponent(v));
                 }
@@ -564,43 +578,55 @@
             document.getElementById('player-results').innerHTML = '';
             document.getElementById('team-select').value = '';
             document.querySelector('#filter-form input[name="body_part"]').value = '';
-            document.querySelector('#filter-form select[name="season"]').value = '';
             document.querySelector('#filter-form input[name="start_date"]').value = '';
             document.querySelector('#filter-form input[name="end_date"]').value = '';
             document.querySelector('#filter-form input[name="injury_type"]').value = '';
             document.querySelector('#filter-form input[name="reason_search"]').value = '';
-            const defaults = ['Out', 'Doubtful', 'Questionable', 'Probable', 'Available'];
+            // Restore status defaults
+            const statusDefaults = ['Out', 'Doubtful', 'Questionable', 'Probable', 'Available'];
             document.querySelectorAll('#status-panel input[type="checkbox"]').forEach(function(cb) {
-                cb.checked = defaults.includes(cb.value);
+                cb.checked = statusDefaults.includes(cb.value);
             });
-            const trigger = document.getElementById('status-trigger');
-            const total = document.querySelectorAll('#status-panel input[type="checkbox"]').length;
-            const checked = document.querySelectorAll('#status-panel input[type="checkbox"]:checked').length;
-            trigger.textContent = checked === total ? 'All statuses' : checked + ' statuses selected';
+            updateStatusSummary();
+            // Restore season defaults: 2019-20 through 2025-26 checked, 2018-19 unchecked
+            const seasonDefaults = ['2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'];
+            document.querySelectorAll('#season-panel input[type="checkbox"]').forEach(function(cb) {
+                cb.checked = seasonDefaults.includes(cb.value);
+            });
+            updateSeasonSummary();
+            // Restore season type defaults: Regular Season, Play-In, Playoffs checked; Preseason unchecked
+            const seasonTypeDefaults = ['Regular Season', 'Play-In', 'Playoffs'];
+            document.querySelectorAll('#season-type-panel input[type="checkbox"]').forEach(function(cb) {
+                cb.checked = seasonTypeDefaults.includes(cb.value);
+            });
+            updateSeasonTypeSummary();
             currentPage = 1;
-            loadInjuries('');
+            loadInjuries(getFilterParams());
         });
 
         // ---- Status multiselect ----
+        function updateStatusSummary() {
+            const panel = document.getElementById('status-panel');
+            const trigger = document.getElementById('status-trigger');
+            const checkboxes = panel.querySelectorAll('input[type="checkbox"]');
+            const checked = panel.querySelectorAll('input[type="checkbox"]:checked');
+            const total = checkboxes.length;
+            if (checked.length === total) {
+                trigger.textContent = 'All statuses';
+            } else if (checked.length === 0) {
+                trigger.textContent = 'None selected';
+            } else if (checked.length <= 2) {
+                const names = Array.from(checked).map(cb => cb.value);
+                trigger.textContent = names.join(', ');
+            } else {
+                trigger.textContent = checked.length + ' statuses selected';
+            }
+        }
+
         (function() {
             const trigger = document.getElementById('status-trigger');
             const panel = document.getElementById('status-panel');
             const checkboxes = panel.querySelectorAll('input[type="checkbox"]');
-
-            function updateSummary() {
-                const checked = panel.querySelectorAll('input[type="checkbox"]:checked');
-                const total = checkboxes.length;
-                if (checked.length === total) {
-                    trigger.textContent = 'All statuses';
-                } else if (checked.length === 0) {
-                    trigger.textContent = 'None selected';
-                } else if (checked.length <= 2) {
-                    const names = Array.from(checked).map(cb => cb.value);
-                    trigger.textContent = names.join(', ');
-                } else {
-                    trigger.textContent = checked.length + ' statuses selected';
-                }
-            }
 
             trigger.addEventListener('click', function() {
                 const open = panel.classList.toggle('open');
@@ -612,7 +638,7 @@
             });
 
             checkboxes.forEach(function(cb) {
-                cb.addEventListener('change', updateSummary);
+                cb.addEventListener('change', updateStatusSummary);
             });
 
             document.addEventListener('click', function(e) {
@@ -645,7 +671,141 @@
                 }
             });
 
-            updateSummary();
+            updateStatusSummary();
+        })();
+
+        // ---- Season multiselect ----
+        function updateSeasonSummary() {
+            const panel = document.getElementById('season-panel');
+            const trigger = document.getElementById('season-trigger');
+            const checkboxes = panel.querySelectorAll('input[type="checkbox"]');
+            const checked = panel.querySelectorAll('input[type="checkbox"]:checked');
+            const total = checkboxes.length;
+            if (checked.length === total) {
+                trigger.textContent = 'All seasons';
+            } else if (checked.length === 0) {
+                trigger.textContent = 'None selected';
+            } else if (checked.length === 1) {
+                trigger.textContent = checked[0].value;
+            } else {
+                trigger.textContent = checked.length + ' seasons';
+            }
+        }
+
+        (function() {
+            const trigger = document.getElementById('season-trigger');
+            const panel = document.getElementById('season-panel');
+            const checkboxes = panel.querySelectorAll('input[type="checkbox"]');
+
+            trigger.addEventListener('click', function() {
+                const open = panel.classList.toggle('open');
+                trigger.setAttribute('aria-expanded', open);
+                if (open) {
+                    const first = panel.querySelector('input[type="checkbox"]');
+                    if (first) first.focus();
+                }
+            });
+
+            checkboxes.forEach(function(cb) {
+                cb.addEventListener('change', updateSeasonSummary);
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!document.getElementById('season-multiselect').contains(e.target)) {
+                    panel.classList.remove('open');
+                    trigger.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            trigger.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    panel.classList.remove('open');
+                    trigger.setAttribute('aria-expanded', 'false');
+                } else if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (!panel.classList.contains('open')) {
+                        panel.classList.add('open');
+                        trigger.setAttribute('aria-expanded', 'true');
+                        var first = panel.querySelector('input[type="checkbox"]');
+                        if (first) first.focus();
+                    }
+                }
+            });
+
+            panel.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    panel.classList.remove('open');
+                    trigger.setAttribute('aria-expanded', 'false');
+                    trigger.focus();
+                }
+            });
+
+            updateSeasonSummary();
+        })();
+
+        // ---- Season Type multiselect ----
+        function updateSeasonTypeSummary() {
+            const panel = document.getElementById('season-type-panel');
+            const trigger = document.getElementById('season-type-trigger');
+            const checked = panel.querySelectorAll('input[type="checkbox"]:checked');
+            if (checked.length === 0) {
+                trigger.textContent = '0 types';
+            } else if (checked.length === 1) {
+                trigger.textContent = checked[0].value;
+            } else {
+                trigger.textContent = checked.length + ' types';
+            }
+        }
+
+        (function() {
+            const trigger = document.getElementById('season-type-trigger');
+            const panel = document.getElementById('season-type-panel');
+            const checkboxes = panel.querySelectorAll('input[type="checkbox"]');
+
+            trigger.addEventListener('click', function() {
+                const open = panel.classList.toggle('open');
+                trigger.setAttribute('aria-expanded', open);
+                if (open) {
+                    const first = panel.querySelector('input[type="checkbox"]');
+                    if (first) first.focus();
+                }
+            });
+
+            checkboxes.forEach(function(cb) {
+                cb.addEventListener('change', updateSeasonTypeSummary);
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!document.getElementById('season-type-multiselect').contains(e.target)) {
+                    panel.classList.remove('open');
+                    trigger.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            trigger.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    panel.classList.remove('open');
+                    trigger.setAttribute('aria-expanded', 'false');
+                } else if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (!panel.classList.contains('open')) {
+                        panel.classList.add('open');
+                        trigger.setAttribute('aria-expanded', 'true');
+                        var first = panel.querySelector('input[type="checkbox"]');
+                        if (first) first.focus();
+                    }
+                }
+            });
+
+            panel.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    panel.classList.remove('open');
+                    trigger.setAttribute('aria-expanded', 'false');
+                    trigger.focus();
+                }
+            });
+
+            updateSeasonTypeSummary();
         })();
 
         // ---- Player autocomplete ----
