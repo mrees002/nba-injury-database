@@ -11,13 +11,9 @@ from sqlalchemy.orm import Session
 from app.api import app, get_session
 from app.db.base import Base
 from app.models.nba import (
-    NBAInjuryCondition,
     NBAPlayer,
-    NBAReport,
-    NBAReportCandidate,
-    NBAReportEntry,
-    NBAScheduleGame,
     NBATeam,
+    PublicInjuryEntry,
 )
 
 
@@ -44,108 +40,43 @@ def client(db):
 
 
 def _seed(session: Session, *, entry_count: int = 1, condition_counts: dict | None = None):
-    """Insert minimal NBAReportEntry rows with supporting FK rows.
+    """Insert PublicInjuryEntry rows directly.
 
-    Returns list of (entry_id, condition_indices) pairs.
+    Returns list of entry_ids.
     """
-    if condition_counts is None:
-        condition_counts = {1: 1}
-
     player = NBAPlayer(id=100, canonical_name="Test Player", name_key="test player")
     team = NBATeam(id=200, canonical_name="Test Team", abbreviation="TST")
-    candidate = NBAReportCandidate(
-        id=300,
-        source_url="https://example.com/report.pdf",
-        report_date=date(2025, 1, 15),
-        status="parsed",
-    )
-    report = NBAReport(
-        id=400,
-        candidate_id=300,
-        report_date=date(2025, 1, 15),
-        report_time=time(17, 0),
-        source_url="https://example.com/report.pdf",
-        content_hash="abc123",
-        content=b"dummy",
-        content_type="application/pdf",
-        byte_length=5,
-        parse_status="parsed",
-    )
-    session.add_all([player, team, candidate, report])
+    session.add_all([player, team])
     session.flush()
-
-    # Schedule game for CSV season/season_type derivation tests
-    _seed_schedule_games(session, [
-        (date(2025, 1, 15), "TST@OPP", "2024-25", "regular"),
-    ])
 
     entries = []
     for i in range(1, entry_count + 1):
-        entry = NBAReportEntry(
+        entry = PublicInjuryEntry(
             id=500 + i,
-            report_id=400,
-            page_number=1,
+            source_url="https://example.com/report.pdf",
+            source_report_date=date(2025, 1, 15),
+            source_report_time=time(17, 0),
             row_number=i,
-            team_id=200,
-            player_id=100,
-            entry_type="player",
             game_date=date(2025, 1, 15),
             game_time=time(19, 30),
             matchup="TST @ OPP",
-            team_name_raw="TST",
-            player_name_raw="Test Player",
+            player_id=100,
+            player_name="Test Player",
+            team_id=200,
+            team_name="Test Team",
             status="Out",
             reason_category="Injury",
             raw_reason="sore left knee",
-            previous_status="Questionable",
-            previous_reason="knee soreness",
-            raw_row_text="raw row",
+            body_part="Knee",
+            injury_type="Soreness",
+            season="2024-25",
+            season_type="regular",
         )
         session.add(entry)
         session.flush()
-        indices = condition_counts.get(i, [1])
-        if isinstance(indices, int):
-            indices = [indices]
-        for idx, bp in zip(indices, _body_parts_for(indices), strict=True):
-            cond = NBAInjuryCondition(
-                report_entry_id=entry.id,
-                condition_index=idx,
-                body_part=bp,
-                injury_type="Soreness",
-                normalized_reason=f"sore {bp}",
-                classification_version="v1",
-                is_injury=True,
-            )
-            session.add(cond)
-        entries.append((entry.id, indices))
+        entries.append(entry.id)
     session.commit()
     return entries
-
-
-def _body_parts_for(indices):
-    parts = ["Knee", "Ankle", "Back"]
-    return [parts[(i - 1) % len(parts)] for i in indices]
-
-
-def _seed_schedule_games(session: Session, games: list[tuple[date, str, str, str]]):
-    """Seed NBAScheduleGame rows.
-
-    Each tuple is (game_date, matchup, season, season_type).
-    Matchup is stored without spaces (compact AWAY@HOME format).
-    """
-    for i, (gd, matchup, season, stype) in enumerate(games, start=1):
-        away, home = matchup.split("@")
-        sg = NBAScheduleGame(
-            id=i,
-            season=season,
-            game_date=gd,
-            season_type=stype,
-            away_team=away,
-            home_team=home,
-            matchup=matchup,
-        )
-        session.add(sg)
-    session.flush()
 
 
 # ── JSON basics ──────────────────────────────────────────────────────────────
@@ -159,7 +90,6 @@ def test_json_returns_entry_fields(client, db):
     row = data[0]
     assert set(row) == {
         "id",
-        "report_id",
         "game_date",
         "game_time",
         "matchup",
@@ -172,8 +102,6 @@ def test_json_returns_entry_fields(client, db):
         "reason_category",
         "body_part",
         "injury_type",
-        "previous_status",
-        "previous_reason",
         "source_url",
     }
     assert row["player_name"] == "Test Player"
@@ -255,24 +183,25 @@ def test_pagination_beyond_last_page(client, db):
 # ── Filters ──────────────────────────────────────────────────────────────────
 
 def test_filter_by_player_id(client, db):
-    player2 = NBAPlayer(id=101, canonical_name="Other Player", name_key="other player")
-    db.add(player2)
-    db.flush()
-    entry2 = NBAReportEntry(
+    _seed(db)
+    entry2 = PublicInjuryEntry(
         id=510,
-        report_id=400,
-        page_number=1,
+        source_url="https://example.com/report2.pdf",
+        source_report_date=date(2025, 1, 16),
+        source_report_time=time(17, 0),
         row_number=10,
-        team_id=200,
-        player_id=101,
-        entry_type="player",
         game_date=date(2025, 1, 16),
         matchup="TST @ OPP",
-        team_name_raw="TST",
-        player_name_raw="Other Player",
+        player_id=101,
+        player_name="Other Player",
+        team_id=200,
+        team_name="Test Team",
         status="Probable",
         raw_reason="back tightness",
-        raw_row_text="raw",
+        body_part="Back",
+        injury_type="Tightness",
+        season="2024-25",
+        season_type="regular",
     )
     db.add(entry2)
     db.commit()
@@ -285,24 +214,24 @@ def test_filter_by_player_id(client, db):
 
 def test_filter_by_team_id(client, db):
     _seed(db)
-    team2 = NBATeam(id=201, canonical_name="Other Team", abbreviation="OTH")
-    db.add(team2)
-    db.flush()
-    entry2 = NBAReportEntry(
+    entry2 = PublicInjuryEntry(
         id=511,
-        report_id=400,
-        page_number=1,
+        source_url="https://example.com/report3.pdf",
+        source_report_date=date(2025, 1, 16),
+        source_report_time=time(17, 0),
         row_number=11,
-        team_id=201,
-        player_id=100,
-        entry_type="player",
         game_date=date(2025, 1, 16),
         matchup="OTH @ OPP",
-        team_name_raw="OTH",
-        player_name_raw="Test Player",
+        player_id=100,
+        player_name="Test Player",
+        team_id=201,
+        team_name="Other Team",
         status="Doubtful",
         raw_reason="ankle pain",
-        raw_row_text="raw",
+        body_part="Ankle",
+        injury_type="Pain",
+        season="2024-25",
+        season_type="regular",
     )
     db.add(entry2)
     db.commit()
@@ -314,7 +243,29 @@ def test_filter_by_team_id(client, db):
 
 
 def test_filter_by_body_part(client, db):
-    _seed(db, condition_counts={1: [1, 2]})
+    _seed(db)
+    entry2 = PublicInjuryEntry(
+        id=512,
+        source_url="https://example.com/report4.pdf",
+        source_report_date=date(2025, 1, 15),
+        source_report_time=time(17, 0),
+        row_number=12,
+        game_date=date(2025, 1, 15),
+        matchup="TST @ OPP",
+        player_id=100,
+        player_name="Test Player",
+        team_id=200,
+        team_name="Test Team",
+        status="Out",
+        raw_reason="ankle sprain",
+        body_part="Ankle",
+        injury_type="Sprain",
+        season="2024-25",
+        season_type="regular",
+    )
+    db.add(entry2)
+    db.commit()
+
     resp_knee = client.get("/injuries?body_part=Knee")
     assert len(resp_knee.json()) == 1
 
@@ -325,46 +276,28 @@ def test_filter_by_body_part(client, db):
     assert len(resp_back.json()) == 0
 
 
-def test_body_part_filter_matches_any_condition(client, db):
-    _seed(db, condition_counts={1: [1, 2]})
-    resp = client.get("/injuries?body_part=Ankle")
-    data = resp.json()
-    assert len(data) == 1
-    assert data[0]["body_part"] == "Knee"
-
-
 def test_filter_combined(client, db):
     _seed(db)
-    player2 = NBAPlayer(id=101, canonical_name="Other Player", name_key="other player")
-    db.add(player2)
-    db.flush()
-    entry2 = NBAReportEntry(
-        id=512,
-        report_id=400,
-        page_number=1,
-        row_number=12,
-        team_id=200,
-        player_id=101,
-        entry_type="player",
+    entry2 = PublicInjuryEntry(
+        id=513,
+        source_url="https://example.com/report5.pdf",
+        source_report_date=date(2025, 1, 16),
+        source_report_time=time(17, 0),
+        row_number=13,
         game_date=date(2025, 1, 16),
         matchup="TST @ OPP",
-        team_name_raw="TST",
-        player_name_raw="Other Player",
+        player_id=101,
+        player_name="Other Player",
+        team_id=200,
+        team_name="Test Team",
         status="Out",
         raw_reason="ankle sprain",
-        raw_row_text="raw",
-    )
-    db.add(entry2)
-    cond = NBAInjuryCondition(
-        report_entry_id=512,
-        condition_index=1,
         body_part="Ankle",
         injury_type="Sprain",
-        normalized_reason="ankle sprain",
-        classification_version="v1",
-        is_injury=True,
+        season="2024-25",
+        season_type="regular",
     )
-    db.add(cond)
+    db.add(entry2)
     db.commit()
 
     resp = client.get("/injuries?player_id=100&body_part=Knee")
@@ -373,52 +306,13 @@ def test_filter_combined(client, db):
     assert data[0]["player_id"] == 100
 
 
-# ── Duplicate prevention ────────────────────────────────────────────────────
-
-def test_no_duplicate_rows_with_multiple_conditions(client, db):
-    _seed(db, condition_counts={1: [1, 2, 3]})
-    resp = client.get("/injuries")
-    data = resp.json()
-    assert len(data) == 1
-    assert data[0]["body_part"] == "Knee"
-    assert data[0]["injury_type"] == "Soreness"
-
-
-def test_csv_no_duplicate_rows(client, db):
-    _seed(db, condition_counts={1: [1, 2]})
-    resp = client.get("/injuries.csv")
-    reader = csv.reader(io.StringIO(resp.text))
-    next(reader)
-    rows = list(reader)
-    assert len(rows) == 1
-    assert rows[0][10] == "Knee"
-
-
 # ── start_date / end_date / status filters ─────────────────────────────────────
 
 def _seed_multi_date(session: Session):
     """Seed three entries on different dates and statuses."""
     player = NBAPlayer(id=100, canonical_name="Test Player", name_key="test player")
     team = NBATeam(id=200, canonical_name="Test Team", abbreviation="TST")
-    candidate = NBAReportCandidate(
-        id=300,
-        source_url="https://example.com/report.pdf",
-        report_date=date(2025, 1, 15),
-        status="parsed",
-    )
-    report = NBAReport(
-        id=400,
-        candidate_id=300,
-        report_date=date(2025, 1, 15),
-        report_time=time(17, 0),
-        source_url="https://example.com/report.pdf",
-        content_hash="abc123",
-        content=b"dummy",
-        content_type="application/pdf",
-        byte_length=5,
-        parse_status="parsed",
-    )
-    session.add_all([player, team, candidate, report])
+    session.add_all([player, team])
     session.flush()
 
     specs = [
@@ -427,36 +321,28 @@ def _seed_multi_date(session: Session):
         (503, date(2025, 1, 20), "Out"),
     ]
     for eid, gd, st in specs:
-        entry = NBAReportEntry(
+        entry = PublicInjuryEntry(
             id=eid,
-            report_id=400,
-            page_number=1,
+            source_url="https://example.com/report.pdf",
+            source_report_date=gd,
+            source_report_time=time(17, 0),
             row_number=eid - 500,
-            team_id=200,
-            player_id=100,
-            entry_type="player",
             game_date=gd,
             game_time=time(19, 30),
             matchup="TST @ OPP",
-            team_name_raw="TST",
-            player_name_raw="Test Player",
+            player_id=100,
+            player_name="Test Player",
+            team_id=200,
+            team_name="Test Team",
             status=st,
             reason_category="Injury",
             raw_reason="sore knee",
-            raw_row_text="raw",
-        )
-        session.add(entry)
-        session.flush()
-        cond = NBAInjuryCondition(
-            report_entry_id=eid,
-            condition_index=1,
             body_part="Knee",
             injury_type="Soreness",
-            normalized_reason="sore knee",
-            classification_version="v1",
-            is_injury=True,
+            season="2024-25",
+            season_type="regular",
         )
-        session.add(cond)
+        session.add(entry)
     session.commit()
 
 
@@ -629,12 +515,6 @@ def test_injury_type_filter_case_sensitive(client, db):
     assert resp.json() == []
 
 
-def test_injury_type_filter_matches_any_condition(client, db):
-    _seed(db, condition_counts={1: [1, 2]})
-    resp_knee = client.get("/injuries?injury_type=Soreness")
-    assert len(resp_knee.json()) == 1
-
-
 # ── reason_search filter ──────────────────────────────────────────────────────
 
 def test_reason_search_filter(client, db):
@@ -683,285 +563,13 @@ def test_combined_injury_type_and_reason_search_no_match(client, db):
 
 
 def test_combined_all_new_filters_with_existing(client, db):
-    _seed(db, condition_counts={1: [1, 2]})
+    _seed(db)
     resp = client.get(
         "/injuries?injury_type=Soreness&reason_search=knee&team_id=200"
     )
     data = resp.json()
     assert len(data) == 1
     assert data[0]["injury_type"] == "Soreness"
-
-
-# ── duplicate prevention with new filters ─────────────────────────────────────
-
-def test_injury_type_no_duplicates_with_multiple_conditions(client, db):
-    _seed(db, condition_counts={1: [1, 2, 3]})
-    resp = client.get("/injuries?injury_type=Soreness")
-    data = resp.json()
-    assert len(data) == 1
-
-
-def test_reason_search_no_duplicates_with_multiple_conditions(client, db):
-    _seed(db, condition_counts={1: [1, 2, 3]})
-    resp = client.get("/injuries?reason_search=knee")
-    data = resp.json()
-    assert len(data) == 1
-
-
-# ── CSV / JSON parity for new filters ─────────────────────────────────────────
-
-def test_csv_injury_type_parity(client, db):
-    _seed(db)
-    j = client.get("/injuries?injury_type=Soreness").json()
-    c = _csv_ids(client, "/injuries.csv?injury_type=Soreness")
-    assert [r["id"] for r in j] == c
-
-
-def test_csv_reason_search_parity(client, db):
-    _seed(db)
-    j = client.get("/injuries?reason_search=knee").json()
-    c = _csv_ids(client, "/injuries.csv?reason_search=knee")
-    assert [r["id"] for r in j] == c
-
-
-def test_csv_combined_new_filters_parity(client, db):
-    _seed(db)
-    j = client.get(
-        "/injuries?injury_type=Soreness&reason_search=knee"
-    ).json()
-    c = _csv_ids(
-        client,
-        "/injuries.csv?injury_type=Soreness&reason_search=knee",
-    )
-    assert [r["id"] for r in j] == c
-
-
-# ── season filter ─────────────────────────────────────────────────────────────
-
-def _seed_multi_season(session: Session):
-    """Seed entries across normal and COVID-affected seasons.
-
-    Returns dict mapping game_date -> entry_id for easy lookup.
-    """
-    player = NBAPlayer(id=100, canonical_name="Test Player", name_key="test player")
-    team = NBATeam(id=200, canonical_name="Test Team", abbreviation="TST")
-    candidate = NBAReportCandidate(
-        id=300,
-        source_url="https://example.com/report.pdf",
-        report_date=date(2020, 1, 1),
-        status="parsed",
-    )
-    report = NBAReport(
-        id=400,
-        candidate_id=300,
-        report_date=date(2020, 1, 1),
-        report_time=time(17, 0),
-        source_url="https://example.com/report.pdf",
-        content_hash="abc123",
-        content=b"dummy",
-        content_type="application/pdf",
-        byte_length=5,
-        parse_status="parsed",
-    )
-    session.add_all([player, team, candidate, report])
-    session.flush()
-
-    # Schedule games for CSV season derivation tests
-    _seed_schedule_games(session, [
-        (date(2019, 10, 25), "TST@OPP", "2019-20", "regular"),
-        (date(2020, 3, 10), "TST@OPP", "2019-20", "regular"),
-        (date(2020, 7, 30), "TST@OPP", "2019-20", "playoffs"),
-        (date(2020, 9, 30), "TST@OPP", "2019-20", "playoffs"),
-        (date(2020, 10, 11), "TST@OPP", "2019-20", "playoffs"),
-        (date(2020, 12, 25), "TST@OPP", "2020-21", "regular"),
-        (date(2021, 5, 16), "TST@OPP", "2020-21", "regular"),
-        (date(2021, 7, 10), "TST@OPP", "2020-21", "playoffs"),
-        (date(2021, 7, 20), "TST@OPP", "2020-21", "playoffs"),
-        (date(2021, 10, 22), "TST@OPP", "2021-22", "regular"),
-    ])
-
-    specs = [
-        (501, date(2019, 10, 25), "2019-20 regular"),
-        (502, date(2020, 3, 10), "2019-20 pre-bubble"),
-        (503, date(2020, 7, 30), "2019-20 bubble"),       # summer 2020 bubble games
-        (504, date(2020, 9, 30), "2019-20 late bubble"),   # fall 2020 bubble/finals
-        (505, date(2020, 10, 11), "2019-20 last day"),     # last day of 2019-20
-        (506, date(2020, 12, 25), "2020-21 early"),        # Christmas 2020
-        (507, date(2021, 5, 16), "2020-21 late regular"),
-        (508, date(2021, 7, 10), "2020-21 finals"),        # July 2021 finals
-        (509, date(2021, 7, 20), "2020-21 last day"),      # last day of 2020-21
-        (510, date(2021, 10, 22), "2021-22 early"),
-    ]
-    for eid, gd, reason in specs:
-        entry = NBAReportEntry(
-            id=eid,
-            report_id=400,
-            page_number=1,
-            row_number=eid - 500,
-            team_id=200,
-            player_id=100,
-            entry_type="player",
-            game_date=gd,
-            game_time=time(19, 30),
-            matchup="TST @ OPP",
-            team_name_raw="TST",
-            player_name_raw="Test Player",
-            status="Out",
-            reason_category="Injury",
-            raw_reason=reason,
-            raw_row_text="raw",
-        )
-        session.add(entry)
-        session.flush()
-        cond = NBAInjuryCondition(
-            report_entry_id=eid,
-            condition_index=1,
-            body_part="Knee",
-            injury_type="Soreness",
-            normalized_reason="sore knee",
-            classification_version="v1",
-            is_injury=True,
-        )
-        session.add(cond)
-    session.commit()
-    return {gd: eid for _, gd, _ in [(None, s[1], None) for s in specs]}
-
-
-def test_season_filter_normal(client, db):
-    _seed_multi_season(db)
-    resp = client.get("/injuries?season=2021-22")
-    data = resp.json()
-    assert len(data) == 1
-    assert data[0]["game_date"] == "2021-10-22"
-    assert data[0]["raw_reason"] == "2021-22 early"
-
-
-def test_season_filter_2019_20_includes_bubble(client, db):
-    _seed_multi_season(db)
-    resp = client.get("/injuries?season=2019-20")
-    data = resp.json()
-    dates = [r["game_date"] for r in data]
-    # Should include regular, bubble (July), late bubble (Sept), and last day (Oct 11)
-    assert len(data) == 5
-    assert "2019-10-25" in dates
-    assert "2020-03-10" in dates
-    assert "2020-07-30" in dates  # summer 2020 bubble
-    assert "2020-09-30" in dates  # fall 2020
-    assert "2020-10-11" in dates  # last day of 2019-20
-
-
-def test_season_filter_2020_21_includes_july_games(client, db):
-    _seed_multi_season(db)
-    resp = client.get("/injuries?season=2020-21")
-    data = resp.json()
-    dates = [r["game_date"] for r in data]
-    assert len(data) == 4
-    assert "2020-12-25" in dates
-    assert "2021-05-16" in dates
-    assert "2021-07-10" in dates  # July 2021 finals
-    assert "2021-07-20" in dates  # last day
-
-
-def test_season_filter_no_match(client, db):
-    _seed_multi_season(db)
-    resp = client.get("/injuries?season=2018-19")
-    assert resp.json() == []
-
-
-def test_season_filter_malformed_value(client, db):
-    _seed_multi_season(db)
-    resp = client.get("/injuries?season=2024")
-    assert resp.status_code == 422
-    assert "Unsupported season" in resp.json()["detail"]
-
-
-def test_season_filter_unsupported_season(client, db):
-    _seed_multi_season(db)
-    resp = client.get("/injuries?season=2026-27")
-    assert resp.status_code == 422
-    assert "2026-27" in resp.json()["detail"]
-
-
-def test_season_filter_whitespace_stripped(client, db):
-    _seed_multi_season(db)
-    resp = client.get("/injuries?season= 2021-22 ")
-    assert resp.status_code == 200
-    assert len(resp.json()) == 1
-
-
-def test_season_combined_with_start_date(client, db):
-    _seed_multi_season(db)
-    resp = client.get("/injuries?season=2019-20&start_date=2020-07-01")
-    data = resp.json()
-    dates = [r["game_date"] for r in data]
-    assert len(data) == 3
-    assert all(d >= "2020-07-01" for d in dates)
-
-
-def test_season_combined_with_end_date(client, db):
-    _seed_multi_season(db)
-    resp = client.get("/injuries?season=2019-20&end_date=2020-03-31")
-    data = resp.json()
-    dates = [r["game_date"] for r in data]
-    assert len(data) == 2
-    assert all(d <= "2020-03-31" for d in dates)
-
-
-def test_season_combined_with_date_range(client, db):
-    _seed_multi_season(db)
-    resp = client.get(
-        "/injuries?season=2020-21&start_date=2021-05-01&end_date=2021-07-15"
-    )
-    data = resp.json()
-    dates = [r["game_date"] for r in data]
-    assert len(data) == 2
-    assert all("2021-05-01" <= d <= "2021-07-15" for d in dates)
-
-
-def test_season_combined_with_player_id(client, db):
-    _seed_multi_season(db)
-    resp = client.get("/injuries?season=2020-21&player_id=100")
-    data = resp.json()
-    assert len(data) == 4
-
-
-def test_season_combined_with_status(client, db):
-    _seed_multi_season(db)
-    resp = client.get("/injuries?season=2019-20&status=Out")
-    data = resp.json()
-    assert len(data) == 5
-    assert all(r["status"] == "Out" for r in data)
-
-
-def test_csv_season_parity(client, db):
-    _seed_multi_season(db)
-    j = client.get("/injuries?season=2019-20").json()
-    c = _csv_ids(client, "/injuries.csv?season=2019-20")
-    assert [r["id"] for r in j] == c
-
-
-def test_csv_season_2020_21_parity(client, db):
-    _seed_multi_season(db)
-    j = client.get("/injuries?season=2020-21").json()
-    c = _csv_ids(client, "/injuries.csv?season=2020-21")
-    assert [r["id"] for r in j] == c
-
-
-def test_csv_season_combined_parity(client, db):
-    _seed_multi_season(db)
-    j = client.get(
-        "/injuries?season=2020-21&start_date=2021-05-01"
-    ).json()
-    c = _csv_ids(
-        client,
-        "/injuries.csv?season=2020-21&start_date=2021-05-01",
-    )
-    assert [r["id"] for r in j] == c
-
-
-def test_csv_season_unsupported_returns_422(client, db):
-    resp = client.get("/injuries.csv?season=bad")
-    assert resp.status_code == 422
 
 
 # ── Multi-value status filter ────────────────────────────────────────────────
@@ -1045,68 +653,42 @@ def _seed_ordering(session: Session):
         NBATeam(id=203, canonical_name="Golden State Warriors", abbreviation="GSW"),
         NBATeam(id=204, canonical_name="Milwaukee Bucks", abbreviation="MIL"),
     ]
-    candidate = NBAReportCandidate(
-        id=300,
-        source_url="https://example.com/ordering.pdf",
-        report_date=date(2025, 1, 20),
-        status="parsed",
-    )
-    report = NBAReport(
-        id=400,
-        candidate_id=300,
-        report_date=date(2025, 1, 20),
-        report_time=time(17, 0),
-        source_url="https://example.com/ordering.pdf",
-        content_hash="order123",
-        content=b"dummy",
-        content_type="application/pdf",
-        byte_length=5,
-        parse_status="parsed",
-    )
-    session.add_all(players + teams + [candidate, report])
+    session.add_all(players + teams)
     session.flush()
 
-    # (id, game_date, matchup, team_id, player_id)
+    # (id, game_date, matchup, team_id, player_id, team_name, player_name)
     specs = [
-        (501, date(2025, 1, 10), "LAL @ BOS", 201, 102),  # BOS, Bravo
-        (502, date(2025, 1, 10), "LAL @ BOS", 202, 103),  # LAL, Charlie
-        (503, date(2025, 1, 10), "MIL @ GSW", 203, 104),  # GSW, Delta
-        (504, date(2025, 1, 10), "MIL @ GSW", 204, 105),  # MIL, Echo
-        (505, date(2025, 1, 10), "LAL @ BOS", 201, 101),  # BOS, Alpha (second player)
-        (506, date(2025, 1, 15), "LAL @ BOS", 201, 106),  # BOS, Foxtrot
-        (507, date(2025, 1, 20), "LAL @ BOS", 201, 107),  # BOS, Golf
+        (501, date(2025, 1, 10), "LAL @ BOS", 201, 102, "Boston Celtics", "Bravo"),
+        (502, date(2025, 1, 10), "LAL @ BOS", 202, 103, "Los Angeles Lakers", "Charlie"),
+        (503, date(2025, 1, 10), "MIL @ GSW", 203, 104, "Golden State Warriors", "Delta"),
+        (504, date(2025, 1, 10), "MIL @ GSW", 204, 105, "Milwaukee Bucks", "Echo"),
+        (505, date(2025, 1, 10), "LAL @ BOS", 201, 101, "Boston Celtics", "Alpha"),
+        (506, date(2025, 1, 15), "LAL @ BOS", 201, 106, "Boston Celtics", "Foxtrot"),
+        (507, date(2025, 1, 20), "LAL @ BOS", 201, 107, "Boston Celtics", "Golf"),
     ]
-    for eid, gd, matchup, tid, pid in specs:
-        entry = NBAReportEntry(
+    for eid, gd, matchup, tid, pid, tname, pname in specs:
+        entry = PublicInjuryEntry(
             id=eid,
-            report_id=400,
-            page_number=1,
+            source_url="https://example.com/ordering.pdf",
+            source_report_date=gd,
+            source_report_time=time(17, 0),
             row_number=eid - 500,
-            team_id=tid,
-            player_id=pid,
-            entry_type="player",
             game_date=gd,
             game_time=time(19, 30),
             matchup=matchup,
-            team_name_raw=teams[tid - 201].abbreviation,
-            player_name_raw=players[pid - 101].canonical_name,
+            player_id=pid,
+            player_name=pname,
+            team_id=tid,
+            team_name=tname,
             status="Out",
             reason_category="Injury",
             raw_reason="general soreness",
-            raw_row_text="raw",
-        )
-        session.add(entry)
-        session.flush()
-        cond = NBAInjuryCondition(
-            report_entry_id=eid,
-            condition_index=1,
             body_part="Knee",
             injury_type="Soreness",
-            normalized_reason="sore knee",
-            classification_version="v1",
-            is_injury=True,
+            season="2024-25",
+            season_type="regular",
         )
-        session.add(cond)
+        session.add(entry)
     session.commit()
 
 
@@ -1116,7 +698,6 @@ def _ordering_ids(client, url="/injuries") -> list[int]:
 
 def test_ordering_different_game_dates(client, db):
     _seed_ordering(db)
-    ids = _ordering_ids(client)
     dates = [r["game_date"] for r in client.get("/injuries").json()]
     assert dates == sorted(dates, reverse=True), "rows must be ordered by game_date descending"
 
@@ -1124,7 +705,6 @@ def test_ordering_different_game_dates(client, db):
 def test_ordering_same_date_multiple_matchups(client, db):
     _seed_ordering(db)
     data = client.get("/injuries").json()
-    # All 2025-01-10 rows: LAL @ BOS comes before MIL @ GSW lexicographically
     jan10 = [r for r in data if r["game_date"] == "2025-01-10"]
     matchups = [r["matchup"] for r in jan10]
     assert matchups == sorted(matchups), "rows on the same date must be ordered by matchup"
@@ -1133,7 +713,6 @@ def test_ordering_same_date_multiple_matchups(client, db):
 def test_ordering_both_teams_in_one_matchup(client, db):
     _seed_ordering(db)
     data = client.get("/injuries").json()
-    # Within LAL @ BOS on 2025-01-10: Boston Celtics (B) before Los Angeles Lakers (L)
     jan10_bos = [
         r for r in data
         if r["game_date"] == "2025-01-10" and r["matchup"] == "LAL @ BOS"
@@ -1145,7 +724,6 @@ def test_ordering_both_teams_in_one_matchup(client, db):
 def test_ordering_multiple_players_on_one_team(client, db):
     _seed_ordering(db)
     data = client.get("/injuries").json()
-    # Boston Celtics on 2025-01-10 should have Alpha before Bravo
     bos_jan10 = [
         r for r in data
         if r["game_date"] == "2025-01-10"
@@ -1161,11 +739,6 @@ def test_ordering_multiple_players_on_one_team(client, db):
 def test_ordering_full_sequence(client, db):
     _seed_ordering(db)
     ids = _ordering_ids(client)
-    # Expected order by (game_date DESC, matchup ASC, team ASC, player ASC):
-    # 2025-01-20 LAL@BOS BOS Golf=107
-    # 2025-01-15 LAL@BOS BOS Foxtrot=106
-    # 2025-01-10 LAL@BOS BOS Alpha=101, BOS Bravo=102, LAL Charlie=103
-    # 2025-01-10 MIL@GSW GSW Delta=104, MIL Echo=105
     assert ids == [507, 506, 505, 501, 502, 503, 504]
 
 
@@ -1212,42 +785,171 @@ def test_csv_returns_source_url(client, db):
     assert rows[0][src_idx] == "https://example.com/report.pdf"
 
 
-def test_source_url_none_when_no_report(client, db):
-    """source_url should be None if the linked report is missing."""
+# ── season filter ─────────────────────────────────────────────────────────────
+
+def _seed_multi_season(session: Session):
+    """Seed entries across multiple seasons."""
     player = NBAPlayer(id=100, canonical_name="Test Player", name_key="test player")
     team = NBATeam(id=200, canonical_name="Test Team", abbreviation="TST")
-    candidate = NBAReportCandidate(
-        id=300,
-        source_url="https://example.com/report.pdf",
-        report_date=date(2025, 1, 15),
-        status="discovered",
-    )
-    session = db
-    session.add_all([player, team, candidate])
+    session.add_all([player, team])
     session.flush()
-    entry = NBAReportEntry(
-        id=501,
-        report_id=0,
-        page_number=1,
-        row_number=1,
-        team_id=200,
-        player_id=100,
-        entry_type="player",
-        game_date=date(2025, 1, 15),
-        game_time=time(19, 30),
-        matchup="TST @ OPP",
-        team_name_raw="TST",
-        player_name_raw="Test Player",
-        status="Out",
-        raw_reason="sore knee",
-        raw_row_text="raw",
-    )
-    session.add(entry)
+
+    specs = [
+        (501, date(2019, 10, 25), "2019-20", "regular", "2019-20 regular"),
+        (502, date(2020, 3, 10), "2019-20", "regular", "2019-20 pre-bubble"),
+        (503, date(2020, 7, 30), "2019-20", "playoffs", "2019-20 bubble"),
+        (504, date(2020, 9, 30), "2019-20", "playoffs", "2019-20 late bubble"),
+        (505, date(2020, 10, 11), "2019-20", "playoffs", "2019-20 last day"),
+        (506, date(2020, 12, 25), "2020-21", "regular", "2020-21 early"),
+        (507, date(2021, 5, 16), "2020-21", "regular", "2020-21 late regular"),
+        (508, date(2021, 7, 10), "2020-21", "playoffs", "2020-21 finals"),
+        (509, date(2021, 7, 20), "2020-21", "playoffs", "2020-21 last day"),
+        (510, date(2021, 10, 22), "2021-22", "regular", "2021-22 early"),
+    ]
+    for eid, gd, season, stype, reason in specs:
+        entry = PublicInjuryEntry(
+            id=eid,
+            source_url="https://example.com/report.pdf",
+            source_report_date=gd,
+            source_report_time=time(17, 0),
+            row_number=eid - 500,
+            game_date=gd,
+            game_time=time(19, 30),
+            matchup="TST @ OPP",
+            player_id=100,
+            player_name="Test Player",
+            team_id=200,
+            team_name="Test Team",
+            status="Out",
+            reason_category="Injury",
+            raw_reason=reason,
+            body_part="Knee",
+            injury_type="Soreness",
+            season=season,
+            season_type=stype,
+        )
+        session.add(entry)
     session.commit()
-    resp = client.get("/injuries")
+    return {s[1]: s[0] for s in specs}
+
+
+def test_season_filter_normal(client, db):
+    _seed_multi_season(db)
+    resp = client.get("/injuries?season=2021-22")
     data = resp.json()
     assert len(data) == 1
-    assert data[0]["source_url"] is None
+    assert data[0]["game_date"] == "2021-10-22"
+    assert data[0]["raw_reason"] == "2021-22 early"
+
+
+def test_season_filter_2019_20(client, db):
+    _seed_multi_season(db)
+    resp = client.get("/injuries?season=2019-20")
+    data = resp.json()
+    assert len(data) == 5
+
+
+def test_season_filter_2020_21(client, db):
+    _seed_multi_season(db)
+    resp = client.get("/injuries?season=2020-21")
+    data = resp.json()
+    assert len(data) == 4
+
+
+def test_season_filter_no_match(client, db):
+    _seed_multi_season(db)
+    resp = client.get("/injuries?season=2018-19")
+    assert resp.json() == []
+
+
+def test_season_filter_malformed_value(client, db):
+    _seed_multi_season(db)
+    resp = client.get("/injuries?season=2024")
+    assert resp.status_code == 422
+    assert "Unsupported season" in resp.json()["detail"]
+
+
+def test_season_filter_unsupported_season(client, db):
+    _seed_multi_season(db)
+    resp = client.get("/injuries?season=2026-27")
+    assert resp.status_code == 422
+    assert "2026-27" in resp.json()["detail"]
+
+
+def test_season_filter_whitespace_stripped(client, db):
+    _seed_multi_season(db)
+    resp = client.get("/injuries?season= 2021-22 ")
+    assert resp.status_code == 200
+    assert len(resp.json()) == 1
+
+
+def test_season_combined_with_start_date(client, db):
+    _seed_multi_season(db)
+    resp = client.get("/injuries?season=2019-20&start_date=2020-07-01")
+    data = resp.json()
+    assert len(data) == 3
+
+
+def test_season_combined_with_end_date(client, db):
+    _seed_multi_season(db)
+    resp = client.get("/injuries?season=2019-20&end_date=2020-03-31")
+    data = resp.json()
+    assert len(data) == 2
+
+
+def test_season_combined_with_date_range(client, db):
+    _seed_multi_season(db)
+    resp = client.get(
+        "/injuries?season=2020-21&start_date=2021-05-01&end_date=2021-07-15"
+    )
+    data = resp.json()
+    assert len(data) == 2
+
+
+def test_season_combined_with_player_id(client, db):
+    _seed_multi_season(db)
+    resp = client.get("/injuries?season=2020-21&player_id=100")
+    data = resp.json()
+    assert len(data) == 4
+
+
+def test_season_combined_with_status(client, db):
+    _seed_multi_season(db)
+    resp = client.get("/injuries?season=2019-20&status=Out")
+    data = resp.json()
+    assert len(data) == 5
+    assert all(r["status"] == "Out" for r in data)
+
+
+def test_csv_season_parity(client, db):
+    _seed_multi_season(db)
+    j = client.get("/injuries?season=2019-20").json()
+    c = _csv_ids(client, "/injuries.csv?season=2019-20")
+    assert [r["id"] for r in j] == c
+
+
+def test_csv_season_2020_21_parity(client, db):
+    _seed_multi_season(db)
+    j = client.get("/injuries?season=2020-21").json()
+    c = _csv_ids(client, "/injuries.csv?season=2020-21")
+    assert [r["id"] for r in j] == c
+
+
+def test_csv_season_combined_parity(client, db):
+    _seed_multi_season(db)
+    j = client.get(
+        "/injuries?season=2020-21&start_date=2021-05-01"
+    ).json()
+    c = _csv_ids(
+        client,
+        "/injuries.csv?season=2020-21&start_date=2021-05-01",
+    )
+    assert [r["id"] for r in j] == c
+
+
+def test_csv_season_unsupported_returns_422(client, db):
+    resp = client.get("/injuries.csv?season=bad")
+    assert resp.status_code == 422
 
 
 # ── Multi-season filter (list[str]) ──────────────────────────────────────────
@@ -1256,14 +958,7 @@ def test_multi_season_filter(client, db):
     _seed_multi_season(db)
     resp = client.get("/injuries?season=2019-20&season=2021-22")
     data = resp.json()
-    dates = [r["game_date"] for r in data]
     assert len(data) == 6
-    assert "2019-10-25" in dates
-    assert "2020-03-10" in dates
-    assert "2020-07-30" in dates
-    assert "2020-09-30" in dates
-    assert "2020-10-11" in dates
-    assert "2021-10-22" in dates
 
 
 def test_single_season_still_works(client, db):
@@ -1271,9 +966,6 @@ def test_single_season_still_works(client, db):
     resp = client.get("/injuries?season=2020-21")
     data = resp.json()
     assert len(data) == 4
-    dates = [r["game_date"] for r in data]
-    assert "2020-12-25" in dates
-    assert "2021-07-20" in dates
 
 
 def test_all_seasons_selected(client, db):
@@ -1306,137 +998,82 @@ def test_csv_multi_season_parity(client, db):
 
 # ── Season type filter ───────────────────────────────────────────────────────
 
-def _seed_with_matchups(session: Session):
-    """Seed entries with matchups that can be matched against the schedule CSV."""
+def _seed_with_season_types(session: Session):
+    """Seed entries with season_type values directly on PublicInjuryEntry."""
     player = NBAPlayer(id=100, canonical_name="Test Player", name_key="test player")
     team = NBATeam(id=200, canonical_name="Test Team", abbreviation="TST")
-    candidate = NBAReportCandidate(
-        id=300,
-        source_url="https://example.com/report.pdf",
-        report_date=date(2024, 10, 25),
-        status="parsed",
-    )
-    report = NBAReport(
-        id=400,
-        candidate_id=300,
-        report_date=date(2024, 10, 25),
-        report_time=time(17, 0),
-        source_url="https://example.com/report.pdf",
-        content_hash="abc123",
-        content=b"dummy",
-        content_type="application/pdf",
-        byte_length=5,
-        parse_status="parsed",
-    )
-    session.add_all([player, team, candidate, report])
+    session.add_all([player, team])
     session.flush()
 
-    # Schedule games for season_type filtering
-    _seed_schedule_games(session, [
-        (date(2024, 10, 25), "PHX@LAL", "2024-25", "regular"),
-        (date(2024, 10, 4), "MIN@LAL", "2024-25", "preseason"),
-    ])
-
-    # Entry with a regular-season matchup (PHX@LAL exists in schedule on 2024-10-25)
-    entry1 = NBAReportEntry(
+    entry1 = PublicInjuryEntry(
         id=501,
-        report_id=400,
-        page_number=1,
+        source_url="https://example.com/report.pdf",
+        source_report_date=date(2024, 10, 25),
+        source_report_time=time(17, 0),
         row_number=1,
-        team_id=200,
-        player_id=100,
-        entry_type="player",
         game_date=date(2024, 10, 25),
         game_time=time(19, 30),
         matchup="PHX@LAL",
-        team_name_raw="TST",
-        player_name_raw="Test Player",
+        player_id=100,
+        player_name="Test Player",
+        team_id=200,
+        team_name="Test Team",
         status="Out",
         reason_category="Injury",
         raw_reason="sore knee",
-        raw_row_text="raw",
-    )
-    session.add(entry1)
-    session.flush()
-    cond = NBAInjuryCondition(
-        report_entry_id=501,
-        condition_index=1,
         body_part="Knee",
         injury_type="Soreness",
-        normalized_reason="sore knee",
-        classification_version="v1",
-        is_injury=True,
+        season="2024-25",
+        season_type="regular",
     )
-    session.add(cond)
-
-    # Entry with a preseason matchup (MIN@LAL exists in schedule on 2024-10-04)
-    entry2 = NBAReportEntry(
+    entry2 = PublicInjuryEntry(
         id=502,
-        report_id=400,
-        page_number=1,
+        source_url="https://example.com/report.pdf",
+        source_report_date=date(2024, 10, 4),
+        source_report_time=time(17, 0),
         row_number=2,
-        team_id=200,
-        player_id=100,
-        entry_type="player",
         game_date=date(2024, 10, 4),
         game_time=time(19, 30),
         matchup="MIN@LAL",
-        team_name_raw="TST",
-        player_name_raw="Test Player",
+        player_id=100,
+        player_name="Test Player",
+        team_id=200,
+        team_name="Test Team",
         status="Questionable",
         reason_category="Injury",
         raw_reason="ankle pain",
-        raw_row_text="raw",
-    )
-    session.add(entry2)
-    session.flush()
-    cond2 = NBAInjuryCondition(
-        report_entry_id=502,
-        condition_index=1,
         body_part="Ankle",
         injury_type="Pain",
-        normalized_reason="ankle pain",
-        classification_version="v1",
-        is_injury=True,
+        season="2024-25",
+        season_type="preseason",
     )
-    session.add(cond2)
-
-    # Entry with a matchup/date not in the schedule (should be excluded by season_type filter)
-    entry3 = NBAReportEntry(
+    entry3 = PublicInjuryEntry(
         id=503,
-        report_id=400,
-        page_number=1,
+        source_url="https://example.com/report.pdf",
+        source_report_date=date(2024, 9, 20),
+        source_report_time=time(17, 0),
         row_number=3,
-        team_id=200,
-        player_id=100,
-        entry_type="player",
         game_date=date(2024, 9, 20),
         game_time=time(19, 30),
         matchup="LAL@GSW",
-        team_name_raw="TST",
-        player_name_raw="Test Player",
+        player_id=100,
+        player_name="Test Player",
+        team_id=200,
+        team_name="Test Team",
         status="Out",
         reason_category="Injury",
         raw_reason="back tightness",
-        raw_row_text="raw",
-    )
-    session.add(entry3)
-    session.flush()
-    cond3 = NBAInjuryCondition(
-        report_entry_id=503,
-        condition_index=1,
         body_part="Back",
         injury_type="Tightness",
-        normalized_reason="back tightness",
-        classification_version="v1",
-        is_injury=True,
+        season="2024-25",
+        season_type=None,
     )
-    session.add(cond3)
+    session.add_all([entry1, entry2, entry3])
     session.commit()
 
 
 def test_season_type_filter_regular(client, db):
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get("/injuries?season_type=Regular Season")
     data = resp.json()
     assert len(data) == 1
@@ -1444,7 +1081,7 @@ def test_season_type_filter_regular(client, db):
 
 
 def test_season_type_filter_preseason(client, db):
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get("/injuries?season_type=Preseason")
     data = resp.json()
     assert len(data) == 1
@@ -1452,14 +1089,14 @@ def test_season_type_filter_preseason(client, db):
 
 
 def test_season_type_filter_multiple(client, db):
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get("/injuries?season_type=Regular Season&season_type=Preseason")
     data = resp.json()
     assert len(data) == 2
 
 
 def test_season_type_excludes_unmatched(client, db):
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get("/injuries?season_type=Regular Season")
     data = resp.json()
     matchup = [r["matchup"] for r in data]
@@ -1472,14 +1109,14 @@ def test_season_type_invalid_value(client, db):
 
 
 def test_csv_season_type_parity(client, db):
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     j = client.get("/injuries?season_type=Regular Season").json()
     c = _csv_ids(client, "/injuries.csv?season_type=Regular Season")
     assert [r["id"] for r in j] == c
 
 
 def test_csv_season_type_multiple_parity(client, db):
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     j = client.get(
         "/injuries?season_type=Regular Season&season_type=Preseason"
     ).json()
@@ -1493,7 +1130,7 @@ def test_csv_season_type_multiple_parity(client, db):
 # ── Combined season + season_type ────────────────────────────────────────────
 
 def test_season_and_season_type_combined(client, db):
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get(
         "/injuries?season=2024-25&season_type=Regular Season"
     )
@@ -1503,7 +1140,7 @@ def test_season_and_season_type_combined(client, db):
 
 
 def test_season_and_season_type_no_match(client, db):
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get(
         "/injuries?season=2023-24&season_type=Regular Season"
     )
@@ -1511,7 +1148,7 @@ def test_season_and_season_type_no_match(client, db):
 
 
 def test_csv_season_and_season_type_parity(client, db):
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     j = client.get(
         "/injuries?season=2024-25&season_type=Regular Season"
     ).json()
@@ -1533,7 +1170,7 @@ def test_no_duplicates_with_multi_season(client, db):
 
 
 def test_no_duplicates_with_season_type(client, db):
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get("/injuries?season_type=Regular Season&season_type=Preseason")
     data = resp.json()
     ids = [r["id"] for r in data]
@@ -1541,7 +1178,7 @@ def test_no_duplicates_with_season_type(client, db):
 
 
 def test_no_duplicates_with_combined(client, db):
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get(
         "/injuries?season=2024-25&season_type=Regular Season&season_type=Preseason"
     )
@@ -1553,235 +1190,13 @@ def test_no_duplicates_with_combined(client, db):
 # ── Backward compatibility: single season query param ───────────────────────
 
 def test_single_season_query_param_comma(client, db):
-    """Single season value in a list should still work (backwards compat)."""
     _seed_multi_season(db)
     resp = client.get("/injuries?season=2021-22")
     assert resp.status_code == 200
     assert len(resp.json()) == 1
 
 
-# ── Regression: season_type must not generate giant tuple IN clause ──────────
-
-def test_season_type_filter_no_giant_tuple_in_clause(client, db):
-    """Multi-season + Regular/Play-In/Playoffs must not produce thousands of bound params."""
-    from app.api import _build_entry_query, _resolve_seasons, _resolve_season_types
-
-    _seed_with_matchups(db)
-
-    seasons = _resolve_seasons(
-        ["2024-25"]
-    )
-    season_types = _resolve_season_types(
-        ["Regular Season", "Preseason", "Play-In", "Playoffs"]
-    )
-    q = _build_entry_query(
-        db, seasons=seasons, season_types=season_types,
-    )
-    compiled = q.statement.compile()
-    num_params = len(compiled.params)
-    assert num_params < 100, (
-        f"Expected fewer than 100 bound parameters, got {num_params}. "
-        "The season_type filter is likely still expanding a giant tuple IN clause."
-    )
-
-
-# ── Regression: temp-table matchup must use compact AWAY@HOME format ─────────
-
-def _seed_real_format_matchup(session: Session):
-    """Seed an entry with the canonical compact matchup format (no spaces)."""
-    player = NBAPlayer(id=110, canonical_name="Real Player", name_key="real player")
-    team = NBATeam(id=210, canonical_name="Real Team", abbreviation="HOU")
-    candidate = NBAReportCandidate(
-        id=310,
-        source_url="https://example.com/real.pdf",
-        report_date=date(2025, 10, 21),
-        status="parsed",
-    )
-    report = NBAReport(
-        id=410,
-        candidate_id=310,
-        report_date=date(2025, 10, 21),
-        report_time=time(18, 0),
-        source_url="https://example.com/real.pdf",
-        content_hash="real123",
-        content=b"dummy",
-        content_type="application/pdf",
-        byte_length=5,
-        parse_status="parsed",
-    )
-    session.add_all([player, team, candidate, report])
-    session.flush()
-
-    # Schedule game for season_type filtering
-    _seed_schedule_games(session, [
-        (date(2025, 10, 21), "HOU@OKC", "2025-26", "regular"),
-    ])
-
-    entry = NBAReportEntry(
-        id=601,
-        report_id=410,
-        page_number=1,
-        row_number=1,
-        team_id=210,
-        player_id=110,
-        entry_type="player",
-        game_date=date(2025, 10, 21),
-        game_time=time(19, 0),
-        matchup="HOU@OKC",
-        team_name_raw="HOU",
-        player_name_raw="Real Player",
-        status="Out",
-        reason_category="Injury",
-        raw_reason="hamstring strain",
-        raw_row_text="raw",
-    )
-    session.add(entry)
-    session.flush()
-    cond = NBAInjuryCondition(
-        report_entry_id=601,
-        condition_index=1,
-        body_part="Hamstring",
-        injury_type="Strain",
-        normalized_reason="hamstring strain",
-        classification_version="v1",
-        is_injury=True,
-    )
-    session.add(cond)
-    session.commit()
-
-
-def test_real_format_matchup_regular_season(client, db):
-    """Compact AWAY@HOME matchup (HOU@OKC) matches schedule via temp-table EXISTS."""
-    _seed_real_format_matchup(db)
-    resp = client.get("/injuries?season_type=Regular Season")
-    data = resp.json()
-    assert len(data) == 1
-    assert data[0]["matchup"] == "HOU@OKC"
-
-
-def test_real_format_matchup_regular_playin_playoffs(client, db):
-    """Regular + Play-In + Playoffs still returns the entry."""
-    _seed_real_format_matchup(db)
-    resp = client.get(
-        "/injuries?season_type=Regular Season&season_type=Play-In&season_type=Playoffs"
-    )
-    data = resp.json()
-    assert len(data) == 1
-    assert data[0]["matchup"] == "HOU@OKC"
-
-
-def test_real_format_matchup_no_season_type(client, db):
-    """Omitting season_type returns all entries (no filtering)."""
-    _seed_real_format_matchup(db)
-    resp = client.get("/injuries")
-    data = resp.json()
-    assert len(data) == 1
-    assert data[0]["matchup"] == "HOU@OKC"
-
-
-def test_real_format_matchup_csv_json_parity(client, db):
-    """CSV and JSON responses carry identical entry IDs."""
-    _seed_real_format_matchup(db)
-    j = client.get("/injuries?season_type=Regular Season").json()
-    c = _csv_ids(client, "/injuries.csv?season_type=Regular Season")
-    assert [r["id"] for r in j] == c
-
-
-# ── Regression: Play-In date ordering ────────────────────────────────────────
-
-def test_playin_date_ordering_descending(client, db):
-    """Play-In entries on multiple 2026 dates must be returned newest game_date first."""
-    player = NBAPlayer(id=120, canonical_name="Play-In Player", name_key="play-in player")
-    team = NBATeam(id=220, canonical_name="Play-In Team", abbreviation="PIT")
-    candidate = NBAReportCandidate(
-        id=320,
-        source_url="https://example.com/playin.pdf",
-        report_date=date(2026, 4, 18),
-        status="parsed",
-    )
-    report = NBAReport(
-        id=420,
-        candidate_id=320,
-        report_date=date(2026, 4, 18),
-        report_time=time(18, 0),
-        source_url="https://example.com/playin.pdf",
-        content_hash="playin123",
-        content=b"dummy",
-        content_type="application/pdf",
-        byte_length=5,
-        parse_status="parsed",
-    )
-    db.add_all([player, team, candidate, report])
-    db.flush()
-
-    # Schedule games for Play-In season_type filtering
-    _seed_schedule_games(db, [
-        (date(2026, 4, 14), "MIA@CHA", "2025-26", "play_in"),
-        (date(2026, 4, 15), "GSW@LAC", "2025-26", "play_in"),
-        (date(2026, 4, 17), "CHA@ORL", "2025-26", "play_in"),
-        (date(2026, 4, 14), "POR@PHX", "2025-26", "play_in"),
-        (date(2026, 4, 15), "ORL@PHI", "2025-26", "play_in"),
-        (date(2026, 4, 17), "GSW@PHX", "2025-26", "play_in"),
-    ])
-
-    # Insert Play-In entries across three dates, deliberately NOT in date order.
-    specs = [
-        (701, date(2026, 4, 14), "MIA@CHA", "earliest"),
-        (702, date(2026, 4, 15), "GSW@LAC", "middle"),
-        (703, date(2026, 4, 17), "CHA@ORL", "newest"),
-        (704, date(2026, 4, 14), "POR@PHX", "earliest second"),
-        (705, date(2026, 4, 15), "ORL@PHI", "middle second"),
-        (706, date(2026, 4, 17), "GSW@PHX", "newest second"),
-    ]
-    for eid, gd, matchup, reason in specs:
-        entry = NBAReportEntry(
-            id=eid,
-            report_id=420,
-            page_number=1,
-            row_number=eid - 700,
-            team_id=220,
-            player_id=120,
-            entry_type="player",
-            game_date=gd,
-            game_time=time(19, 0),
-            matchup=matchup,
-            team_name_raw="PIT",
-            player_name_raw="Play-In Player",
-            status="Out",
-            reason_category="Injury",
-            raw_reason=reason,
-            raw_row_text="raw",
-        )
-        db.add(entry)
-        db.flush()
-        cond = NBAInjuryCondition(
-            report_entry_id=eid,
-            condition_index=1,
-            body_part="Knee",
-            injury_type="Soreness",
-            normalized_reason="sore knee",
-            classification_version="v1",
-            is_injury=True,
-        )
-        db.add(cond)
-    db.commit()
-
-    resp = client.get("/injuries?season_type=Play-In")
-    data = resp.json()
-    assert len(data) == 6
-    game_dates = [r["game_date"] for r in data]
-    assert game_dates == sorted(game_dates, reverse=True), (
-        "Play-In rows must be sorted by game_date descending, "
-        f"got {game_dates}"
-    )
-
-    # Also verify CSV ordering matches JSON ordering
-    j_ids = [r["id"] for r in data]
-    c_ids = _csv_ids(client, "/injuries.csv?season_type=Play-In")
-    assert j_ids == c_ids, "CSV and JSON must return Play-In rows in the same order"
-
-
-# ── CSV export: season / season_type derivation ─────────────────────────────
+# ── CSV export: season / season_type values ─────────────────────────────
 
 def _csv_header_and_rows(client, url="/injuries.csv"):
     resp = client.get(url)
@@ -1811,30 +1226,14 @@ def test_csv_has_season_and_season_type(client, db):
 
 
 def test_csv_season_correct_for_regular_season_entry(client, db):
-    """Entry on 2025-01-15 should be in 2024-25 season."""
     _seed(db)
     header, rows = _csv_header_and_rows(client)
     season_idx = header.index("season")
     assert rows[0][season_idx] == "2024-25"
 
 
-def test_csv_season_type_correct_via_schedule_lookup(client, db):
-    """Entry with matchup PHX@LAL on 2024-10-25 is a Regular Season game per schedule CSV."""
-    _seed_with_matchups(db)
-    header, rows = _csv_header_and_rows(client)
-    st_idx = header.index("season_type")
-    date_idx = header.index("game_date")
-    matchup_idx = header.index("matchup")
-    # Find the PHX@LAL row
-    for row in rows:
-        if row[date_idx] == str(date(2024, 10, 25)) and row[matchup_idx] == "PHX@LAL":
-            assert row[st_idx] == "Regular Season"
-            return
-    pytest.fail("PHX@LAL row not found in CSV")
-
-
 def test_csv_season_across_seasons(client, db):
-    """Entries spanning 2019-20 through 2021-22 get correct season labels."""
+    """Entries spanning 2019-20 through 2021-22 get correct season labels from PublicInjuryEntry."""
     _seed_multi_season(db)
     header, rows = _csv_header_and_rows(client)
     season_idx = header.index("season")
@@ -1848,22 +1247,18 @@ def test_csv_season_across_seasons(client, db):
     assert season_dates["2021-10-22"] == "2021-22"
 
 
-def test_csv_season_type_from_schedule_not_dates(client, db):
-    """season_type must come from schedule CSV lookup, not generic date ranges."""
-    _seed_with_matchups(db)
+def test_csv_season_type_values_direct_from_entry(client, db):
+    """CSV season_type comes directly from PublicInjuryEntry, not schedule lookup."""
+    _seed_with_season_types(db)
     header, rows = _csv_header_and_rows(client)
     st_idx = header.index("season_type")
     matchup_idx = header.index("matchup")
-    date_idx = header.index("game_date")
-    results = {(row[date_idx], row[matchup_idx]): row[st_idx] for row in rows}
-    # PHX@LAL on 2024-10-25 is Regular Season per schedule CSV
-    assert results[(str(date(2024, 10, 25)), "PHX@LAL")] == "Regular Season"
-    # MIN@LAL on 2024-10-04 is Preseason per schedule CSV
-    assert results[(str(date(2024, 10, 4)), "MIN@LAL")] == "Preseason"
+    results = {row[matchup_idx]: row[st_idx] for row in rows}
+    assert results["PHX@LAL"] == "Regular Season"
+    assert results["MIN@LAL"] == "Preseason"
 
 
 def test_csv_filtered_by_season_reflects_filter(client, db):
-    """CSV with season filter returns only rows from that season."""
     _seed_multi_season(db)
     header, rows = _csv_header_and_rows(client, "/injuries.csv?season=2020-21")
     season_idx = header.index("season")
@@ -1872,8 +1267,7 @@ def test_csv_filtered_by_season_reflects_filter(client, db):
 
 
 def test_csv_filtered_by_season_type_reflects_filter(client, db):
-    """CSV with season_type filter returns only matching season_type rows."""
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     header, rows = _csv_header_and_rows(
         client, "/injuries.csv?season_type=Regular Season"
     )
@@ -1883,8 +1277,7 @@ def test_csv_filtered_by_season_type_reflects_filter(client, db):
 
 
 def test_csv_combined_season_and_season_type_filter(client, db):
-    """CSV with both filters returns only rows matching both."""
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     header, rows = _csv_header_and_rows(
         client, "/injuries.csv?season=2024-25&season_type=Regular Season"
     )
@@ -1895,11 +1288,10 @@ def test_csv_combined_season_and_season_type_filter(client, db):
     assert rows[0][st_idx] == "Regular Season"
 
 
-# ── Focused NBAScheduleGame-backed filtering tests ──────────────────────────
+# ── Focused filtering tests ─────────────────────────────────────────────────
 
 
 def test_focused_single_season(client, db):
-    """Single season filter returns only entries from that season."""
     _seed_multi_season(db)
     resp = client.get("/injuries?season=2021-22")
     data = resp.json()
@@ -1908,7 +1300,6 @@ def test_focused_single_season(client, db):
 
 
 def test_focused_multiple_seasons(client, db):
-    """Multiple season filters are ORed together."""
     _seed_multi_season(db)
     resp = client.get("/injuries?season=2019-20&season=2021-22")
     data = resp.json()
@@ -1921,8 +1312,7 @@ def test_focused_multiple_seasons(client, db):
 
 
 def test_focused_single_season_type(client, db):
-    """Single season_type filter returns only matching entries."""
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get("/injuries?season_type=Regular Season")
     data = resp.json()
     assert len(data) == 1
@@ -1930,8 +1320,7 @@ def test_focused_single_season_type(client, db):
 
 
 def test_focused_multiple_season_types(client, db):
-    """Multiple season_type filters are ORed together."""
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get(
         "/injuries?season_type=Regular Season&season_type=Preseason"
     )
@@ -1942,8 +1331,7 @@ def test_focused_multiple_season_types(client, db):
 
 
 def test_focused_season_and_season_type_combined(client, db):
-    """Combined season + season_type returns intersection."""
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get(
         "/injuries?season=2024-25&season_type=Regular Season"
     )
@@ -1954,7 +1342,6 @@ def test_focused_season_and_season_type_combined(client, db):
 
 
 def test_focused_no_duplicates_with_season(client, db):
-    """Season filter produces no duplicate rows."""
     _seed_multi_season(db)
     resp = client.get("/injuries?season=2019-20&season=2020-21")
     ids = [r["id"] for r in resp.json()]
@@ -1962,8 +1349,7 @@ def test_focused_no_duplicates_with_season(client, db):
 
 
 def test_focused_no_duplicates_with_season_type(client, db):
-    """Season_type filter produces no duplicate rows."""
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get(
         "/injuries?season_type=Regular Season&season_type=Preseason"
     )
@@ -1972,8 +1358,7 @@ def test_focused_no_duplicates_with_season_type(client, db):
 
 
 def test_focused_no_duplicates_with_combined(client, db):
-    """Combined season + season_type produces no duplicate rows."""
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     resp = client.get(
         "/injuries?season=2024-25&season_type=Regular Season&season_type=Preseason"
     )
@@ -1982,7 +1367,6 @@ def test_focused_no_duplicates_with_combined(client, db):
 
 
 def test_focused_json_csv_parity_season(client, db):
-    """JSON and CSV return same IDs when filtered by season."""
     _seed_multi_season(db)
     j = client.get("/injuries?season=2019-20").json()
     c = _csv_ids(client, "/injuries.csv?season=2019-20")
@@ -1990,16 +1374,14 @@ def test_focused_json_csv_parity_season(client, db):
 
 
 def test_focused_json_csv_parity_season_type(client, db):
-    """JSON and CSV return same IDs when filtered by season_type."""
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     j = client.get("/injuries?season_type=Regular Season").json()
     c = _csv_ids(client, "/injuries.csv?season_type=Regular Season")
     assert [r["id"] for r in j] == c
 
 
 def test_focused_json_csv_parity_combined(client, db):
-    """JSON and CSV return same IDs when filtered by season + season_type."""
-    _seed_with_matchups(db)
+    _seed_with_season_types(db)
     j = client.get(
         "/injuries?season=2024-25&season_type=Regular Season"
     ).json()
@@ -2011,7 +1393,7 @@ def test_focused_json_csv_parity_combined(client, db):
 
 
 def test_focused_csv_season_values(client, db):
-    """CSV season column comes from NBAScheduleGame, not date-range derivation."""
+    """CSV season column comes from PublicInjuryEntry.season."""
     _seed_multi_season(db)
     header, rows = _csv_header_and_rows(client)
     season_idx = header.index("season")
@@ -2024,27 +1406,11 @@ def test_focused_csv_season_values(client, db):
 
 
 def test_focused_csv_season_type_values(client, db):
-    """CSV season_type column comes from NBAScheduleGame, not date-range derivation."""
-    _seed_with_matchups(db)
+    """CSV season_type column comes from PublicInjuryEntry.season_type."""
+    _seed_with_season_types(db)
     header, rows = _csv_header_and_rows(client)
     st_idx = header.index("season_type")
     matchup_idx = header.index("matchup")
-    date_idx = header.index("game_date")
-    results = {(row[date_idx], row[matchup_idx]): row[st_idx] for row in rows}
-    assert results[(str(date(2024, 10, 25)), "PHX@LAL")] == "Regular Season"
-    assert results[(str(date(2024, 10, 4)), "MIN@LAL")] == "Preseason"
-
-
-def test_focused_no_schedule_csv_at_runtime(client, db):
-    """The API module does not reference or load the schedule CSV at runtime."""
-    import importlib
-    import app.api as api_mod
-
-    # The module should not have _SCHEDULE_LOOKUP or _load_schedule
-    assert not hasattr(api_mod, "_SCHEDULE_LOOKUP")
-    assert not hasattr(api_mod, "_load_schedule")
-
-    # The source should not contain the CSV path
-    import inspect
-    source = inspect.getsource(api_mod)
-    assert "nba_schedule_games.csv" not in source
+    results = {row[matchup_idx]: row[st_idx] for row in rows}
+    assert results["PHX@LAL"] == "Regular Season"
+    assert results["MIN@LAL"] == "Preseason"

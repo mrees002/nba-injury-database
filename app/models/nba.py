@@ -235,6 +235,41 @@ class NBAScheduleGame(Base):
     )
 
 
+class PublicInjuryEntry(Base):
+    __tablename__ = "public_injury_entries"
+    __table_args__ = (
+        UniqueConstraint("source_url", "row_number", name="uq_public_injury_entries_url_row"),
+        Index("ix_public_injury_entries_game_date", "game_date"),
+        Index("ix_public_injury_entries_player_id", "player_id"),
+        Index("ix_public_injury_entries_team_id", "team_id"),
+        Index("ix_public_injury_entries_season", "season"),
+        Index("ix_public_injury_entries_season_type", "season_type"),
+    )
+
+    id: Mapped[int] = mapped_column(BIGINT, primary_key=True)
+    source_url: Mapped[str] = mapped_column(Text, nullable=False)
+    source_report_date: Mapped[date] = mapped_column(Date, nullable=False)
+    source_report_time: Mapped[time] = mapped_column(Time, nullable=False)
+    row_number: Mapped[int] = mapped_column(Integer, nullable=False)
+    game_date: Mapped[date] = mapped_column(Date, nullable=False)
+    game_time: Mapped[time | None] = mapped_column(Time)
+    matchup: Mapped[str] = mapped_column(String(16), nullable=False)
+    player_id: Mapped[int | None] = mapped_column(BIGINT, ForeignKey("nba_players.id"))
+    player_name: Mapped[str] = mapped_column(Text, nullable=False)
+    team_id: Mapped[int | None] = mapped_column(BIGINT, ForeignKey("nba_teams.id"))
+    team_name: Mapped[str] = mapped_column(Text, nullable=False)
+    status: Mapped[str | None] = mapped_column(String(64))
+    raw_reason: Mapped[str | None] = mapped_column(Text)
+    reason_category: Mapped[str | None] = mapped_column(Text)
+    body_part: Mapped[str | None] = mapped_column(Text)
+    injury_type: Mapped[str | None] = mapped_column(Text)
+    season: Mapped[str | None] = mapped_column(Text)
+    season_type: Mapped[str | None] = mapped_column(String(32))
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now()
+    )
+
+
 class NBAInjuryEpisodeCondition(Base):
     __tablename__ = "nba_injury_episode_conditions"
     __table_args__ = (

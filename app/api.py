@@ -9,35 +9,38 @@ from typing import Generator
 from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
-from sqlalchemy import and_, exists, func, or_, select
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app.db.session import build_engine, build_session_factory
 from app.models.nba import (
-    NBAInjuryCondition,
     NBAPlayer,
-    NBAReport,
-    NBAReportEntry,
-    NBAScheduleGame,
     NBATeam,
+    PublicInjuryEntry,
 )
 
-# Explicit season mapping: label -> (inclusive start_date, inclusive end_date).
-# Avoids generic July-1 rules; each boundary is set to actual NBA game dates.
-NBA_SEASONS: dict[str, tuple[date, date]] = {
-    "2018-19": (date(2018, 10, 16), date(2019, 6, 13)),
-    "2019-20": (date(2019, 10, 22), date(2020, 10, 11)),  # COVID bubble
-    "2020-21": (date(2020, 12, 22), date(2021, 7, 20)),   # delayed start, July finals
-    "2021-22": (date(2021, 10, 19), date(2022, 6, 26)),
-    "2022-23": (date(2022, 10, 18), date(2023, 6, 20)),
-    "2023-24": (date(2023, 10, 24), date(2024, 6, 23)),
-    "2024-25": (date(2024, 10, 22), date(2025, 6, 22)),
-    "2025-26": (date(2025, 10, 21), date(2026, 6, 13)),
+NBA_SEASONS: set[str] = {
+    "2018-19", "2019-20", "2020-21", "2021-22",
+    "2022-23", "2023-24", "2024-25", "2025-26",
 }
 
 ALLOWED_SEASON_TYPES = {"preseason", "regular", "play_in", "playoffs"}
 
-# Map frontend labels -> database season_type values.
+
+def _resolve_seasons(values: list[str]) -> list[str]:
+    """Validate and normalize season labels, returning cleaned strings."""
+    result = []
+    for v in values:
+        key = v.strip()
+        if key not in NBA_SEASONS:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Unsupported season '{v}'. "
+                f"Valid seasons: {', '.join(sorted(NBA_SEASONS))}",
+            )
+        result.append(key)
+    return result
+
 _SEASON_TYPE_LABEL_MAP: dict[str, str] = {
     "Preseason": "preseason",
     "Regular Season": "regular",
@@ -45,46 +48,13 @@ _SEASON_TYPE_LABEL_MAP: dict[str, str] = {
     "Playoffs": "playoffs",
 }
 
-# Reverse map: database season_type value -> display label.
 _CSV_TO_SEASON_TYPE_LABEL: dict[str, str] = {v: k for k, v in _SEASON_TYPE_LABEL_MAP.items()}
 
 
-def _derive_season(game_date: date) -> str | None:
-    """Return the NBA season label for a given game date, or None if unmatched."""
-    for label, (start, end) in NBA_SEASONS.items():
-        if start <= game_date <= end:
-            return label
-    return None
-
-
-def _resolve_season(value: str) -> tuple[date, date]:
-    """Return (start, end) for a season label or raise ValueError."""
-    key = value.strip()
-    if key not in NBA_SEASONS:
-        raise ValueError(
-            f"Unsupported season '{value}'. "
-            f"Valid seasons: {', '.join(sorted(NBA_SEASONS))}"
-        )
-    return NBA_SEASONS[key]
-
-
-def _resolve_seasons(values: list[str]) -> list[tuple[date, date]]:
-    """Resolve multiple season labels to a list of (start, end) ranges."""
-    ranges = []
-    for v in values:
-        try:
-            ranges.append(_resolve_season(v))
-        except ValueError as exc:
-            raise HTTPException(status_code=422, detail=str(exc))
-    return ranges
-
-
 def _normalize_season_type(value: str) -> str:
-    """Map a frontend season type label to its CSV value, or raise ValueError."""
     label = value.strip()
     if label in _SEASON_TYPE_LABEL_MAP:
         return _SEASON_TYPE_LABEL_MAP[label]
-    # Also accept raw CSV values directly.
     if label in ALLOWED_SEASON_TYPES:
         return label
     raise ValueError(
@@ -94,7 +64,6 @@ def _normalize_season_type(value: str) -> str:
 
 
 def _resolve_season_types(values: list[str]) -> list[str]:
-    """Resolve multiple season type labels to their CSV values."""
     types = []
     for v in values:
         try:
@@ -103,22 +72,31 @@ def _resolve_season_types(values: list[str]) -> list[str]:
             raise HTTPException(status_code=422, detail=str(exc))
     return types
 
+
 app = FastAPI(title="NBA Injury Database")
 
 _TEMPLATE_DIR = Path(__file__).resolve().parent / "templates"
 
-_engine = build_engine()
-_session_factory = build_session_factory(_engine)
+_engine = None
+_session_factory = None
+
+
+def _get_session_factory():
+    global _engine, _session_factory
+    if _session_factory is None:
+        _engine = build_engine()
+        _session_factory = build_session_factory(_engine)
+    return _session_factory
 
 
 def get_session() -> Generator[Session, None, None]:
-    with _session_factory() as session:
+    factory = _get_session_factory()
+    with factory() as session:
         yield session
 
 
 class EntryOut(BaseModel):
     id: int
-    report_id: int
     game_date: date
     game_time: time | None
     matchup: str
@@ -131,8 +109,6 @@ class EntryOut(BaseModel):
     reason_category: str | None
     body_part: str | None
     injury_type: str | None
-    previous_status: str | None
-    previous_reason: str | None
     source_url: str | None
 
     model_config = {"from_attributes": True}
@@ -154,16 +130,6 @@ _CSV_COLUMNS = [
     "source_url",
 ]
 
-_CONDITION_SQ = (
-    select(
-        NBAInjuryCondition.report_entry_id,
-        NBAInjuryCondition.body_part,
-        NBAInjuryCondition.injury_type,
-    )
-    .where(NBAInjuryCondition.condition_index == 1)
-    .subquery()
-)
-
 
 def _build_entry_query(
     session: Session,
@@ -175,80 +141,38 @@ def _build_entry_query(
     statuses: list[str] | None = None,
     injury_type: str | None = None,
     reason_search: str | None = None,
-    seasons: list[tuple[date, date]] | None = None,
+    seasons: list[str] | None = None,
     season_types: list[str] | None = None,
 ):
-    q = (
-        session.query(
-            NBAReportEntry,
-            NBAPlayer.canonical_name,
-            NBATeam.canonical_name,
-            _CONDITION_SQ.c.body_part,
-            _CONDITION_SQ.c.injury_type,
-            NBAReport.source_url,
-        )
-        .join(NBAPlayer, NBAReportEntry.player_id == NBAPlayer.id)
-        .outerjoin(NBATeam, NBAReportEntry.team_id == NBATeam.id)
-        .outerjoin(NBAReport, NBAReportEntry.report_id == NBAReport.id)
-        .outerjoin(_CONDITION_SQ, _CONDITION_SQ.c.report_entry_id == NBAReportEntry.id)
-    )
+    q = session.query(PublicInjuryEntry)
     if player_id is not None:
-        q = q.filter(NBAReportEntry.player_id == player_id)
+        q = q.filter(PublicInjuryEntry.player_id == player_id)
     if team_id is not None:
-        q = q.filter(NBAReportEntry.team_id == team_id)
+        q = q.filter(PublicInjuryEntry.team_id == team_id)
     if body_part is not None:
-        q = q.filter(
-            exists()
-            .where(
-                NBAInjuryCondition.report_entry_id == NBAReportEntry.id,
-                NBAInjuryCondition.body_part == body_part,
-            )
-            .correlate(NBAReportEntry)
-        )
+        q = q.filter(PublicInjuryEntry.body_part == body_part)
     if seasons is not None:
-        season_conditions = []
-        for s_start, s_end in seasons:
-            season_conditions.append(
-                and_(
-                    NBAReportEntry.game_date >= s_start,
-                    NBAReportEntry.game_date <= s_end,
-                )
-            )
-        q = q.filter(or_(*season_conditions))
+        q = q.filter(PublicInjuryEntry.season.in_(seasons))
     if season_types is not None:
         if not season_types:
-            q = q.filter(NBAReportEntry.id == -1)
+            q = q.filter(PublicInjuryEntry.id == -1)
         else:
-            q = q.filter(
-                exists()
-                .where(
-                    NBAScheduleGame.game_date == NBAReportEntry.game_date,
-                    func.replace(NBAScheduleGame.matchup, " ", "") == func.replace(NBAReportEntry.matchup, " ", ""),
-                    NBAScheduleGame.season_type.in_(season_types),
-                )
-            )
+            q = q.filter(PublicInjuryEntry.season_type.in_(season_types))
     if start_date is not None:
-        q = q.filter(NBAReportEntry.game_date >= start_date)
+        q = q.filter(PublicInjuryEntry.game_date >= start_date)
     if end_date is not None:
-        q = q.filter(NBAReportEntry.game_date <= end_date)
+        q = q.filter(PublicInjuryEntry.game_date <= end_date)
     if statuses is not None:
-        q = q.filter(NBAReportEntry.status.in_(statuses))
+        q = q.filter(PublicInjuryEntry.status.in_(statuses))
     if injury_type is not None:
-        q = q.filter(
-            exists()
-            .where(
-                NBAInjuryCondition.report_entry_id == NBAReportEntry.id,
-                NBAInjuryCondition.injury_type == injury_type,
-            )
-            .correlate(NBAReportEntry)
-        )
+        q = q.filter(PublicInjuryEntry.injury_type == injury_type)
     if reason_search is not None:
-        q = q.filter(NBAReportEntry.raw_reason.ilike(f"%{reason_search}%"))
+        q = q.filter(PublicInjuryEntry.raw_reason.ilike(f"%{reason_search}%"))
     q = q.order_by(
-        NBAReportEntry.game_date.desc(),
-        NBAReportEntry.matchup,
-        NBATeam.canonical_name,
-        NBAPlayer.canonical_name,
+        PublicInjuryEntry.game_date.desc(),
+        PublicInjuryEntry.matchup,
+        PublicInjuryEntry.team_name,
+        PublicInjuryEntry.player_name,
     )
     return q
 
@@ -285,24 +209,21 @@ def list_injuries(
     return [
         EntryOut(
             id=entry.id,
-            report_id=entry.report_id,
             game_date=entry.game_date,
             game_time=entry.game_time,
             matchup=entry.matchup,
             player_id=entry.player_id,
-            player_name=p_name,
+            player_name=entry.player_name,
             team_id=entry.team_id,
-            team_name=t_name,
+            team_name=entry.team_name,
             status=entry.status,
             raw_reason=entry.raw_reason,
             reason_category=entry.reason_category,
-            body_part=bp,
-            injury_type=it,
-            previous_status=entry.previous_status,
-            previous_reason=entry.previous_reason,
-            source_url=src_url,
+            body_part=entry.body_part,
+            injury_type=entry.injury_type,
+            source_url=entry.source_url,
         )
-        for entry, p_name, t_name, bp, it, src_url in rows
+        for entry in rows
     ]
 
 
@@ -328,35 +249,25 @@ def list_injuries_csv(
     )
     rows = q.all()
 
-    # Build schedule lookups for season/season_type derivation from NBAScheduleGame
-    schedule_games = session.query(NBAScheduleGame).all()
-    season_lookup: dict[tuple[date, str], str] = {}
-    season_type_lookup: dict[tuple[date, str], str] = {}
-    for sg in schedule_games:
-        key = (sg.game_date, sg.matchup.replace(" ", ""))
-        season_lookup[key] = sg.season
-        season_type_lookup[key] = sg.season_type
-
     buf = io.StringIO()
     writer = csv.writer(buf)
     writer.writerow(_CSV_COLUMNS)
-    for entry, p_name, t_name, bp, it, src_url in rows:
-        skey = (entry.game_date, entry.matchup.replace(" ", ""))
+    for entry in rows:
         writer.writerow(
             [
                 entry.id,
-                p_name,
-                t_name,
-                season_lookup.get(skey),
-                _CSV_TO_SEASON_TYPE_LABEL.get(season_type_lookup.get(skey, "")),
+                entry.player_name,
+                entry.team_name,
+                entry.season,
+                _CSV_TO_SEASON_TYPE_LABEL.get(entry.season_type, entry.season_type) if entry.season_type else None,
                 entry.game_date,
                 entry.matchup,
                 entry.status,
                 entry.raw_reason,
                 entry.reason_category,
-                bp,
-                it,
-                src_url,
+                entry.body_part,
+                entry.injury_type,
+                entry.source_url,
             ]
         )
     buf.seek(0)

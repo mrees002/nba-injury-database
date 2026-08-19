@@ -10,6 +10,7 @@ from app.models.nba import (
     NBAReportEntry,
     NBAScheduleGame,
     NBATeam,
+    PublicInjuryEntry,
 )
 from app.models.raw_transaction import RawTransaction
 from app.models.update_run import UpdateRun
@@ -26,6 +27,7 @@ __all__ = [
     "NBAReportEntry",
     "NBAScheduleGame",
     "NBATeam",
+    "PublicInjuryEntry",
     "RawTransaction",
     "UpdateRun",
 ]

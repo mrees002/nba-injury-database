@@ -22,3 +22,36 @@ def test_sqlalchemy_foundation_builds_engine_and_session_factory():
     assert engine.dialect.name == "postgresql"
     assert session_factory.kw["bind"] is engine
     assert {"raw_transactions", "injuries", "update_runs"}.issubset(Base.metadata.tables)
+
+
+def test_api_engine_is_lazy_until_first_request(monkeypatch):
+    """Engine and session factory must not be created at import time.
+
+    This is required for Vercel serverless: importing the app module should
+    not attempt a database connection.
+    """
+    monkeypatch.setenv("DATABASE_URL", "postgresql+psycopg://test:test@localhost:5432/test_db")
+    get_settings.cache_clear()
+
+    import app.api as api_module
+
+    # Reset lazy state so we can test the full cycle
+    api_module._engine = None
+    api_module._session_factory = None
+
+    try:
+        assert api_module._engine is None
+        assert api_module._session_factory is None
+
+        factory = api_module._get_session_factory()
+
+        assert api_module._engine is not None
+        assert api_module._session_factory is not None
+        assert factory is api_module._session_factory
+    finally:
+        # Clean up: dispose engine and reset to None
+        if api_module._engine is not None:
+            api_module._engine.dispose()
+        api_module._engine = None
+        api_module._session_factory = None
+        get_settings.cache_clear()
