@@ -21,7 +21,7 @@ from app.models.nba import (
 
 NBA_SEASONS: set[str] = {
     "2018-19", "2019-20", "2020-21", "2021-22",
-    "2022-23", "2023-24", "2024-25", "2025-26",
+    "2022-23", "2023-24", "2024-25", "2025-26", "2026-27",
 }
 
 ALLOWED_SEASON_TYPES = {"preseason", "regular", "play_in", "playoffs"}

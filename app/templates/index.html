@@ -358,7 +358,7 @@
                 <label>Body Part: <input type="text" name="body_part"></label>
                 <label class="multiselect-label">Season:
                     <div class="multiselect" id="season-multiselect">
-                        <button type="button" class="multiselect-trigger" id="season-trigger" aria-haspopup="listbox" aria-expanded="false">7 seasons</button>
+                        <button type="button" class="multiselect-trigger" id="season-trigger" aria-haspopup="listbox" aria-expanded="false">8 seasons</button>
                         <div class="multiselect-panel" id="season-panel" role="listbox" aria-label="Season filter">
                             <label class="multiselect-option"><input type="checkbox" name="season" value="2018-19"> 2018-19</label>
                             <label class="multiselect-option"><input type="checkbox" name="season" value="2019-20" checked> 2019-20</label>
@@ -368,6 +368,7 @@
                             <label class="multiselect-option"><input type="checkbox" name="season" value="2023-24" checked> 2023-24</label>
                             <label class="multiselect-option"><input type="checkbox" name="season" value="2024-25" checked> 2024-25</label>
                             <label class="multiselect-option"><input type="checkbox" name="season" value="2025-26" checked> 2025-26</label>
+                            <label class="multiselect-option"><input type="checkbox" name="season" value="2026-27" checked> 2026-27</label>
                         </div>
                     </div>
                 </label>
@@ -588,8 +589,8 @@
                 cb.checked = statusDefaults.includes(cb.value);
             });
             updateStatusSummary();
-            // Restore season defaults: 2019-20 through 2025-26 checked, 2018-19 unchecked
-            const seasonDefaults = ['2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'];
+            // Restore season defaults: 2019-20 through 2026-27 checked, 2018-19 unchecked
+            const seasonDefaults = ['2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26', '2026-27'];
             document.querySelectorAll('#season-panel input[type="checkbox"]').forEach(function(cb) {
                 cb.checked = seasonDefaults.includes(cb.value);
             });

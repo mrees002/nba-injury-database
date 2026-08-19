@@ -482,12 +482,13 @@ def test_season_and_season_type_populated(db):
 
 
 def test_missing_schedule_match_is_nullable(db):
-    """When no schedule game matches, season and season_type are NULL."""
+    """When no schedule game matches and date is outside all boundaries, season and season_type are NULL."""
     _seed_player(db)
     _seed_team(db)
     # No schedule seeded
 
-    parsed = _make_parsed_report()
+    # July 15 falls between 2024-25 playoffs end (Jun 22) and 2025-26 preseason start (Oct 2)
+    parsed = _make_parsed_report(_make_parsed_entry(game_date=date(2025, 7, 15)))
 
     with patch(
         "app.jobs.update_public_daily.classify_conditions",
@@ -496,7 +497,7 @@ def test_missing_schedule_match_is_nullable(db):
         _write_report_entries(
             db,
             "https://example.com/report.pdf",
-            date(2025, 1, 15),
+            date(2025, 7, 15),
             time(17, 30),
             parsed,
             {},
@@ -773,7 +774,8 @@ def test_lookup_schedule_meta_found(db):
 
 
 def test_lookup_schedule_meta_not_found(db):
-    season, season_type = _lookup_schedule_meta(db, date(2025, 1, 15), "LAL@BOS")
+    # July 15 is between seasons — no schedule row and outside all boundaries
+    season, season_type = _lookup_schedule_meta(db, date(2025, 7, 15), "LAL@BOS")
     assert season is None
     assert season_type is None
 
@@ -910,12 +912,13 @@ def test_equal_timestamp_does_not_supersede(db):
 
 
 def test_missing_schedule_match_allows_nullable_season(db):
-    """When no schedule rows exist, season/season_type stay NULL."""
+    """When no schedule rows exist and date is outside all boundaries, season/season_type stay NULL."""
     _seed_player(db)
     _seed_team(db)
     # No schedule rows seeded
 
-    parsed = _make_parsed_report()
+    # July 15 falls between 2024-25 playoffs end (Jun 22) and 2025-26 preseason start (Oct 2)
+    parsed = _make_parsed_report(_make_parsed_entry(game_date=date(2025, 7, 15)))
 
     with patch(
         "app.jobs.update_public_daily.classify_conditions",
@@ -924,7 +927,7 @@ def test_missing_schedule_match_allows_nullable_season(db):
         written, _ = _write_report_entries(
             db,
             "https://example.com/report.pdf",
-            date(2025, 1, 15),
+            date(2025, 7, 15),
             time(17, 30),
             parsed,
             {},
@@ -1040,3 +1043,256 @@ def test_normal_injury_update_succeeds_without_schedule_sync(tmp_path):
         assert run.finished_at is not None
         assert run.error_details is None
     engine.dispose()
+
+
+# ---------------------------------------------------------------------------
+# 25. Schedule match wins over date-boundary fallback
+# ---------------------------------------------------------------------------
+
+
+def test_schedule_match_wins_over_fallback(db):
+    """When a schedule row exists, its season/season_type take priority over fallback."""
+    _seed_player(db)
+    _seed_team(db)
+    # Seed schedule with a deliberately non-matching season_type to prove it wins
+    _seed_schedule(db, date(2024, 11, 10), "LAL@BOS", "2024-25", "regular")
+
+    parsed = _make_parsed_report(_make_parsed_entry(game_date=date(2024, 11, 10)))
+
+    with patch(
+        "app.jobs.update_public_daily.classify_conditions",
+        return_value=(_make_classification(),),
+    ):
+        _write_report_entries(
+            db,
+            "https://example.com/report.pdf",
+            date(2024, 11, 10),
+            time(17, 30),
+            parsed,
+            {},
+            {},
+        )
+    db.flush()
+
+    pub = db.query(PublicInjuryEntry).one()
+    assert pub.season == "2024-25"
+    assert pub.season_type == "regular"
+
+
+# ---------------------------------------------------------------------------
+# 26. Regular-season fallback via date boundaries
+# ---------------------------------------------------------------------------
+
+
+def test_regular_season_fallback(db):
+    """Date within regular-season boundaries uses fallback when no schedule row exists."""
+    _seed_player(db)
+    _seed_team(db)
+    # No schedule seeded
+
+    # Jan 15, 2025 falls within 2024-25 regular season (Oct 22 2024 - Apr 13 2025)
+    parsed = _make_parsed_report(_make_parsed_entry(game_date=date(2025, 1, 15)))
+
+    with patch(
+        "app.jobs.update_public_daily.classify_conditions",
+        return_value=(_make_classification(),),
+    ):
+        _write_report_entries(
+            db,
+            "https://example.com/report.pdf",
+            date(2025, 1, 15),
+            time(17, 30),
+            parsed,
+            {},
+            {},
+        )
+    db.flush()
+
+    pub = db.query(PublicInjuryEntry).one()
+    assert pub.season == "2024-25"
+    assert pub.season_type == "regular"
+
+
+# ---------------------------------------------------------------------------
+# 27. Play-In fallback via date boundaries
+# ---------------------------------------------------------------------------
+
+
+def test_play_in_fallback(db):
+    """Date within play-in boundaries uses fallback when no schedule row exists."""
+    _seed_player(db)
+    _seed_team(db)
+    # No schedule seeded
+
+    # Apr 16, 2025 falls within 2024-25 play-in (Apr 15 - Apr 18 2025)
+    parsed = _make_parsed_report(_make_parsed_entry(game_date=date(2025, 4, 16)))
+
+    with patch(
+        "app.jobs.update_public_daily.classify_conditions",
+        return_value=(_make_classification(),),
+    ):
+        _write_report_entries(
+            db,
+            "https://example.com/report.pdf",
+            date(2025, 4, 16),
+            time(17, 30),
+            parsed,
+            {},
+            {},
+        )
+    db.flush()
+
+    pub = db.query(PublicInjuryEntry).one()
+    assert pub.season == "2024-25"
+    assert pub.season_type == "play_in"
+
+
+# ---------------------------------------------------------------------------
+# 28. Playoff fallback via date boundaries
+# ---------------------------------------------------------------------------
+
+
+def test_playoffs_fallback(db):
+    """Date within playoff boundaries uses fallback when no schedule row exists."""
+    _seed_player(db)
+    _seed_team(db)
+    # No schedule seeded
+
+    # Jun 10, 2025 falls within 2024-25 playoffs (Apr 19 - Jun 22 2025)
+    parsed = _make_parsed_report(_make_parsed_entry(game_date=date(2025, 6, 10)))
+
+    with patch(
+        "app.jobs.update_public_daily.classify_conditions",
+        return_value=(_make_classification(),),
+    ):
+        _write_report_entries(
+            db,
+            "https://example.com/report.pdf",
+            date(2025, 6, 10),
+            time(17, 30),
+            parsed,
+            {},
+            {},
+        )
+    db.flush()
+
+    pub = db.query(PublicInjuryEntry).one()
+    assert pub.season == "2024-25"
+    assert pub.season_type == "playoffs"
+
+
+# ---------------------------------------------------------------------------
+# 29. Preseason fallback via date boundaries
+# ---------------------------------------------------------------------------
+
+
+def test_preseason_fallback(db):
+    """Date within preseason boundaries uses fallback when no schedule row exists."""
+    _seed_player(db)
+    _seed_team(db)
+    # No schedule seeded
+
+    # Oct 10, 2024 falls within 2024-25 preseason (Oct 4 - Oct 18 2024)
+    parsed = _make_parsed_report(_make_parsed_entry(game_date=date(2024, 10, 10)))
+
+    with patch(
+        "app.jobs.update_public_daily.classify_conditions",
+        return_value=(_make_classification(),),
+    ):
+        _write_report_entries(
+            db,
+            "https://example.com/report.pdf",
+            date(2024, 10, 10),
+            time(17, 30),
+            parsed,
+            {},
+            {},
+        )
+    db.flush()
+
+    pub = db.query(PublicInjuryEntry).one()
+    assert pub.season == "2024-25"
+    assert pub.season_type == "preseason"
+
+
+# ---------------------------------------------------------------------------
+# 30. classify_by_season_boundary unit tests
+# ---------------------------------------------------------------------------
+
+
+def test_classify_by_season_boundary_regular():
+    from app.nba.season_boundaries import classify_by_season_boundary
+
+    season, st = classify_by_season_boundary(date(2025, 1, 15))
+    assert season == "2024-25"
+    assert st == "regular"
+
+
+def test_classify_by_season_boundary_play_in():
+    from app.nba.season_boundaries import classify_by_season_boundary
+
+    season, st = classify_by_season_boundary(date(2025, 4, 17))
+    assert season == "2024-25"
+    assert st == "play_in"
+
+
+def test_classify_by_season_boundary_playoffs():
+    from app.nba.season_boundaries import classify_by_season_boundary
+
+    season, st = classify_by_season_boundary(date(2025, 5, 20))
+    assert season == "2024-25"
+    assert st == "playoffs"
+
+
+def test_classify_by_season_boundary_preseason():
+    from app.nba.season_boundaries import classify_by_season_boundary
+
+    season, st = classify_by_season_boundary(date(2024, 10, 10))
+    assert season == "2024-25"
+    assert st == "preseason"
+
+
+def test_classify_by_season_boundary_unknown_date():
+    from app.nba.season_boundaries import classify_by_season_boundary
+
+    season, st = classify_by_season_boundary(date(2025, 7, 15))
+    assert season is None
+    assert st is None
+
+
+def test_classify_by_season_boundary_covid_bubble():
+    """2020-10-11 is still 2019-20 playoffs (COVID bubble exception)."""
+    from app.nba.season_boundaries import classify_by_season_boundary
+
+    season, st = classify_by_season_boundary(date(2020, 10, 11))
+    assert season == "2019-20"
+    assert st == "playoffs"
+
+
+def test_classify_by_season_boundary_2020_21_delayed_start():
+    """2020-12-15 is 2020-21 preseason (delayed COVID season)."""
+    from app.nba.season_boundaries import classify_by_season_boundary
+
+    season, st = classify_by_season_boundary(date(2020, 12, 15))
+    assert season == "2020-21"
+    assert st == "preseason"
+
+
+def test_classify_by_season_boundary_boundary_inclusive():
+    """Start and end dates are inclusive."""
+    from app.nba.season_boundaries import classify_by_season_boundary
+
+    # Exact start of 2024-25 regular season
+    season, st = classify_by_season_boundary(date(2024, 10, 22))
+    assert season == "2024-25"
+    assert st == "regular"
+
+    # Exact end of 2024-25 regular season
+    season, st = classify_by_season_boundary(date(2025, 4, 13))
+    assert season == "2024-25"
+    assert st == "regular"
+
+    # Day before 2024-25 regular season = gap (none)
+    season, st = classify_by_season_boundary(date(2024, 10, 21))
+    assert season is None
+    assert st is None

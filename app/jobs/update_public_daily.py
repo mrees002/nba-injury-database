@@ -14,8 +14,10 @@ For a target date:
   7. Write directly to PublicInjuryEntry (superseding older reports per game).
 
 Schedule metadata (season, season_type) is looked up from existing
-nba_schedule_games rows.  The caller is responsible for keeping that
-table current via the separate schedule sync tooling.
+nba_schedule_games rows.  When no schedule row matches, season-specific
+date boundaries provide a fallback classification.  The caller is
+responsible for keeping nba_schedule_games current via the separate
+schedule sync tooling.
 """
 
 from __future__ import annotations
@@ -42,6 +44,7 @@ from app.models.nba import (
 from app.models.update_run import UpdateRun
 from app.nba.classification import classify_conditions
 from app.nba.client import NBAReportClient
+from app.nba.season_boundaries import classify_by_season_boundary
 from app.nba.discovery import (
     generate_candidate_urls,
     parse_report_url,
@@ -86,7 +89,12 @@ class DailyUpdateResult(NamedTuple):
 def _lookup_schedule_meta(
     session: Session, game_date: date, matchup: str
 ) -> tuple[str | None, str | None]:
-    """Return (season, season_type) from nba_schedule_games, or (None, None)."""
+    """Return (season, season_type) from nba_schedule_games, or fallback to date boundaries.
+
+    Primary: look up by game_date + matchup in nba_schedule_games.
+    Fallback: use explicit season-specific date boundaries when no schedule row matches.
+    Returns (None, None) only when the date cannot be classified.
+    """
     normalized_matchup = matchup.replace(" ", "")
     row = (
         session.query(NBAScheduleGame.season, NBAScheduleGame.season_type)
@@ -96,9 +104,9 @@ def _lookup_schedule_meta(
         )
         .first()
     )
-    if row is None:
-        return None, None
-    return row[0], row[1]
+    if row is not None:
+        return row[0], row[1]
+    return classify_by_season_boundary(game_date)
 
 
 def _resolve_player(

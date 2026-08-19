@@ -871,9 +871,9 @@ def test_season_filter_malformed_value(client, db):
 
 def test_season_filter_unsupported_season(client, db):
     _seed_multi_season(db)
-    resp = client.get("/injuries?season=2026-27")
+    resp = client.get("/injuries?season=2030-31")
     assert resp.status_code == 422
-    assert "2026-27" in resp.json()["detail"]
+    assert "2030-31" in resp.json()["detail"]
 
 
 def test_season_filter_whitespace_stripped(client, db):
@@ -1414,3 +1414,76 @@ def test_focused_csv_season_type_values(client, db):
     results = {row[matchup_idx]: row[st_idx] for row in rows}
     assert results["PHX@LAL"] == "Regular Season"
     assert results["MIN@LAL"] == "Preseason"
+
+
+# ── 2026-27 season support ──────────────────────────────────────────────────
+
+def test_api_accepts_season_2026_27(client, db):
+    """API should accept season=2026-27 without 422."""
+    _seed_multi_season(db)
+    resp = client.get("/injuries?season=2026-27")
+    assert resp.status_code == 200
+    assert resp.json() == []
+
+
+def test_api_invalid_season_still_returns_422(client, db):
+    """Invalid seasons must still be rejected."""
+    resp = client.get("/injuries?season=garbage")
+    assert resp.status_code == 422
+    assert "Unsupported season" in resp.json()["detail"]
+
+
+def test_api_invalid_season_2030_31_returns_422(client, db):
+    resp = client.get("/injuries?season=2030-31")
+    assert resp.status_code == 422
+
+
+def test_api_invalid_season_csv_returns_422(client, db):
+    resp = client.get("/injuries.csv?season=bad-value")
+    assert resp.status_code == 422
+
+
+def test_api_2026_27_in_valid_seasons_set():
+    from app.api import NBA_SEASONS
+    assert "2026-27" in NBA_SEASONS
+    assert len(NBA_SEASONS) == 9
+
+
+# ── Frontend 2026-27 checks ────────────────────────────────────────────────
+
+from pathlib import Path
+
+_HTML = (Path(__file__).resolve().parent.parent / "app" / "templates" / "index.html").read_text()
+
+
+def test_frontend_includes_2026_27_checkbox():
+    assert 'value="2026-27"' in _HTML
+
+
+def test_frontend_2026_27_checked_by_default():
+    assert 'value="2026-27" checked' in _HTML
+
+
+def test_frontend_2018_19_unchecked_by_default():
+    assert '> 2018-19</label>' in _HTML
+    lines = [l for l in _HTML.splitlines() if 'value="2018-19"' in l]
+    assert lines
+    assert 'checked' not in lines[0]
+
+
+def test_frontend_season_trigger_shows_8_seasons():
+    assert '>8 seasons</button>' in _HTML
+
+
+def test_clear_filters_restores_2026_27():
+    assert "2026-27" in _HTML
+    assert "'2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26', '2026-27'" in _HTML
+
+
+def test_frontend_season_count_matches_defaults():
+    """Default checked seasons: 2019-20 through 2026-27 = 8 seasons."""
+    lines = [l for l in _HTML.splitlines() if 'name="season"' in l]
+    checked = [l for l in lines if 'checked' in l]
+    unchecked = [l for l in lines if 'checked' not in l]
+    assert len(checked) == 8
+    assert len(unchecked) == 1  # only 2018-19
