@@ -1,12 +1,13 @@
 from functools import lru_cache
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     """Runtime configuration loaded from environment variables or a local .env file."""
 
+    environment: str = Field(default="development")
     database_url: str = "postgresql+psycopg://nba:nba@localhost:5432/nba_injuries"
     scraper_user_agent: str = "nba-injury-database/0.1 (low-frequency research client)"
     scraper_timeout_seconds: float = Field(default=30.0, gt=0)
@@ -21,6 +22,16 @@ class Settings(BaseSettings):
     nba_pdf_backoff_base_seconds: float = Field(default=1.0, ge=0)
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    @model_validator(mode="after")
+    def _reject_localhost_in_production(self) -> "Settings":
+        if self.environment == "production" and "localhost" in self.database_url:
+            msg = (
+                "DATABASE_URL must not point at localhost when "
+                "ENVIRONMENT=production. Set DATABASE_URL to the target PostgreSQL instance."
+            )
+            raise ValueError(msg)
+        return self
 
 
 @lru_cache

@@ -17,3 +17,8 @@ artifacts/validation/
 *.db
 *.sqlite
 *.sqlite3
+
+# Runtime artifacts
+logs/
+handoff_state.json
+tmp/

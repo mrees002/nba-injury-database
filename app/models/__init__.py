@@ -8,6 +8,7 @@ from app.models.nba import (
     NBAReport,
     NBAReportCandidate,
     NBAReportEntry,
+    NBAScheduleGame,
     NBATeam,
 )
 from app.models.raw_transaction import RawTransaction
@@ -23,6 +24,7 @@ __all__ = [
     "NBAReport",
     "NBAReportCandidate",
     "NBAReportEntry",
+    "NBAScheduleGame",
     "NBATeam",
     "RawTransaction",
     "UpdateRun",

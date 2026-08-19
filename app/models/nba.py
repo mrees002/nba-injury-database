@@ -212,6 +212,29 @@ class NBAInjuryEpisode(Base):
     )
 
 
+class NBAScheduleGame(Base):
+    __tablename__ = "nba_schedule_games"
+    __table_args__ = (
+        UniqueConstraint(
+            "season", "game_date", "matchup", name="uq_nba_schedule_season_date_matchup"
+        ),
+        Index("ix_nba_schedule_season", "season"),
+        Index("ix_nba_schedule_game_date", "game_date"),
+    )
+
+    id: Mapped[int] = mapped_column(BIGINT, primary_key=True)
+    season: Mapped[str] = mapped_column(Text, nullable=False)
+    game_date: Mapped[date] = mapped_column(Date, nullable=False)
+    season_type: Mapped[str] = mapped_column(String(32), nullable=False)
+    away_team: Mapped[str] = mapped_column(Text, nullable=False)
+    home_team: Mapped[str] = mapped_column(Text, nullable=False)
+    matchup: Mapped[str] = mapped_column(String(16), nullable=False)
+    source: Mapped[str | None] = mapped_column(Text)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now()
+    )
+
+
 class NBAInjuryEpisodeCondition(Base):
     __tablename__ = "nba_injury_episode_conditions"
     __table_args__ = (
