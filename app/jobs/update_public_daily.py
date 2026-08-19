@@ -5,14 +5,17 @@ NBA tables (nba_report_candidates, nba_reports, nba_report_entries,
 nba_injury_conditions).
 
 For a target date:
-  1. Sync nba_schedule_games for the current season.
-  2. Discover official NBA injury report PDFs by probing the NBA host.
-  3. Download PDFs in memory.
-  4. Parse with the existing parser.
-  5. Select the latest substantive reports using existing canonical selection logic.
-  6. Classify primary injury condition using the existing classifier.
-  7. Resolve player/team IDs using nba_players and nba_teams.
-  8. Write directly to PublicInjuryEntry (superseding older reports per game).
+  1. Discover official NBA injury report PDFs by probing the NBA host.
+  2. Download PDFs in memory.
+  3. Parse with the existing parser.
+  4. Select the latest substantive reports using existing canonical selection logic.
+  5. Classify primary injury condition using the existing classifier.
+  6. Resolve player/team IDs using nba_players and nba_teams.
+  7. Write directly to PublicInjuryEntry (superseding older reports per game).
+
+Schedule metadata (season, season_type) is looked up from existing
+nba_schedule_games rows.  The caller is responsible for keeping that
+table current via the separate schedule sync tooling.
 """
 
 from __future__ import annotations
@@ -56,13 +59,7 @@ from app.nba.parser import (
     parse_report_pdf,
     select_latest_reports_from_pairs,
 )
-from app.services.fetch_nba_schedule_api import (
-    SEASON_TYPES_API,
-    detect_current_season,
-    fetch_season_schedule,
-    normalized_games_to_rows,
-)
-from app.jobs.sync_nba_schedule import upsert_schedule_rows
+
 
 logger = logging.getLogger(__name__)
 
@@ -84,16 +81,6 @@ class DailyUpdateResult(NamedTuple):
     reports_selected: int
     entries_written: int
     games_superseded: int
-
-
-def _sync_schedule(session: Session, target_date: date) -> None:
-    """Upsert nba_schedule_games for the season containing *target_date*."""
-    season = detect_current_season(target_date)
-    logger.info("Syncing schedule for season %s", season)
-    games = fetch_season_schedule(season, list(SEASON_TYPES_API))
-    rows = normalized_games_to_rows(games)
-    upsert_schedule_rows(session, rows, source="nba_stats_api")
-    logger.info("Schedule sync complete: %d rows", len(rows))
 
 
 def _lookup_schedule_meta(
@@ -422,7 +409,8 @@ def run_public_daily_update(start_date: date, end_date: date) -> None:
     """Programmatic entry point: update public_injury_entries for a date range.
 
     Creates and completes an UpdateRun record for the entire run.
-    Syncs the schedule once at the start. Processes each day independently.
+    Uses existing nba_schedule_games rows for season/season_type metadata.
+    Does not contact stats.nba.com.
     """
     engine = build_engine()
     session_factory = build_session_factory(engine)
@@ -437,16 +425,6 @@ def run_public_daily_update(start_date: date, end_date: date) -> None:
         session.commit()
 
         try:
-            try:
-                _sync_schedule(session, start_date)
-            except Exception:
-                logger.warning(
-                    "Schedule sync failed for %s; continuing with injury update "
-                    "using any existing schedule rows",
-                    start_date.isoformat(),
-                    exc_info=True,
-                )
-
             current = start_date
             total_discovered = 0
             total_selected = 0
@@ -470,11 +448,27 @@ def run_public_daily_update(start_date: date, end_date: date) -> None:
             run.rows_processed = total_selected
             session.commit()
 
+            logger.info(
+                "Daily update complete: date=%s..%s reports_discovered=%d "
+                "reports_selected=%d entries_written=%d status=completed",
+                start_date.isoformat(),
+                end_date.isoformat(),
+                total_discovered,
+                total_selected,
+                total_entries,
+            )
+
         except Exception as exc:
             run.status = "failed"
             run.finished_at = datetime.now(tz=UTC)
             run.error_details = str(exc)
             session.commit()
+            logger.error(
+                "Daily update failed: date=%s..%s status=failed error=%s",
+                start_date.isoformat(),
+                end_date.isoformat(),
+                exc,
+            )
             raise
 
 
