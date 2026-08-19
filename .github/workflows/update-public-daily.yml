@@ -1,0 +1,39 @@
+name: Update public injury data (daily)
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: updater-public-daily
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      ENVIRONMENT: production
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install .
+
+      - name: Calculate yesterday's date (UTC)
+        id: date
+        run: |
+          YESTERDAY=$(date -u -d "yesterday" +%Y-%m-%d)
+          echo "date=$YESTERDAY" >> "$GITHUB_OUTPUT"
+
+      - name: Run updater
+        run: |
+          python -m app.jobs.update_public_daily \
+            --start-date "${{ steps.date.outputs.date }}" \
+            --end-date "${{ steps.date.outputs.date }}"
