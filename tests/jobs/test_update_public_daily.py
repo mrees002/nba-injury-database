@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 
 from app.db.base import Base
 from app.jobs.update_public_daily import (
@@ -15,7 +15,9 @@ from app.jobs.update_public_daily import (
     _lookup_schedule_meta,
     _resolve_player,
     _resolve_team,
+    _sync_schedule,
     _write_report_entries,
+    run_public_daily_update,
     update_day,
 )
 from app.models.nba import (
@@ -903,3 +905,208 @@ def test_equal_timestamp_does_not_supersede(db):
     original = [r for r in rows if r.source_url == "https://example.com/report_A.pdf"]
     assert len(original) == 1
     assert original[0].player_name == "LeBron James"
+
+
+# ---------------------------------------------------------------------------
+# 20. Schedule sync success behaves normally
+# ---------------------------------------------------------------------------
+
+
+def test_sync_schedule_success(tmp_path):
+    """When _sync_schedule succeeds, schedule rows are upserted."""
+    engine = create_engine(f"sqlite+pysqlite:///{tmp_path / 'test.db'}")
+    Base.metadata.create_all(engine)
+    with Session(engine) as session:
+        with patch("app.jobs.update_public_daily.detect_current_season", return_value="2024-25"):
+            with patch(
+                "app.jobs.update_public_daily.fetch_season_schedule",
+                return_value=[{"gameId": "g1"}],
+            ):
+                with patch(
+                    "app.jobs.update_public_daily.normalized_games_to_rows",
+                    return_value=[{"season": "2024-25"}],
+                ):
+                    with patch("app.jobs.update_public_daily.upsert_schedule_rows") as mock_upsert:
+                        _sync_schedule(session, date(2025, 1, 15))
+                        mock_upsert.assert_called_once()
+    engine.dispose()
+
+
+# ---------------------------------------------------------------------------
+# 21. Schedule sync timeout still allows injury update to complete
+# ---------------------------------------------------------------------------
+
+
+def test_schedule_timeout_does_not_fail_update_run(tmp_path):
+    """A stats.nba.com timeout during schedule sync does NOT fail the UpdateRun."""
+    test_db = tmp_path / "test.db"
+    engine = create_engine(f"sqlite+pysqlite:///{test_db}")
+    Base.metadata.create_all(engine)
+    factory = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+
+    # Mock _sync_schedule to raise a timeout
+    with patch("app.jobs.update_public_daily._sync_schedule", side_effect=TimeoutError("Read timed out")):
+        with patch("app.jobs.update_public_daily.update_day") as mock_day:
+            mock_day.return_value = DailyUpdateResult(
+                target_date=date(2025, 1, 15),
+                reports_discovered=0,
+                reports_selected=0,
+                entries_written=0,
+                games_superseded=0,
+            )
+            with patch("app.jobs.update_public_daily.build_engine", return_value=engine):
+                with patch("app.jobs.update_public_daily.build_session_factory", return_value=factory):
+                    run_public_daily_update(date(2025, 1, 15), date(2025, 1, 15))
+
+    # Verify UpdateRun completed successfully despite schedule sync failure
+    with Session(engine) as session:
+        run = session.query(UpdateRun).one()
+        assert run.status == "completed"
+        assert run.finished_at is not None
+        assert run.error_details is None
+    engine.dispose()
+
+
+# ---------------------------------------------------------------------------
+# 22. Schedule sync HTTP error does not fail UpdateRun
+# ---------------------------------------------------------------------------
+
+
+def test_schedule_http_error_does_not_fail_update_run(tmp_path):
+    """An HTTP error during schedule sync does NOT fail the UpdateRun."""
+    test_db = tmp_path / "test.db"
+    engine = create_engine(f"sqlite+pysqlite:///{test_db}")
+    Base.metadata.create_all(engine)
+    factory = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+
+    with patch(
+        "app.jobs.update_public_daily._sync_schedule",
+        side_effect=ConnectionError("HTTPSConnectionPool timed out"),
+    ):
+        with patch("app.jobs.update_public_daily.update_day") as mock_day:
+            mock_day.return_value = DailyUpdateResult(
+                target_date=date(2025, 1, 15),
+                reports_discovered=2,
+                reports_selected=1,
+                entries_written=5,
+                games_superseded=0,
+            )
+            with patch("app.jobs.update_public_daily.build_engine", return_value=engine):
+                with patch("app.jobs.update_public_daily.build_session_factory", return_value=factory):
+                    run_public_daily_update(date(2025, 1, 15), date(2025, 1, 15))
+
+    with Session(engine) as session:
+        run = session.query(UpdateRun).one()
+        assert run.status == "completed"
+        assert run.rows_inserted == 5
+        assert run.error_details is None
+    engine.dispose()
+
+
+# ---------------------------------------------------------------------------
+# 23. Missing schedule match produces nullable season metadata
+# ---------------------------------------------------------------------------
+
+
+def test_missing_schedule_match_allows_nullable_season(db):
+    """When schedule sync failed and no rows exist, season/season_type stay NULL."""
+    _seed_player(db)
+    _seed_team(db)
+    # No schedule rows seeded — simulates post-timeout state
+
+    parsed = _make_parsed_report()
+
+    with patch(
+        "app.jobs.update_public_daily.classify_conditions",
+        return_value=(_make_classification(),),
+    ):
+        written, _ = _write_report_entries(
+            db,
+            "https://example.com/report.pdf",
+            date(2025, 1, 15),
+            time(17, 30),
+            parsed,
+            {},
+            {},
+        )
+    db.flush()
+
+    assert written == 1
+    pub = db.query(PublicInjuryEntry).one()
+    assert pub.season is None
+    assert pub.season_type is None
+
+
+# ---------------------------------------------------------------------------
+# 24. Injury updater exceptions still fail UpdateRun
+# ---------------------------------------------------------------------------
+
+
+def test_injury_updater_exception_fails_update_run(tmp_path):
+    """An exception in update_day still marks the UpdateRun as failed."""
+    test_db = tmp_path / "test.db"
+    engine = create_engine(f"sqlite+pysqlite:///{test_db}")
+    Base.metadata.create_all(engine)
+    factory = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+
+    with patch("app.jobs.update_public_daily._sync_schedule"):
+        with patch(
+            "app.jobs.update_public_daily.update_day",
+            side_effect=RuntimeError("PDF parsing crashed"),
+        ):
+            with patch("app.jobs.update_public_daily.build_engine", return_value=engine):
+                with patch("app.jobs.update_public_daily.build_session_factory", return_value=factory):
+                    with pytest.raises(RuntimeError, match="PDF parsing crashed"):
+                        run_public_daily_update(date(2025, 1, 15), date(2025, 1, 15))
+
+    with Session(engine) as session:
+        run = session.query(UpdateRun).one()
+        assert run.status == "failed"
+        assert run.finished_at is not None
+        assert "PDF parsing crashed" in run.error_details
+    engine.dispose()
+
+
+# ---------------------------------------------------------------------------
+# 25. Schedule sync failure does not suppress injury processing
+# ---------------------------------------------------------------------------
+
+
+def test_schedule_failure_still_calls_update_day(tmp_path):
+    """Even when schedule sync fails, update_day is still invoked for each date."""
+    test_db = tmp_path / "test.db"
+    engine = create_engine(f"sqlite+pysqlite:///{test_db}")
+    Base.metadata.create_all(engine)
+    factory = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+
+    call_dates: list[date] = []
+
+    def _capture_day(session, d):
+        call_dates.append(d)
+        return DailyUpdateResult(
+            target_date=d,
+            reports_discovered=0,
+            reports_selected=0,
+            entries_written=0,
+            games_superseded=0,
+        )
+
+    with patch(
+        "app.jobs.update_public_daily._sync_schedule",
+        side_effect=TimeoutError("Read timed out"),
+    ):
+        with patch("app.jobs.update_public_daily.update_day", side_effect=_capture_day):
+            with patch("app.jobs.update_public_daily.build_engine", return_value=engine):
+                with patch("app.jobs.update_public_daily.build_session_factory", return_value=factory):
+                    run_public_daily_update(date(2025, 1, 10), date(2025, 1, 12))
+
+    assert call_dates == [
+        date(2025, 1, 10),
+        date(2025, 1, 11),
+        date(2025, 1, 12),
+    ]
+
+    with Session(engine) as session:
+        run = session.query(UpdateRun).one()
+        assert run.status == "completed"
+    engine.dispose()

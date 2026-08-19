@@ -437,7 +437,15 @@ def run_public_daily_update(start_date: date, end_date: date) -> None:
         session.commit()
 
         try:
-            _sync_schedule(session, start_date)
+            try:
+                _sync_schedule(session, start_date)
+            except Exception:
+                logger.warning(
+                    "Schedule sync failed for %s; continuing with injury update "
+                    "using any existing schedule rows",
+                    start_date.isoformat(),
+                    exc_info=True,
+                )
 
             current = start_date
             total_discovered = 0
