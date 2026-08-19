@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import sys
 from pathlib import Path
 from urllib.parse import urlparse, urlunparse
@@ -45,6 +46,21 @@ TRANSFER_TABLES = [
 ]
 
 BATCH_SIZE = 1000
+
+SEASON_RE = re.compile(r"^\d{4}-\d{2}$")
+
+
+def _validate_season(value: str) -> str:
+    """Validate and return a season string like '2018-19'.
+
+    Raises argparse.ArgumentTypeError for malformed values.
+    """
+    value = value.strip()
+    if not SEASON_RE.match(value):
+        raise argparse.ArgumentTypeError(
+            f"Invalid season format: {value!r}. Expected format: YYYY-YY (e.g. 2018-19)"
+        )
+    return value
 
 
 # ---------------------------------------------------------------------------
@@ -80,12 +96,36 @@ def _count_rows(conn: psycopg.Connection, table: str) -> int:
         return cur.fetchone()[0]
 
 
-def _source_counts(src: psycopg.Connection) -> dict[str, int]:
-    return {t: _count_rows(src, t) for t in TRANSFER_TABLES}
+def _count_rows_filtered(
+    conn: psycopg.Connection,
+    table: str,
+    *,
+    season: str | None = None,
+) -> int:
+    with conn.cursor() as cur:
+        if season is not None:
+            cur.execute(f"SELECT count(*) FROM {table} WHERE season = %s", (season,))
+        else:
+            cur.execute(f"SELECT count(*) FROM {table}")
+        return cur.fetchone()[0]
 
 
-def _dest_counts(dst: psycopg.Connection) -> dict[str, int]:
-    return {t: _count_rows(dst, t) for t in TRANSFER_TABLES}
+def _source_counts(
+    src: psycopg.Connection,
+    *,
+    season: str | None = None,
+) -> dict[str, int]:
+    tables = ["public_injury_entries"] if season else TRANSFER_TABLES
+    return {t: _count_rows_filtered(src, t, season=season) for t in tables}
+
+
+def _dest_counts(
+    dst: psycopg.Connection,
+    *,
+    season: str | None = None,
+) -> dict[str, int]:
+    tables = ["public_injury_entries"] if season else TRANSFER_TABLES
+    return {t: _count_rows_filtered(dst, t, season=season) for t in tables}
 
 
 # ---------------------------------------------------------------------------
@@ -97,8 +137,16 @@ def _fetch_columns(cur: psycopg.Cursor, table: str) -> list[str]:
     return [desc.name for desc in cur.description]
 
 
-def _fetch_all(cur: psycopg.Cursor, table: str) -> list[tuple]:
-    cur.execute(f"SELECT * FROM {table}")
+def _fetch_all(
+    cur: psycopg.Cursor,
+    table: str,
+    *,
+    season: str | None = None,
+) -> list[tuple]:
+    if season is not None:
+        cur.execute(f"SELECT * FROM {table} WHERE season = %s", (season,))
+    else:
+        cur.execute(f"SELECT * FROM {table}")
     return cur.fetchall()
 
 
@@ -120,11 +168,12 @@ def _transfer_table(
     table: str,
     *,
     dry_run: bool = False,
+    season: str | None = None,
 ) -> dict[str, int]:
     """Transfer one table. Returns dict with source/inserted/updated/dest counts."""
     with src.cursor() as src_cur:
         columns = _fetch_columns(src_cur, table)
-        rows = _fetch_all(src_cur, table)
+        rows = _fetch_all(src_cur, table, season=season)
 
     source_count = len(rows)
     dest_before = _count_rows(dst.connection, table)
@@ -156,10 +205,16 @@ def _transfer_table(
     }
 
 
-def _sync_sequences(dst: psycopg.Connection) -> None:
+def _sync_sequences(
+    dst: psycopg.Connection,
+    *,
+    tables: list[str] | None = None,
+) -> None:
     """Reset each table's id sequence to MAX(id) to prevent future collisions."""
+    if tables is None:
+        tables = TRANSFER_TABLES
     with dst.cursor() as cur:
-        for table in TRANSFER_TABLES:
+        for table in tables:
             cur.execute(f"SELECT COALESCE(MAX(id), 0) FROM {table}")
             max_id = cur.fetchone()[0]
             if max_id <= 0:
@@ -179,10 +234,17 @@ def _sync_sequences(dst: psycopg.Connection) -> None:
 # Report
 # ---------------------------------------------------------------------------
 
-def _print_report(results: dict[str, dict[str, int]], *, dry_run: bool = False) -> None:
+def _print_report(
+    results: dict[str, dict[str, int]],
+    *,
+    dry_run: bool = False,
+    tables: list[str] | None = None,
+) -> None:
+    if tables is None:
+        tables = TRANSFER_TABLES
     print(f"\n{'Table':<30} {'Source':>8} {'Inserted':>10} {'Updated':>10} {'Dest':>8}")
     print("-" * 70)
-    for table in TRANSFER_TABLES:
+    for table in tables:
         r = results[table]
         print(
             f"{table:<30} {r['source']:>8,} {r['inserted']:>10,} "
@@ -223,12 +285,26 @@ def main() -> int:
         action="store_true",
         help="Report source counts without writing to the target",
     )
+    parser.add_argument(
+        "--season",
+        type=_validate_season,
+        default=None,
+        help="Transfer only public_injury_entries for this season (e.g. 2018-19). "
+             "Skips nba_players, nba_teams, nba_schedule_games.",
+    )
     args = parser.parse_args()
 
     if not args.target_database_url:
         parser.error(
             "Provide --target-database-url or set TARGET_DATABASE_URL."
         )
+
+    # Determine which tables to transfer
+    season = args.season
+    if season:
+        transfer_tables = ["public_injury_entries"]
+    else:
+        transfer_tables = TRANSFER_TABLES
 
     # Resolve source URL: CLI > env > config default
     source_url = args.source_database_url
@@ -245,7 +321,9 @@ def main() -> int:
     print("=" * 64)
     print(f"\n  Source:  {mask_url(src_psy)}")
     print(f"  Target:  {mask_url(dst_psy)}")
-    print(f"  Tables:  {', '.join(TRANSFER_TABLES)}")
+    print(f"  Tables:  {', '.join(transfer_tables)}")
+    if season:
+        print(f"  Season:  {season}")
     if args.dry_run:
         print("  Mode:    DRY RUN (no writes)")
 
@@ -253,18 +331,34 @@ def main() -> int:
     print("\nConnecting to source ...")
     src_conn = psycopg.connect(src_psy)
     try:
-        src_counts = _source_counts(src_conn)
+        src_counts = _source_counts(src_conn, season=season)
         print("  Source connected.")
         for t, c in src_counts.items():
             print(f"    {t}: {c:,} rows")
 
         if args.dry_run:
             print("\n-- dry-run: skipping target connection and writes --")
-            _print_report(
-                {t: {"source": src_counts[t], "inserted": 0, "updated": 0, "dest": 0}
-                 for t in TRANSFER_TABLES},
-                dry_run=True,
-            )
+            # For dry-run, try to get dest counts if target is reachable
+            dest_counts = {}
+            try:
+                dst_conn = psycopg.connect(dst_psy)
+                try:
+                    dest_counts = _dest_counts(dst_conn, season=season)
+                finally:
+                    dst_conn.close()
+            except Exception:
+                pass
+
+            results = {}
+            for t in transfer_tables:
+                dest_count = dest_counts.get(t, 0)
+                results[t] = {
+                    "source": src_counts.get(t, 0),
+                    "inserted": 0,
+                    "updated": 0,
+                    "dest": dest_count,
+                }
+            _print_report(results, dry_run=True, tables=transfer_tables)
             return 0
 
         # Connect to target
@@ -280,7 +374,7 @@ def main() -> int:
                     "WHERE table_schema = 'public'"
                 )
                 existing = {row[0] for row in cur.fetchall()}
-            missing = set(TRANSFER_TABLES) - existing
+            missing = set(transfer_tables) - existing
             if missing:
                 print(f"\n  ERROR: target missing tables: {sorted(missing)}")
                 print("  Run bootstrap_lean_production.py first.")
@@ -288,25 +382,27 @@ def main() -> int:
 
             # Transfer each table
             results = {}
-            for table in TRANSFER_TABLES:
+            for table in transfer_tables:
                 print(f"\n  Transferring {table} ...")
-                r = _transfer_table(src_conn, dst_conn.cursor(), table)
+                r = _transfer_table(
+                    src_conn, dst_conn.cursor(), table, season=season,
+                )
                 results[table] = r
                 print(
                     f"    source={r['source']:,}  inserted={r['inserted']:,}  "
                     f"updated={r['updated']:,}  dest={r['dest']:,}"
                 )
 
-            # Sync sequences
+            # Sync sequences for transferred tables
             print("\n  Synchronizing sequences ...")
-            _sync_sequences(dst_conn)
+            _sync_sequences(dst_conn, tables=transfer_tables)
 
             dst_conn.commit()
             print("  Committed.")
         finally:
             dst_conn.close()
 
-        _print_report(results)
+        _print_report(results, tables=transfer_tables)
 
         src_total = sum(src_counts.values())
         dst_total = sum(r["dest"] for r in results.values())

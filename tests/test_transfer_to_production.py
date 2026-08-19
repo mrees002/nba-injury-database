@@ -6,15 +6,19 @@ table ordering, and dry-run behaviour using mocked psycopg connections.
 
 from __future__ import annotations
 
+import argparse
 import sys
 from types import SimpleNamespace
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch
 
 from scripts.transfer_to_production import (
     TRANSFER_TABLES,
     _build_upsert,
+    _count_rows_filtered,
+    _fetch_all,
     _sync_sequences,
     _transfer_table,
+    _validate_season,
     main,
     mask_url,
     normalize_psycopg_url,
@@ -287,7 +291,7 @@ class TestConnectionLifecycle:
         # Track whether src.close() was called before each _transfer_table call
         src_was_closed_before_transfer = []
 
-        def _tracking_transfer(src_conn, dst_cur, table, *, dry_run=False):
+        def _tracking_transfer(src_conn, dst_cur, table, *, dry_run=False, season=None):
             src_was_closed_before_transfer.append(src.close.called)
             return {"source": 10, "inserted": 10, "updated": 0, "dest": 10}
 
@@ -309,3 +313,422 @@ class TestConnectionLifecycle:
         )
         # src.close() IS called at the end (finally block)
         src.close.assert_called_once()
+
+
+# ---------------------------------------------------------------------------
+# Season validation
+# ---------------------------------------------------------------------------
+
+class TestSeasonValidation:
+    def test_valid_season(self):
+        assert _validate_season("2018-19") == "2018-19"
+
+    def test_valid_season_2023_24(self):
+        assert _validate_season("2023-24") == "2023-24"
+
+    def test_strips_whitespace(self):
+        assert _validate_season("  2018-19  ") == "2018-19"
+
+    def test_invalid_format_no_dash(self):
+        try:
+            _validate_season("201819")
+            raise AssertionError("Should have raised")
+        except argparse.ArgumentTypeError as e:
+            assert "Invalid season format" in str(e)
+
+    def test_invalid_format_three_digits(self):
+        try:
+            _validate_season("2018-1")
+            raise AssertionError("Should have raised")
+        except argparse.ArgumentTypeError as e:
+            assert "Invalid season format" in str(e)
+
+    def test_invalid_format_wrong_separator(self):
+        try:
+            _validate_season("2018/19")
+            raise AssertionError("Should have raised")
+        except argparse.ArgumentTypeError as e:
+            assert "Invalid season format" in str(e)
+
+    def test_invalid_format_empty(self):
+        try:
+            _validate_season("")
+            raise AssertionError("Should have raised")
+        except argparse.ArgumentTypeError as e:
+            assert "Invalid season format" in str(e)
+
+    def test_invalid_format_text(self):
+        try:
+            _validate_season("2018-2019")
+            raise AssertionError("Should have raised")
+        except argparse.ArgumentTypeError as e:
+            assert "Invalid season format" in str(e)
+
+
+# ---------------------------------------------------------------------------
+# Season-filtered fetch
+# ---------------------------------------------------------------------------
+
+class TestSeasonFilteredFetch:
+    def test_fetch_all_with_season(self):
+        src_cur = MagicMock()
+        src_cur.description = [SimpleNamespace(name="id")]
+        src_cur.fetchall.return_value = [(1,), (2,)]
+
+        _fetch_all(src_cur, "public_injury_entries", season="2018-19")
+
+        # Verify WHERE clause was used
+        src_cur.execute.assert_called_once_with(
+            "SELECT * FROM public_injury_entries WHERE season = %s",
+            ("2018-19",),
+        )
+
+    def test_fetch_all_without_season(self):
+        src_cur = MagicMock()
+        src_cur.description = [SimpleNamespace(name="id")]
+        src_cur.fetchall.return_value = [(1,), (2,)]
+
+        _fetch_all(src_cur, "public_injury_entries")
+
+        # Verify no WHERE clause
+        src_cur.execute.assert_called_once_with(
+            "SELECT * FROM public_injury_entries"
+        )
+
+    def test_count_rows_filtered_with_season(self):
+        conn = MagicMock()
+        cur = MagicMock()
+        conn.cursor.return_value.__enter__ = MagicMock(return_value=cur)
+        conn.cursor.return_value.__exit__ = MagicMock(return_value=False)
+        cur.fetchone.return_value = [42]
+
+        result = _count_rows_filtered(conn, "public_injury_entries", season="2018-19")
+        assert result == 42
+        cur.execute.assert_called_once_with(
+            "SELECT count(*) FROM public_injury_entries WHERE season = %s",
+            ("2018-19",),
+        )
+
+    def test_count_rows_filtered_without_season(self):
+        conn = MagicMock()
+        cur = MagicMock()
+        conn.cursor.return_value.__enter__ = MagicMock(return_value=cur)
+        conn.cursor.return_value.__exit__ = MagicMock(return_value=False)
+        cur.fetchone.return_value = [100]
+
+        result = _count_rows_filtered(conn, "public_injury_entries")
+        assert result == 100
+        cur.execute.assert_called_once_with(
+            "SELECT count(*) FROM public_injury_entries"
+        )
+
+
+# ---------------------------------------------------------------------------
+# Season-filtered transfer
+# ---------------------------------------------------------------------------
+
+class TestSeasonFilteredTransfer:
+    def test_only_public_injury_entries_when_season_set(self):
+        """When --season is provided, only public_injury_entries should be transferred."""
+        src = MagicMock()
+        src_cur = MagicMock()
+        src_cur.description = [SimpleNamespace(name="id")]
+        src_cur.fetchall.return_value = [(1,), (2,)]
+        src.cursor.return_value.__enter__ = MagicMock(return_value=src_cur)
+        src.cursor.return_value.__exit__ = MagicMock(return_value=False)
+
+        dst_cur = MagicMock()
+        dst_cur.connection = MagicMock()
+        dst_cur.fetchone.return_value = [0]
+
+        result = _transfer_table(
+            src, dst_cur, "public_injury_entries", season="2018-19",
+        )
+        assert result["source"] == 2
+
+        # Verify the WHERE clause was applied (second execute call after LIMIT 0)
+        season_call = src_cur.execute.call_args_list[1]
+        assert season_call[0][0] == "SELECT * FROM public_injury_entries WHERE season = %s"
+        assert season_call[0][1] == ("2018-19",)
+
+    def test_season_preserves_existing_ids(self):
+        """Transfer with --season uses ON CONFLICT (id) DO UPDATE, preserving IDs."""
+        sql = _build_upsert("public_injury_entries", ["id", "player_name", "season"])
+        assert "ON CONFLICT (id) DO UPDATE SET" in sql
+        assert "player_name = EXCLUDED.player_name" in sql
+        assert "season = EXCLUDED.season" in sql
+
+
+# ---------------------------------------------------------------------------
+# Season dry-run
+# ---------------------------------------------------------------------------
+
+class TestSeasonDryRun:
+    @patch("scripts.transfer_to_production._source_counts")
+    @patch("scripts.transfer_to_production._dest_counts")
+    @patch("scripts.transfer_to_production._print_report")
+    @patch("scripts.transfer_to_production.psycopg")
+    def test_dry_run_with_season_reports_counts(
+        self, mock_psycopg, _print_rpt, _dest_fn, _src_fn,
+    ):
+        src = MagicMock()
+        dst = MagicMock()
+        mock_psycopg.connect.side_effect = [src, dst]
+
+        _src_fn.return_value = {"public_injury_entries": 150}
+        _dest_fn.return_value = {"public_injury_entries": 120}
+
+        with patch.object(sys, "argv", [
+            "transfer_to_production.py",
+            "--target-database-url", "postgresql://t@localhost/t",
+            "--source-database-url", "postgresql://s@localhost/s",
+            "--season", "2018-19",
+            "--dry-run",
+        ]):
+            result = main()
+
+        assert result == 0
+
+        # Verify report was called with season-filtered results
+        _print_rpt.assert_called_once()
+        call_args = _print_rpt.call_args
+        report_data = call_args[0][0]
+        assert "public_injury_entries" in report_data
+        assert report_data["public_injury_entries"]["source"] == 150
+        assert report_data["public_injury_entries"]["dest"] == 120
+        assert call_args[1]["tables"] == ["public_injury_entries"]
+
+    @patch("scripts.transfer_to_production._source_counts")
+    @patch("scripts.transfer_to_production._dest_counts")
+    @patch("scripts.transfer_to_production._print_report")
+    @patch("scripts.transfer_to_production.psycopg")
+    def test_dry_run_with_season_does_not_write(
+        self, mock_psycopg, _print_rpt, _dest_fn, _src_fn,
+    ):
+        src = MagicMock()
+        dst = MagicMock()
+        mock_psycopg.connect.side_effect = [src, dst]
+
+        _src_fn.return_value = {"public_injury_entries": 50}
+        _dest_fn.return_value = {"public_injury_entries": 30}
+
+        with patch.object(sys, "argv", [
+            "transfer_to_production.py",
+            "--target-database-url", "postgresql://t@localhost/t",
+            "--source-database-url", "postgresql://s@localhost/s",
+            "--season", "2018-19",
+            "--dry-run",
+        ]):
+            result = main()
+
+        assert result == 0
+        # Source and dest connects, but no executemany/write operations
+        assert mock_psycopg.connect.call_count == 2
+        # Report was called with correct data
+        _print_rpt.assert_called_once()
+
+
+# ---------------------------------------------------------------------------
+# Full transfer unchanged (regression)
+# ---------------------------------------------------------------------------
+
+class TestFullTransferUnchanged:
+    @patch("scripts.transfer_to_production._source_counts")
+    @patch("scripts.transfer_to_production._transfer_table")
+    @patch("scripts.transfer_to_production._sync_sequences")
+    @patch("scripts.transfer_to_production._print_report")
+    @patch("scripts.transfer_to_production.psycopg")
+    def test_no_season_transfers_all_tables(
+        self, mock_psycopg, _print_rpt, _sync_fn, _xfer_fn, _counts_fn,
+    ):
+        src = MagicMock()
+        dst = MagicMock()
+        mock_psycopg.connect.side_effect = [src, dst]
+
+        info_cur = MagicMock()
+        info_cur.fetchall.return_value = [(t,) for t in TRANSFER_TABLES]
+        dst.cursor.return_value.__enter__ = MagicMock(return_value=info_cur)
+        dst.cursor.return_value.__exit__ = MagicMock(return_value=False)
+
+        _counts_fn.return_value = {t: 10 for t in TRANSFER_TABLES}
+
+        def _transfer_side_effect(src_conn, dst_cur, table, *, dry_run=False, season=None):
+            return {"source": 10, "inserted": 10, "updated": 0, "dest": 10}
+
+        _xfer_fn.side_effect = _transfer_side_effect
+
+        with patch.object(sys, "argv", [
+            "transfer_to_production.py",
+            "--target-database-url", "postgresql://t@localhost/t",
+            "--source-database-url", "postgresql://s@localhost/s",
+        ]):
+            result = main()
+
+        assert result == 0
+        assert _xfer_fn.call_count == len(TRANSFER_TABLES)
+        _sync_fn.assert_called_once_with(dst, tables=TRANSFER_TABLES)
+
+    @patch("scripts.transfer_to_production._source_counts")
+    @patch("scripts.transfer_to_production._transfer_table")
+    @patch("scripts.transfer_to_production._sync_sequences")
+    @patch("scripts.transfer_to_production._print_report")
+    @patch("scripts.transfer_to_production.psycopg")
+    def test_no_season_skips_no_tables(
+        self, mock_psycopg, _print_rpt, _sync_fn, _xfer_fn, _counts_fn,
+    ):
+        src = MagicMock()
+        dst = MagicMock()
+        mock_psycopg.connect.side_effect = [src, dst]
+
+        info_cur = MagicMock()
+        info_cur.fetchall.return_value = [(t,) for t in TRANSFER_TABLES]
+        dst.cursor.return_value.__enter__ = MagicMock(return_value=info_cur)
+        dst.cursor.return_value.__exit__ = MagicMock(return_value=False)
+
+        _counts_fn.return_value = {t: 5 for t in TRANSFER_TABLES}
+
+        def _transfer_side_effect(src_conn, dst_cur, table, *, dry_run=False, season=None):
+            return {"source": 5, "inserted": 5, "updated": 0, "dest": 5}
+
+        _xfer_fn.side_effect = _transfer_side_effect
+
+        with patch.object(sys, "argv", [
+            "transfer_to_production.py",
+            "--target-database-url", "postgresql://t@localhost/t",
+            "--source-database-url", "postgresql://s@localhost/s",
+        ]):
+            main()
+
+        transferred_tables = [c[0][2] for c in _xfer_fn.call_args_list]
+        assert transferred_tables == TRANSFER_TABLES
+
+
+# ---------------------------------------------------------------------------
+# Season-filtered full integration (mocked)
+# ---------------------------------------------------------------------------
+
+class TestSeasonFilteredIntegration:
+    @patch("scripts.transfer_to_production._source_counts")
+    @patch("scripts.transfer_to_production._transfer_table")
+    @patch("scripts.transfer_to_production._sync_sequences")
+    @patch("scripts.transfer_to_production._print_report")
+    @patch("scripts.transfer_to_production.psycopg")
+    def test_season_only_transfers_entries(
+        self, mock_psycopg, _print_rpt, _sync_fn, _xfer_fn, _counts_fn,
+    ):
+        src = MagicMock()
+        dst = MagicMock()
+        mock_psycopg.connect.side_effect = [src, dst]
+
+        info_cur = MagicMock()
+        info_cur.fetchall.return_value = [(t,) for t in TRANSFER_TABLES]
+        dst.cursor.return_value.__enter__ = MagicMock(return_value=info_cur)
+        dst.cursor.return_value.__exit__ = MagicMock(return_value=False)
+
+        _counts_fn.return_value = {"public_injury_entries": 200}
+
+        def _transfer_side_effect(src_conn, dst_cur, table, *, dry_run=False, season=None):
+            return {"source": 200, "inserted": 200, "updated": 0, "dest": 200}
+
+        _xfer_fn.side_effect = _transfer_side_effect
+
+        with patch.object(sys, "argv", [
+            "transfer_to_production.py",
+            "--target-database-url", "postgresql://t@localhost/t",
+            "--source-database-url", "postgresql://s@localhost/s",
+            "--season", "2018-19",
+        ]):
+            result = main()
+
+        assert result == 0
+        # Only one table transferred
+        assert _xfer_fn.call_count == 1
+        transferred_tables = [c[0][2] for c in _xfer_fn.call_args_list]
+        assert transferred_tables == ["public_injury_entries"]
+
+        # Verify season kwarg was passed
+        call_kwargs = _xfer_fn.call_args[1]
+        assert call_kwargs["season"] == "2018-19"
+
+        # Sequence sync only for public_injury_entries
+        _sync_fn.assert_called_once_with(dst, tables=["public_injury_entries"])
+
+    @patch("scripts.transfer_to_production._source_counts")
+    @patch("scripts.transfer_to_production._transfer_table")
+    @patch("scripts.transfer_to_production._sync_sequences")
+    @patch("scripts.transfer_to_production._print_report")
+    @patch("scripts.transfer_to_production.psycopg")
+    def test_season_skips_players_teams_schedule(
+        self, mock_psycopg, _print_rpt, _sync_fn, _xfer_fn, _counts_fn,
+    ):
+        src = MagicMock()
+        dst = MagicMock()
+        mock_psycopg.connect.side_effect = [src, dst]
+
+        info_cur = MagicMock()
+        info_cur.fetchall.return_value = [(t,) for t in TRANSFER_TABLES]
+        dst.cursor.return_value.__enter__ = MagicMock(return_value=info_cur)
+        dst.cursor.return_value.__exit__ = MagicMock(return_value=False)
+
+        _counts_fn.return_value = {"public_injury_entries": 100}
+
+        def _transfer_side_effect(src_conn, dst_cur, table, *, dry_run=False, season=None):
+            return {"source": 100, "inserted": 100, "updated": 0, "dest": 100}
+
+        _xfer_fn.side_effect = _transfer_side_effect
+
+        with patch.object(sys, "argv", [
+            "transfer_to_production.py",
+            "--target-database-url", "postgresql://t@localhost/t",
+            "--source-database-url", "postgresql://s@localhost/s",
+            "--season", "2018-19",
+        ]):
+            main()
+
+        transferred_tables = [c[0][2] for c in _xfer_fn.call_args_list]
+        assert "nba_players" not in transferred_tables
+        assert "nba_teams" not in transferred_tables
+        assert "nba_schedule_games" not in transferred_tables
+        assert transferred_tables == ["public_injury_entries"]
+
+
+# ---------------------------------------------------------------------------
+# Invalid season rejected
+# ---------------------------------------------------------------------------
+
+class TestInvalidSeasonRejected:
+    def test_invalid_season_exits_with_error(self):
+        with patch.object(sys, "argv", [
+            "transfer_to_production.py",
+            "--target-database-url", "postgresql://t@localhost/t",
+            "--season", "invalid-season",
+        ]):
+            try:
+                main()
+                raise AssertionError("Should have raised SystemExit")
+            except SystemExit as e:
+                assert e.code == 2  # argparse exits with 2 on error
+
+    def test_invalid_season_no_dash(self):
+        with patch.object(sys, "argv", [
+            "transfer_to_production.py",
+            "--target-database-url", "postgresql://t@localhost/t",
+            "--season", "201819",
+        ]):
+            try:
+                main()
+                raise AssertionError("Should have raised SystemExit")
+            except SystemExit as e:
+                assert e.code == 2
+
+    def test_invalid_season_three_digit_year(self):
+        with patch.object(sys, "argv", [
+            "transfer_to_production.py",
+            "--target-database-url", "postgresql://t@localhost/t",
+            "--season", "018-19",
+        ]):
+            try:
+                main()
+                raise AssertionError("Should have raised SystemExit")
+            except SystemExit as e:
+                assert e.code == 2
