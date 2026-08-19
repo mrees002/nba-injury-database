@@ -1,7 +1,8 @@
 """Season-specific date boundaries for fallback classification.
 
 Defines explicit start/end dates (inclusive) for each season phase
-(preseason, regular, play_in, playoffs) for seasons 2019-20 through 2026-27.
+(preseason, regular, play_in, playoffs) for seasons 2019-20 through 2025-26,
+with 2026-27 preseason/regular/play_in filled and playoffs pending official dates.
 
 Used only when no nba_schedule_games row matches an injury entry.
 Derived from the NBA schedule reference data in data/reference/nba_schedule_reference.csv.
@@ -63,9 +64,13 @@ SEASON_BOUNDARIES: dict[str, dict[str, _PhaseBoundary]] = {
         "play_in": _PhaseBoundary(date(2026, 4, 14), date(2026, 4, 17)),
         "playoffs": _PhaseBoundary(date(2026, 4, 18), date(2026, 6, 13)),
     },
-    # TODO: Fill in 2026-27 preseason, regular, play_in, and playoffs
-    # from official NBA dates once published.
-    "2026-27": {},
+    "2026-27": {
+        "preseason": _PhaseBoundary(date(2026, 10, 3), date(2026, 10, 16)),
+        "regular": _PhaseBoundary(date(2026, 10, 20), date(2027, 4, 11)),
+        "play_in": _PhaseBoundary(date(2027, 4, 13), date(2027, 4, 16)),
+        # TODO: Fill in playoffs from official NBA dates once published.
+        "playoffs": None,
+    },
 }
 
 

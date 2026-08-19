@@ -5,21 +5,36 @@ from datetime import date
 from app.nba.season_boundaries import SEASON_BOUNDARIES, classify_by_season_boundary
 
 
-def test_2026_27_entry_exists_but_is_empty():
-    assert "2026-27" in SEASON_BOUNDARIES
-    assert SEASON_BOUNDARIES["2026-27"] == {}
+def test_2026_27_preseason_boundary():
+    assert classify_by_season_boundary(date(2026, 10, 3)) == ("2026-27", "preseason")
+    assert classify_by_season_boundary(date(2026, 10, 16)) == ("2026-27", "preseason")
+    assert classify_by_season_boundary(date(2026, 10, 10)) == ("2026-27", "preseason")
 
 
-def test_2026_27_dates_return_none():
-    # No phase boundaries configured yet, so all 2026-27 dates are uncovered.
-    samples = [
-        date(2026, 10, 1),   # hypothetical preseason
-        date(2026, 11, 15),  # hypothetical regular season
-        date(2027, 4, 20),   # hypothetical play-in
-        date(2027, 6, 1),    # hypothetical playoffs
-    ]
-    for d in samples:
-        assert classify_by_season_boundary(d) == (None, None), f"date={d}"
+def test_2026_27_regular_boundary():
+    assert classify_by_season_boundary(date(2026, 10, 20)) == ("2026-27", "regular")
+    assert classify_by_season_boundary(date(2027, 4, 11)) == ("2026-27", "regular")
+    assert classify_by_season_boundary(date(2027, 1, 15)) == ("2026-27", "regular")
+
+
+def test_2026_27_play_in_boundary():
+    assert classify_by_season_boundary(date(2027, 4, 13)) == ("2026-27", "play_in")
+    assert classify_by_season_boundary(date(2027, 4, 16)) == ("2026-27", "play_in")
+
+
+def test_2026_27_playoffs_none():
+    # playoffs is None until official dates are available; dates after Apr 16 are unclassified.
+    assert classify_by_season_boundary(date(2027, 4, 20)) == (None, None)
+    assert classify_by_season_boundary(date(2027, 6, 1)) == (None, None)
+
+
+def test_2026_27_gap_dates_return_none():
+    # Gap between preseason end and regular start
+    assert classify_by_season_boundary(date(2026, 10, 17)) == (None, None)
+    assert classify_by_season_boundary(date(2026, 10, 18)) == (None, None)
+    assert classify_by_season_boundary(date(2026, 10, 19)) == (None, None)
+    # Gap between regular end and play_in start
+    assert classify_by_season_boundary(date(2027, 4, 12)) == (None, None)
 
 
 def test_uncovered_offseason_dates_return_none():
