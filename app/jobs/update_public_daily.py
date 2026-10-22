@@ -485,6 +485,8 @@ def run_public_daily_update(start_date: date, end_date: date) -> None:
 
 
 def main() -> None:
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+    logging.getLogger("httpx").setLevel(logging.WARNING)
     parser = argparse.ArgumentParser(
         description="Lean production daily updater for public_injury_entries"
     )
