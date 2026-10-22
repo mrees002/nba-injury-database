@@ -7,6 +7,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from sqlalchemy import create_engine
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.db.base import Base
@@ -968,6 +969,54 @@ def test_injury_updater_exception_fails_update_run(tmp_path):
         assert run.finished_at is not None
         assert "PDF parsing crashed" in run.error_details
     engine.dispose()
+
+
+def test_database_flush_failure_rolls_back_and_records_original_error(tmp_path):
+    engine = create_engine(f"sqlite+pysqlite:///{tmp_path / 'failed.db'}")
+    Base.metadata.create_all(engine)
+    factory = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+
+    def failing_update(session, target_date):
+        session.add(NBAPlayer(canonical_name="Ugonna Onyenso", name_key=None))
+        session.flush()
+
+    with (
+        patch("app.jobs.update_public_daily.update_day", side_effect=failing_update),
+        patch("app.jobs.update_public_daily.build_engine", return_value=engine),
+        patch("app.jobs.update_public_daily.build_session_factory", return_value=factory),
+        pytest.raises(IntegrityError),
+    ):
+        run_public_daily_update(date(2026, 10, 19), date(2026, 10, 20))
+
+    with Session(engine) as session:
+        run = session.query(UpdateRun).one()
+        assert run.status == "failed"
+        assert run.finished_at is not None
+        assert "NOT NULL constraint failed" in run.error_details
+        assert session.query(NBAPlayer).count() == 0
+    engine.dispose()
+
+
+def test_report_write_failure_is_not_swallowed(db):
+    url = "https://ak-static.cms.nba.com/referee/injury/Injury-Report_2026-10-19_11_45PM.pdf"
+    error = IntegrityError("INSERT", {}, RuntimeError("player ID missing"))
+    with (
+        patch("app.jobs.update_public_daily.probe_candidate_urls", return_value=[url]),
+        patch("app.jobs.update_public_daily.NBAReportClient") as client,
+        patch(
+            "app.jobs.update_public_daily.extract_date_matchups",
+            return_value={("10/19/2026", "LAL@BOS")},
+        ),
+        patch(
+            "app.jobs.update_public_daily.select_latest_reports_from_pairs",
+            side_effect=lambda pairs: [r for r, _ in pairs],
+        ),
+        patch("app.jobs.update_public_daily.parse_report_pdf", return_value=_make_parsed_report()),
+        patch("app.jobs.update_public_daily._write_report_entries", side_effect=error),
+        pytest.raises(IntegrityError, match="player ID missing"),
+    ):
+        client.return_value.__enter__.return_value.download.return_value.content = b"fake PDF"
+        update_day(db, date(2026, 10, 19))
 
 
 # ---------------------------------------------------------------------------

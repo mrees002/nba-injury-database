@@ -17,6 +17,34 @@ for the retained benchmark inventory and `legacy/specifications/` for retired st
 The conservative repository reorganization is recorded in
 [`docs/repository_cleanup.md`](docs/repository_cleanup.md).
 
+## Daily production updates and recovery
+
+The `Update public injury data (daily)` GitHub Actions workflow updates PostgreSQL from
+official NBA reports for yesterday (UTC). For recovery, select **Run workflow** and supply
+`start_date` and `end_date` in `YYYY-MM-DD` format. Existing source URL/row keys make reruns
+idempotent; newer reports continue to supersede older reports using the existing rules.
+
+For databases created by the original lean bootstrap, enable `repair_database_ids` once.
+This restores automatic IDs on the five production tables, preserves existing rows and IDs,
+and advances sequences past imported IDs without rewinding existing sequences. The repair
+briefly locks the tables and fails after 10 seconds if a lock cannot be acquired.
+New databases use identity columns automatically. Run the repair again after importing
+explicit IDs into a lean database.
+
+For a direct repair using an already configured production `DATABASE_URL`:
+
+```bash
+python -m scripts.repair_production_ids
+python -m app.jobs.update_public_daily --start-date 2026-10-19 --end-date 2026-10-21
+```
+
+Database write failures roll back the run's injury changes and persist a failed `update_runs`
+record with the original error. Failed dates require an explicit recovery run.
+
+PostgreSQL repair tests run in CI. Locally, set `TEST_POSTGRES_URL` to a disposable PostgreSQL
+server whose user can create databases, then run `pytest tests/test_production_id_repair.py`.
+Each test creates and removes its own database.
+
 ## Prerequisites
 
 - Python 3.12 or newer

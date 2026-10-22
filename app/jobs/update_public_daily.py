@@ -400,7 +400,8 @@ def update_day(session: Session, target_date: date) -> DailyUpdateResult:
             total_entries += entries_written
             total_superseded += games_superseded
         except Exception:
-            logger.warning("Failed to parse %s, skipping", dl.source_url)
+            logger.exception("Failed to parse or write %s", dl.source_url)
+            raise
 
     session.flush()
 
@@ -467,6 +468,9 @@ def run_public_daily_update(start_date: date, end_date: date) -> None:
             )
 
         except Exception as exc:
+            # A failed flush leaves the transaction unusable. Roll back all
+            # writes from this run before persisting its failure separately.
+            session.rollback()
             run.status = "failed"
             run.finished_at = datetime.now(tz=UTC)
             run.error_details = str(exc)
