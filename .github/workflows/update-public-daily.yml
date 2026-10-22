@@ -26,7 +26,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
     env:
       ENVIRONMENT: production
       DATABASE_URL: ${{ secrets.DATABASE_URL }}

@@ -73,7 +73,8 @@ def test_repair_handles_existing_sequences_and_empty_tables(postgres):
 def test_fresh_bootstrap_generates_ids_and_supports_repair(postgres):
     postgres.execute((ROOT / "scripts/lean_production_bootstrap.sql").read_text())
     postgres.execute(
-        "INSERT INTO nba_players (id, canonical_name, name_key) VALUES (500, 'Existing', 'existing')"
+        "INSERT INTO nba_players (id, canonical_name, name_key) "
+        "VALUES (500, 'Existing', 'existing')"
     )
     postgres.execute(REPAIR)
     for _ in range(2):
