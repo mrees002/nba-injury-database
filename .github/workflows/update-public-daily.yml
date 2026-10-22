@@ -4,6 +4,20 @@ on:
   schedule:
     - cron: "0 10 * * *"
   workflow_dispatch:
+    inputs:
+      start_date:
+        description: "First report date to recover (YYYY-MM-DD; default yesterday UTC)"
+        required: false
+        type: string
+      end_date:
+        description: "Last report date to recover (YYYY-MM-DD; default start date)"
+        required: false
+        type: string
+      repair_database_ids:
+        description: "Repair missing automatic IDs before updating (preserves rows)"
+        required: false
+        type: boolean
+        default: false
 
 concurrency:
   group: updater-public-daily
@@ -12,7 +26,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
     env:
       ENVIRONMENT: production
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -26,6 +40,10 @@ jobs:
 
       - run: pip install .
 
+      - name: Repair production ID generators
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.repair_database_ids }}
+        run: python -m scripts.repair_production_ids
+
       - name: Calculate yesterday's date (UTC)
         id: date
         run: |
@@ -33,7 +51,10 @@ jobs:
           echo "date=$YESTERDAY" >> "$GITHUB_OUTPUT"
 
       - name: Run updater
+        env:
+          START_DATE: ${{ inputs.start_date || steps.date.outputs.date }}
+          END_DATE: ${{ inputs.end_date || inputs.start_date || steps.date.outputs.date }}
         run: |
           python -m app.jobs.update_public_daily \
-            --start-date "${{ steps.date.outputs.date }}" \
-            --end-date "${{ steps.date.outputs.date }}"
+            --start-date "$START_DATE" \
+            --end-date "$END_DATE"
