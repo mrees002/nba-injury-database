@@ -2,7 +2,9 @@ name: Update public injury data (daily)
 
 on:
   schedule:
-    - cron: "0 10 * * *"
+    # Offset from the top of the hour to reduce GitHub scheduler congestion.
+    - cron: "7 4 * * *"
+      timezone: "America/Chicago"
   workflow_dispatch:
     inputs:
       start_date:
