@@ -19,8 +19,17 @@ The conservative repository reorganization is recorded in
 
 ## Daily production updates and recovery
 
-The `Update public injury data (daily)` GitHub Actions workflow updates PostgreSQL from
-official NBA reports for yesterday (UTC). For recovery, select **Run workflow** and supply
+The `Update public injury data (daily)` GitHub Actions workflow is scheduled for **4:07 a.m.
+Central time** daily (`America/Chicago`, with automatic daylight saving adjustments). It updates
+PostgreSQL from official NBA reports for yesterday (UTC). GitHub can delay scheduled runs;
+4:07 a.m. is the requested start time, not a guaranteed completion time. The seven-minute
+offset avoids the busiest scheduling point at the top of the hour.
+
+At this morning start time, yesterday in UTC and Central time are the same calendar date,
+so the report-date selection is unchanged. Reports for later dates and revisions published
+after the pull are not guaranteed to be captured; use a recovery run when needed.
+
+For recovery, select **Run workflow** and supply
 `start_date` and `end_date` in `YYYY-MM-DD` format. Existing source URL/row keys make reruns
 idempotent; newer reports continue to supersede older reports using the existing rules.
 
